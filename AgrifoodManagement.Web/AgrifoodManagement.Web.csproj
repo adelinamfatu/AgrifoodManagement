@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="28.2.4" />
+    <PackageReference Include="Syncfusion.Licensing" Version="28.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AgrifoodManagement.Domain\AgrifoodManagement.Domain.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,8 @@
+using Syncfusion.Licensing;
+
 var builder = WebApplication.CreateBuilder(args);
+
+SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBPh8sVXJ8S0d+X1JPd11dXmJWd1p/THNYflR1fV9DaUwxOX1dQl9mSXxTcERnWn1deXBRRmI=;Mgo+DSMBMAY9C3t2XVhhQlJHfV5AQmBIYVp/TGpJfl96cVxMZVVBJAtUQF1hTH5RdkNiXXxcc31RQ2Vb");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
