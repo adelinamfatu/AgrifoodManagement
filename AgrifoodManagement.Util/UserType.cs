@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AgrifoodManagement.Domain
+namespace AgrifoodManagement.Util
 {
-    public enum OrderStatus
+    public enum UserType
     {
-        Pending,
-        Canceled
+        Seller,
+        Buyer
     }
 }
