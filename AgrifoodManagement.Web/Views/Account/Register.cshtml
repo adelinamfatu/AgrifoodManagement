@@ -1,5 +1,10 @@
-﻿<div class="signup-form">
-    <div class="title">Signup</div>
+﻿@using AgrifoodManagement.Web.Models
+@using AgrifoodManagement.Web.Views.Account.Resources
+
+@model RegisterViewModel
+
+<div class="signup-form">
+    <div class="title">@RegisterResources.SignupTitle</div>
     <form asp-action="Register" method="post">
         <div class="input-boxes">
             <div class="input-box">
@@ -18,7 +23,7 @@
                 <input type="submit" value="Submit">
             </div>
             <div class="text sign-up-text">
-                Already have an account? <label for="flip">Login now</label>
+                @RegisterResources.ExistingAccountButton<label for="flip">@RegisterResources.LoginNowButton</label>
             </div>
         </div>
     </form>

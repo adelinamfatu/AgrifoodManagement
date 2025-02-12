@@ -1,8 +1,10 @@
 ﻿@using AgrifoodManagement.Web.Models
+@using AgrifoodManagement.Web.Views.Account.Resources
+
 @model LoginViewModel
 
 <div class="login-form">
-    <div class="title">Login</div>
+    <div class="title">@LoginResources.LoginTitle</div>
     <form asp-action="Login" method="post">
         <div class="input-boxes">
             <div class="input-box">
@@ -13,12 +15,12 @@
                 <i class="fas fa-lock"></i>
                 <input type="password" placeholder="Enter your password" asp-for="Password" required>
             </div>
-            <div class="text"><a href="#">Forgot password?</a></div>
+            <div class="text"><a href="#">@LoginResources.ForgetPasswordButton</a></div>
             <div class="button input-box">
                 <input type="submit" value="Submit">
             </div>
             <div class="text sign-up-text">
-                Don't have an account? <label for="flip">Signup now</label>
+                @LoginResources.NoAccountButton<label for="flip">@LoginResources.SignupButton</label>
             </div>
         </div>
     </form>

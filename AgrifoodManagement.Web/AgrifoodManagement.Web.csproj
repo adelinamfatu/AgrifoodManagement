@@ -19,4 +19,37 @@
     <ProjectReference Include="..\AgrifoodManagement.Domain\AgrifoodManagement.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\Account\Resources\AuthResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AuthResources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Account\Resources\LoginResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LoginResources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Account\Resources\RegisterResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RegisterResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Views\Account\Resources\AuthResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AuthResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Account\Resources\LoginResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LoginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Account\Resources\RegisterResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RegisterResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

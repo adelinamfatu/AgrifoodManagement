@@ -10,7 +10,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #7d2ae8;
+    background: #687f37;
     padding: 30px;
 }
 
@@ -24,35 +24,35 @@ body {
     perspective: 2700px;
 }
 
-    .container .cover {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        height: 100%;
-        width: 50%;
-        z-index: 98;
-        transition: all 1s ease;
-        transform-origin: left;
-        transform-style: preserve-3d;
-        backface-visibility: hidden;
-    }
+.container .cover {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: 50%;
+    z-index: 98;
+    transition: all 1s ease;
+    transform-origin: left;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
 
-    .container #flip:checked ~ .cover {
-        transform: rotateY(-180deg);
-    }
+.container #flip:checked ~ .cover {
+    transform: rotateY(-180deg);
+}
 
-    .container #flip:checked ~ .forms .login-form {
-        pointer-events: none;
-    }
+.container #flip:checked ~ .forms .login-form {
+    pointer-events: none;
+}
 
-    .container .cover .front,
-    .container .cover .back {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-    }
+.container .cover .front,
+.container .cover .back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
 
 .cover .back {
     transform: rotateY(180deg);
@@ -77,14 +77,14 @@ body {
     justify-content: center;
 }
 
-    .container .cover .text::before {
-        content: '';
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        opacity: 0.5;
-        background: #7d2ae8;
-    }
+.container .cover .text::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0.5;
+    background: #687f37;
+}
 
 .cover .text .text-1,
 .cover .text .text-2 {
@@ -124,15 +124,15 @@ body {
     color: #333;
 }
 
-    .forms .form-content .title:before {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        height: 3px;
-        width: 25px;
-        background: #7d2ae8;
-    }
+.forms .form-content .title:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 25px;
+    background: #687f37;
+}
 
 .forms .signup-form .title:before {
     width: 20px;
@@ -163,14 +163,14 @@ body {
     transition: all 0.3s ease;
 }
 
-    .form-content .input-box input:focus,
-    .form-content .input-box input:valid {
-        border-color: #7d2ae8;
-    }
+.form-content .input-box input:focus,
+.form-content .input-box input:valid {
+    border-color: #687f37;
+}
 
 .form-content .input-box i {
     position: absolute;
-    color: #7d2ae8;
+    color: #687f37;
     font-size: 17px;
 }
 
@@ -180,40 +180,40 @@ body {
     color: #333;
 }
 
-    .forms .form-content .text a {
-        text-decoration: none;
-    }
+.forms .form-content .text a {
+    text-decoration: none;
+}
 
-        .forms .form-content .text a:hover {
-            text-decoration: underline;
-        }
+.forms .form-content .text a:hover {
+    text-decoration: underline;
+}
 
 .forms .form-content .button {
     color: #fff;
     margin-top: 40px;
 }
 
-    .forms .form-content .button input {
-        color: #fff;
-        background: #7d2ae8;
-        border-radius: 6px;
-        padding: 0;
-        cursor: pointer;
-        transition: all 0.4s ease;
-    }
+.forms .form-content .button input {
+    color: #fff;
+    background: #687f37;
+    border-radius: 6px;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
 
-        .forms .form-content .button input:hover {
-            background: #5b13b9;
-        }
+.forms .form-content .button input:hover {
+    background: #5b13b9;
+}
 
 .forms .form-content label {
     color: #5b13b9;
     cursor: pointer;
 }
 
-    .forms .form-content label:hover {
-        text-decoration: underline;
-    }
+.forms .form-content label:hover {
+    text-decoration: underline;
+}
 
 .forms .form-content .login-text,
 .forms .form-content .sign-up-text {
