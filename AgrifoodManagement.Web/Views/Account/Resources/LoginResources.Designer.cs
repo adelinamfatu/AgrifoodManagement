@@ -61,11 +61,29 @@ namespace AgrifoodManagement.Web.Views.Account.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter your email.
+        /// </summary>
+        internal static string EmailPlaceholder {
+            get {
+                return ResourceManager.GetString("EmailPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Forgot password?.
         /// </summary>
         internal static string ForgetPasswordButton {
             get {
                 return ResourceManager.GetString("ForgetPasswordButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        internal static string LoginButton {
+            get {
+                return ResourceManager.GetString("LoginButton", resourceCulture);
             }
         }
         
@@ -84,6 +102,15 @@ namespace AgrifoodManagement.Web.Views.Account.Resources {
         internal static string NoAccountButton {
             get {
                 return ResourceManager.GetString("NoAccountButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your password.
+        /// </summary>
+        internal static string PasswordPlaceholder {
+            get {
+                return ResourceManager.GetString("PasswordPlaceholder", resourceCulture);
             }
         }
         

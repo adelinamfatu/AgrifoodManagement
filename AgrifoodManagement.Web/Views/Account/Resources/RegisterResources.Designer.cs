@@ -61,6 +61,15 @@ namespace AgrifoodManagement.Web.Views.Account.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter your email.
+        /// </summary>
+        internal static string EmailPlaceholder {
+            get {
+                return ResourceManager.GetString("EmailPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Already have an account? .
         /// </summary>
         internal static string ExistingAccountButton {
@@ -75,6 +84,33 @@ namespace AgrifoodManagement.Web.Views.Account.Resources {
         internal static string LoginNowButton {
             get {
                 return ResourceManager.GetString("LoginNowButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your name.
+        /// </summary>
+        internal static string NamePlaceholder {
+            get {
+                return ResourceManager.GetString("NamePlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your password.
+        /// </summary>
+        internal static string PasswordPlaceholder {
+            get {
+                return ResourceManager.GetString("PasswordPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        internal static string RegisterButton {
+            get {
+                return ResourceManager.GetString("RegisterButton", resourceCulture);
             }
         }
         

@@ -79,6 +79,15 @@ namespace AgrifoodManagement.Web.Views.Account.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AgroSphere.
+        /// </summary>
+        internal static string PageTitle {
+            get {
+                return ResourceManager.GetString("PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Join our marketplace today.
         /// </summary>
         internal static string RegisterTextSubtitle {

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgrifoodManagement.Web", "A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgrifoodManagement.Domain", "AgrifoodManagement.Domain\AgrifoodManagement.Domain.csproj", "{56AF5D3B-0A9D-4239-9453-EA273F500537}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgrifoodManagement.Util", "AgrifoodManagement.Util\AgrifoodManagement.Util.csproj", "{AD179E32-559E-4F4C-86F0-3743A8F41A2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgrifoodManagement.Util", "AgrifoodManagement.Util\AgrifoodManagement.Util.csproj", "{AD179E32-559E-4F4C-86F0-3743A8F41A2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

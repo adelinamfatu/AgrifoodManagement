@@ -1,14 +1,14 @@
 ﻿@using AgrifoodManagement.Web.Views.Account.Resources
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_SyncfusionLayout.cshtml";
 }
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <title>Login and Registration Form</title>
+    <title>@AuthResources.PageTitle</title>
     <link rel="stylesheet" href="~/css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,14 +18,14 @@
         <input type="checkbox" id="flip">
         <div class="cover">
             <div class="front">
-                <img src="~/images/low-angle-woman-holding-vegetables.jpg" alt="">
+                <img src="~/images/low-angle-woman-holding-vegetables.jpg" alt="woman-holding-vegetables">
                 <div class="text">
                     <span class="text-1">@Html.Raw(@AuthResources.LoginTextTitle)</span>
                     <span class="text-2">@AuthResources.LoginTextSubtitle</span>
                 </div>
             </div>
             <div class="back">
-                <img class="backImg" src="~/images/side-view-woman-farm.jpg" alt="">
+                <img class="backImg" src="~/images/side-view-woman-farm.jpg" alt="woman-farm">
                 <div class="text">
                     <span class="text-1">@Html.Raw(@AuthResources.RegisterTextTitle)</span>
                     <span class="text-2">@AuthResources.RegisterTextSubtitle</span>

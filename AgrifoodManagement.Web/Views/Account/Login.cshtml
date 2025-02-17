@@ -1,5 +1,11 @@
 ﻿@using AgrifoodManagement.Web.Models
 @using AgrifoodManagement.Web.Views.Account.Resources
+@using Syncfusion.EJ2.SplitButtons;
+
+@{
+    ProgressButtonSpinSettings spinCenter = new ProgressButtonSpinSettings() { Position = SpinPosition.Center };
+    ProgressButtonAnimationSettings slideRight = new ProgressButtonAnimationSettings() { Effect = AnimationEffect.SlideRight };
+}
 
 @model LoginViewModel
 
@@ -9,18 +15,22 @@
         <div class="input-boxes">
             <div class="input-box">
                 <i class="fas fa-envelope"></i>
-                <input type="text" placeholder="Enter your email" asp-for="Email" required>
+                <ejs-textbox id="email" cssClass="e-outline" placeholder="@LoginResources.EmailPlaceholder"
+                             floatLabelType="Auto" asp-for="Email"></ejs-textbox>
             </div>
             <div class="input-box">
                 <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Enter your password" asp-for="Password" required>
+                <ejs-textbox id="password" cssClass="e-outline" placeholder="@LoginResources.PasswordPlaceholder"
+                             floatLabelType="Auto" type="password" asp-for="Password"></ejs-textbox>
             </div>
-            <div class="text"><a href="#">@LoginResources.ForgetPasswordButton</a></div>
+            <div class="text"><a href="#" class="main-color">@LoginResources.ForgetPasswordButton</a></div>
             <div class="button input-box">
-                <input type="submit" value="Submit">
+                <ejs-progressbutton id="loginBtn" content=@LoginResources.LoginButton enableProgress="true" spinSettings="spinCenter" animationSettings="slideRight"
+                                    cssClass="e-outline e-success" type="submit"
+                                    style="width: 100%; height: 3rem; font-size: 1rem;"></ejs-progressbutton>
             </div>
             <div class="text sign-up-text">
-                @LoginResources.NoAccountButton<label for="flip">@LoginResources.SignupButton</label>
+                @LoginResources.NoAccountButton<label for="flip" class="main-color">@LoginResources.SignupButton</label>
             </div>
         </div>
     </form>

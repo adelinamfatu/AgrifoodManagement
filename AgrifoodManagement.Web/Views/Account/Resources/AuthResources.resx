@@ -123,6 +123,9 @@
   <data name="LoginTextTitle" xml:space="preserve">
     <value>Optimize your agrifood resources &lt;br&gt; with ease</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>AgroSphere</value>
+  </data>
   <data name="RegisterTextSubtitle" xml:space="preserve">
     <value>Join our marketplace today</value>
   </data>

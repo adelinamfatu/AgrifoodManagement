@@ -169,9 +169,9 @@ body {
 }
 
 .form-content .input-box i {
-    position: absolute;
     color: #687f37;
     font-size: 17px;
+    margin-right: 10px;
 }
 
 .forms .form-content .text {
@@ -223,6 +223,10 @@ body {
 
 .container #flip {
     display: none;
+}
+
+.main-color {
+    color: #687f37 !important;
 }
 
 @media (max-width: 730px) {

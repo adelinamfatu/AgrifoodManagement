@@ -117,14 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Enter your email</value>
+  </data>
   <data name="ForgetPasswordButton" xml:space="preserve">
     <value>Forgot password?</value>
+  </data>
+  <data name="LoginButton" xml:space="preserve">
+    <value>Login</value>
   </data>
   <data name="LoginTitle" xml:space="preserve">
     <value>Login</value>
   </data>
   <data name="NoAccountButton" xml:space="preserve">
     <value>Don't have an account? </value>
+  </data>
+  <data name="PasswordPlaceholder" xml:space="preserve">
+    <value>Enter your password</value>
   </data>
   <data name="SignupButton" xml:space="preserve">
     <value>Signup now</value>
