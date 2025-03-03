@@ -15,15 +15,18 @@
         <div class="input-boxes">
             <div class="input-box">
                 <i class="fas fa-user"></i>
-                <input type="text" placeholder=@RegisterResources.NamePlaceholder name="Name" required>
+                <ejs-textbox id="name" cssClass="e-outline" placeholder="@RegisterResources.NamePlaceholder"
+                             floatLabelType="Auto" asp-for="Name"></ejs-textbox>
             </div>
             <div class="input-box">
                 <i class="fas fa-envelope"></i>
-                <input type="text" placeholder=@RegisterResources.EmailPlaceholder name="Email" required>
+                <ejs-textbox id="registerEmail" cssClass="e-outline" placeholder="@RegisterResources.EmailPlaceholder"
+                             floatLabelType="Auto" asp-for="Email"></ejs-textbox>
             </div>
             <div class="input-box">
                 <i class="fas fa-lock"></i>
-                <input type="password" placeholder=@RegisterResources.PasswordPlaceholder name="Password" required>
+                <ejs-textbox id="registerPassword" cssClass="e-outline" placeholder="@RegisterResources.PasswordPlaceholder"
+                             floatLabelType="Auto" type="password" asp-for="Password"></ejs-textbox>
             </div>
             <div class="button input-box">
                 <ejs-progressbutton id="registerBtn" content=@RegisterResources.RegisterButton enableProgress="true" spinSettings="spinCenter" animationSettings="slideRight"

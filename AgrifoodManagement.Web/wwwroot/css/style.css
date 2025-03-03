@@ -10,7 +10,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #687f37;
+    background: #7BAE7F;
     padding: 30px;
 }
 
@@ -83,7 +83,7 @@ body {
     height: 100%;
     width: 100%;
     opacity: 0.5;
-    background: #687f37;
+    background: #7BAE7F;
 }
 
 .cover .text .text-1,
@@ -131,7 +131,7 @@ body {
     bottom: 0;
     height: 3px;
     width: 25px;
-    background: #687f37;
+    background: #7BAE7F;
 }
 
 .forms .signup-form .title:before {
@@ -165,11 +165,11 @@ body {
 
 .form-content .input-box input:focus,
 .form-content .input-box input:valid {
-    border-color: #687f37;
+    border-color: #7BAE7F;
 }
 
 .form-content .input-box i {
-    color: #687f37;
+    color: #7BAE7F;
     font-size: 17px;
     margin-right: 10px;
 }
@@ -195,7 +195,7 @@ body {
 
 .forms .form-content .button input {
     color: #fff;
-    background: #687f37;
+    background: #7BAE7F;
     border-radius: 6px;
     padding: 0;
     cursor: pointer;
@@ -226,7 +226,11 @@ body {
 }
 
 .main-color {
-    color: #687f37 !important;
+    color: #7BAE7F !important;
+}
+
+.e-background {
+    background-color: #7BAE7F !important;
 }
 
 @media (max-width: 730px) {
