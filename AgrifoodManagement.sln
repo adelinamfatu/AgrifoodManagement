@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgrifoodManagement.Domain",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgrifoodManagement.Util", "AgrifoodManagement.Util\AgrifoodManagement.Util.csproj", "{AD179E32-559E-4F4C-86F0-3743A8F41A2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgrifoodManagement.Business", "AgrifoodManagement.Business\AgrifoodManagement.Business.csproj", "{08A4FFCB-5C3D-4ACE-BDA6-3ACE9C4D3EBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{AD179E32-559E-4F4C-86F0-3743A8F41A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD179E32-559E-4F4C-86F0-3743A8F41A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD179E32-559E-4F4C-86F0-3743A8F41A2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08A4FFCB-5C3D-4ACE-BDA6-3ACE9C4D3EBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08A4FFCB-5C3D-4ACE-BDA6-3ACE9C4D3EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08A4FFCB-5C3D-4ACE-BDA6-3ACE9C4D3EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08A4FFCB-5C3D-4ACE-BDA6-3ACE9C4D3EBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
