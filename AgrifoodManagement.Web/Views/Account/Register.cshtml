@@ -1,6 +1,7 @@
 ﻿@using AgrifoodManagement.Web.Models
 @using AgrifoodManagement.Web.Views.Account.Resources
 @using Syncfusion.EJ2.SplitButtons;
+@using Syncfusion.EJ2.Navigations
 
 @{
     ProgressButtonSpinSettings spinCenter = new ProgressButtonSpinSettings() { Position = SpinPosition.Center };
@@ -11,23 +12,21 @@
 
 <div class="signup-form">
     <div class="title">@RegisterResources.SignupTitle</div>
+    <ejs-stepper id="stepper" stepType="Indicator" stepChanged="function(args) {onStepChanged(args)}">
+        <e-stepper-steps>
+            <e-stepper-step text="1"></e-stepper-step>
+            <e-stepper-step text="2"></e-stepper-step>
+        </e-stepper-steps>
+    </ejs-stepper>
     <form asp-action="Register" method="post">
         <div class="input-boxes">
-            <div class="input-box">
-                <i class="fas fa-user"></i>
-                <ejs-textbox id="name" cssClass="e-outline" placeholder="@RegisterResources.NamePlaceholder"
-                             floatLabelType="Auto" asp-for="Name"></ejs-textbox>
+            <div id="step1Content">
+                @await Html.PartialAsync("_Step1", Model)
             </div>
-            <div class="input-box">
-                <i class="fas fa-envelope"></i>
-                <ejs-textbox id="registerEmail" name="Email" cssClass="e-outline" placeholder="@RegisterResources.EmailPlaceholder"
-                             floatLabelType="Auto" asp-for="Email"></ejs-textbox>
+            <div id="step2Content" style="display: none;">
+                @await Html.PartialAsync("_Step2", Model)
             </div>
-            <div class="input-box">
-                <i class="fas fa-lock"></i>
-                <ejs-textbox id="registerPassword" name="Password" cssClass="e-outline" placeholder="@RegisterResources.PasswordPlaceholder"
-                             floatLabelType="Auto" type="password" asp-for="Password"></ejs-textbox>
-            </div>
+
             <div class="button input-box">
                 <ejs-progressbutton id="registerBtn" content=@RegisterResources.RegisterButton enableProgress="true" spinSettings="spinCenter" animationSettings="slideRight"
                                     cssClass="e-outline e-success" type="submit"
@@ -39,3 +38,21 @@
         </div>
     </form>
 </div>
+
+<script>
+    function onStepChanged(args) {
+        var stepIndex = args.activeStep + 1;
+        console.log("Step changed to: " + stepIndex);
+        loadStep(stepIndex);
+    }
+
+    function loadStep(stepNumber) {
+        if (stepNumber === 1) {
+            document.getElementById("step1Content").style.display = "block";
+            document.getElementById("step2Content").style.display = "none";
+        } else if (stepNumber === 2) {
+            document.getElementById("step1Content").style.display = "none";
+            document.getElementById("step2Content").style.display = "block";
+        }
+    }
+</script>

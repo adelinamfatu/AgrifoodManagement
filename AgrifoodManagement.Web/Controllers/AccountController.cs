@@ -37,7 +37,7 @@ namespace AgrifoodManagement.Web.Controllers
 
             return View("Index", model);
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {

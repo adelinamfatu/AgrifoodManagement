@@ -1,0 +1,14 @@
+﻿@using AgrifoodManagement.Web.Views.Account.Resources;
+
+@model AgrifoodManagement.Web.Models.RegisterViewModel
+
+<div class="input-box">
+    <i class="fas fa-envelope"></i>
+    <ejs-textbox id="registerEmail" name="Email" cssClass="e-outline" placeholder="@RegisterResources.EmailPlaceholder"
+                 floatLabelType="Auto" asp-for="Email"></ejs-textbox>
+</div>
+<div class="input-box">
+    <i class="fas fa-lock"></i>
+    <ejs-textbox id="registerPassword" name="Password" cssClass="e-outline" placeholder="@RegisterResources.PasswordPlaceholder"
+                 floatLabelType="Auto" type="password" asp-for="Password"></ejs-textbox>
+</div>
