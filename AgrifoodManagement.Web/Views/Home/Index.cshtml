@@ -1,12 +1,13 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div>
-    <ejs-calendar id="calendar"></ejs-calendar>
-</div>
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@await Html.PartialAsync("~/Views/Presentation/_Banner.cshtml")
+@await Html.PartialAsync("~/Views/Presentation/_About.cshtml")
+@await Html.PartialAsync("~/Views/Presentation/_Features.cshtml")
+@await Html.PartialAsync("~/Views/Presentation/_Team.cshtml")
+@await Html.PartialAsync("~/Views/Presentation/_Testimonial.cshtml")
+@await Html.PartialAsync("~/Views/Presentation/_FAQ.cshtml")
+@await Html.PartialAsync("~/Views/Presentation/_Contact.cshtml")
+@await Html.PartialAsync("~/Views/Presentation/_Download.cshtml")
