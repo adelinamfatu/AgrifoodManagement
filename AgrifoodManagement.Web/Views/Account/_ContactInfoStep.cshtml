@@ -1,0 +1,24 @@
+﻿@using AgrifoodManagement.Web.Views.Account.Resources;
+
+@model AgrifoodManagement.Web.Models.RegisterViewModel
+
+@{
+    var userTypes = new List<dynamic>
+    {
+        new { Text = "Seller", Value = "Seller" },
+        new { Text = "Buyer", Value = "Buyer" }
+    };
+}
+
+<div class="input-box">
+    <i class="fas fa-user-tag"></i>
+    <ejs-dropdownlist id="registerUserType" name="UserType" cssClass="e-outline" placeholder="@RegisterResources.UserTypePlaceholder"
+                      floatLabelType="Auto" asp-for="UserType" dataSource="@userTypes">
+        <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+    </ejs-dropdownlist>
+</div>
+<div class="input-box">
+    <i class="fas fa-phone"></i>
+    <ejs-textbox id="registerPhone" name="PhoneNumber" cssClass="e-outline" placeholder="@RegisterResources.PhoneNumberPlaceholder"
+                 floatLabelType="Auto" asp-for="PhoneNumber"></ejs-textbox>
+</div>

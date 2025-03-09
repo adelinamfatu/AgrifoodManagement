@@ -123,19 +123,28 @@
   <data name="ExistingAccountButton" xml:space="preserve">
     <value>Already have an account? </value>
   </data>
+  <data name="FirstNamePlaceholder" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="LastNamePlaceholder" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
   <data name="LoginNowButton" xml:space="preserve">
     <value>Login now</value>
   </data>
-  <data name="NamePlaceholder" xml:space="preserve">
-    <value>Enter your name</value>
-  </data>
   <data name="PasswordPlaceholder" xml:space="preserve">
-    <value>Enter your password</value>
+    <value>Password</value>
+  </data>
+  <data name="PhoneNumberPlaceholder" xml:space="preserve">
+    <value>Phone Number</value>
   </data>
   <data name="RegisterButton" xml:space="preserve">
     <value>Register</value>
   </data>
   <data name="SignupTitle" xml:space="preserve">
     <value>Signup</value>
+  </data>
+  <data name="UserTypePlaceholder" xml:space="preserve">
+    <value>User Type</value>
   </data>
 </root>

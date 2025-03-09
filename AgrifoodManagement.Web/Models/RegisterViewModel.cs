@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AgrifoodManagement.Util;
+using System.ComponentModel.DataAnnotations;
 
 namespace AgrifoodManagement.Web.Models
 {
@@ -15,6 +16,17 @@ namespace AgrifoodManagement.Web.Models
 
         [Required(ErrorMessage = "Name is required.")]
         [RegularExpression(@"^[a-zA-Z\s-]+$", ErrorMessage = "Only letters, spaces, and dashes are allowed.")]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Name is required.")]
+        [RegularExpression(@"^[a-zA-Z\s-]+$", ErrorMessage = "Only letters, spaces, and dashes are allowed.")]
+        public string LastName { get; set; }
+
+        [Required(ErrorMessage = "User type is required.")]
+        public UserType UserType { get; set; }
+
+        [Required(ErrorMessage = "Name is required.")]
+        [RegularExpression(@"^\+?[0-9\s-]+$", ErrorMessage = "Invalid phone number format.")]
+        public string PhoneNumber { get; set; }
     }
 }

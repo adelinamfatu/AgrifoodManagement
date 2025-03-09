@@ -4,11 +4,6 @@ using AgrifoodManagement.Domain.Interfaces;
 using AgrifoodManagement.Util;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.CommandHandlers
 {
@@ -38,7 +33,7 @@ namespace AgrifoodManagement.Business.CommandHandlers
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,
-                UserType = UserType.Buyer
+                UserType = request.UserType
             };
 
             _context.Users.Add(user);

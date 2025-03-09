@@ -12,19 +12,24 @@
 
 <div class="signup-form">
     <div class="title">@RegisterResources.SignupTitle</div>
-    <ejs-stepper id="stepper" stepType="Indicator" stepChanged="function(args) {onStepChanged(args)}">
+    <ejs-stepper id="stepper" stepType="Indicator"
+                 stepChanged="function(args) {onStepChanged(args)}" style="margin-top: 1rem;">
         <e-stepper-steps>
             <e-stepper-step text="1"></e-stepper-step>
             <e-stepper-step text="2"></e-stepper-step>
+            <e-stepper-step text="3"></e-stepper-step>
         </e-stepper-steps>
     </ejs-stepper>
     <form asp-action="Register" method="post">
         <div class="input-boxes">
-            <div id="step1Content">
-                @await Html.PartialAsync("_Step1", Model)
+            <div id="accountInfoStepContent">
+                @await Html.PartialAsync("_AccountInfoStep", Model)
             </div>
-            <div id="step2Content" style="display: none;">
-                @await Html.PartialAsync("_Step2", Model)
+            <div id="personalInfoStepContent" style="display: none;">
+                @await Html.PartialAsync("_PersonalInfoStep", Model)
+            </div>
+            <div id="contactInfoStepContent" style="display: none;">
+                @await Html.PartialAsync("_ContactInfoStep", Model)
             </div>
 
             <div class="button input-box">
@@ -42,17 +47,22 @@
 <script>
     function onStepChanged(args) {
         var stepIndex = args.activeStep + 1;
-        console.log("Step changed to: " + stepIndex);
         loadStep(stepIndex);
     }
 
     function loadStep(stepNumber) {
         if (stepNumber === 1) {
-            document.getElementById("step1Content").style.display = "block";
-            document.getElementById("step2Content").style.display = "none";
+            document.getElementById("accountInfoStepContent").style.display = "block";
+            document.getElementById("personalInfoStepContent").style.display = "none";
+            document.getElementById("contactInfoStepContent").style.display = "none";
         } else if (stepNumber === 2) {
-            document.getElementById("step1Content").style.display = "none";
-            document.getElementById("step2Content").style.display = "block";
+            document.getElementById("accountInfoStepContent").style.display = "none";
+            document.getElementById("personalInfoStepContent").style.display = "block";
+            document.getElementById("contactInfoStepContent").style.display = "none";
+        } else if (stepNumber === 3) {
+            document.getElementById("accountInfoStepContent").style.display = "none";
+            document.getElementById("personalInfoStepContent").style.display = "none";
+            document.getElementById("contactInfoStepContent").style.display = "block";
         }
     }
 </script>

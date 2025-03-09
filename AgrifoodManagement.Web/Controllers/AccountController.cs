@@ -50,9 +50,10 @@ namespace AgrifoodManagement.Web.Controllers
             {
                 Email = model.Email,
                 Password = model.Password,
-                FirstName = "Adelina",
-                LastName = "Fatu",
-                PhoneNumber = "555232322"
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                UserType = model.UserType,
+                PhoneNumber = model.PhoneNumber
             };
 
             var result = await _mediator.Send(command);

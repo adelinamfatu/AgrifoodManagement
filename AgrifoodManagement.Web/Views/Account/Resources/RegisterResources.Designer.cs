@@ -79,6 +79,24 @@ namespace AgrifoodManagement.Web.Views.Account.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to First Name.
+        /// </summary>
+        internal static string FirstNamePlaceholder {
+            get {
+                return ResourceManager.GetString("FirstNamePlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Name.
+        /// </summary>
+        internal static string LastNamePlaceholder {
+            get {
+                return ResourceManager.GetString("LastNamePlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login now.
         /// </summary>
         internal static string LoginNowButton {
@@ -88,20 +106,20 @@ namespace AgrifoodManagement.Web.Views.Account.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter your name.
-        /// </summary>
-        internal static string NamePlaceholder {
-            get {
-                return ResourceManager.GetString("NamePlaceholder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enter your password.
+        ///   Looks up a localized string similar to Password.
         /// </summary>
         internal static string PasswordPlaceholder {
             get {
                 return ResourceManager.GetString("PasswordPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone Number.
+        /// </summary>
+        internal static string PhoneNumberPlaceholder {
+            get {
+                return ResourceManager.GetString("PhoneNumberPlaceholder", resourceCulture);
             }
         }
         
@@ -120,6 +138,15 @@ namespace AgrifoodManagement.Web.Views.Account.Resources {
         internal static string SignupTitle {
             get {
                 return ResourceManager.GetString("SignupTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Type.
+        /// </summary>
+        internal static string UserTypePlaceholder {
+            get {
+                return ResourceManager.GetString("UserTypePlaceholder", resourceCulture);
             }
         }
     }
