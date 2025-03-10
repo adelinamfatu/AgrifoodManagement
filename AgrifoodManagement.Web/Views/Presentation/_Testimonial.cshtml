@@ -1,11 +1,13 @@
-﻿<section class="testimonial section-padding" data-scroll-index="4">
+﻿@using AgrifoodManagement.Web.Views.Presentation.Resources;
+
+<section class="testimonial section-padding" data-scroll-index="4">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="sectioner-header text-center white">
-                    <h3>Testimonials</h3>
+                    <h3>@_TestimonialResources.Title</h3>
                     <span class="line"></span>
-                    <p class="white">Sed quis nisi nisi. Proin consectetur porttitor dui sit amet viverra. Fusce sit amet lorem faucibus, vestibulum ante in, pharetra ante.</p>
+                    <p class="white">@_TestimonialResources.Header</p>
                 </div>
                 <div class="section-content">
                     <div class="row">
@@ -17,9 +19,9 @@
                                     </div>
                                     <div class="test-text">
                                         <span class="title">
-                                            <span>John Michal</span> Digital Designer
+                                            <span>@_TestimonialResources.Person1Name</span>@_TestimonialResources.Person1JobTitle
                                         </span>
-                                        Consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam eratvo lutpat.
+                                        @_TestimonialResources.Testimonial1
                                     </div>
                                 </div>
                                 <div class="slider-item">
@@ -28,9 +30,9 @@
                                     </div>
                                     <div class="test-text">
                                         <span class="title">
-                                            <span>Steve Smith</span> App User
+                                            <span>@_TestimonialResources.Person2Name</span>@_TestimonialResources.Person2JobTitle
                                         </span>
-                                        Euismod tincidunt ut laoreet dolore magna aliquam eratvo lutpat. Ut wisi enim ad minim veniam, quis nostrud v
+                                        @_TestimonialResources.Testimonial2
                                     </div>
                                 </div>
                                 <div class="slider-item">
@@ -39,9 +41,9 @@
                                     </div>
                                     <div class="test-text">
                                         <span class="title">
-                                            <span>Gordon Shaw</span> Blogger
+                                            <span>@_TestimonialResources.Person3Name</span>@_TestimonialResources.Person3JobTitle
                                         </span>
-                                        Consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam eratvo lutpat. Ut wisi enim ad minim veniam, quis nostrud v
+                                        @_TestimonialResources.Testimonial3
                                     </div>
                                 </div>
                             </div>

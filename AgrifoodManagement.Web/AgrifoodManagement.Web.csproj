@@ -62,6 +62,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>_FaqResources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Views\Presentation\Resources\_TestimonialResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>_TestimonialResources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Views\Shared\Resources\_LayoutResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -106,6 +111,10 @@
     <EmbeddedResource Update="Views\Presentation\Resources\_FaqResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>_FaqResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Presentation\Resources\_TestimonialResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>_TestimonialResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Shared\Resources\_LayoutResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

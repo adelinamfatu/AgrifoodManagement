@@ -32,18 +32,17 @@
     <script src="js/scrollIt.min.js"></script>
     <script src="js/wow.min.js"></script>
     <script>
+        $(document).ready(function () {
+            $('.slider').bxSlider({
+                auto: true,
+                pager: false,
+                controls: true,
+                pause: 5000,
+                speed: 500
+            });
+        });
+
         $(window).on("load", function () {
-            var bodyScroll = $(window).scrollTop(),
-                navbar = $(".navbar");
-
-            if (bodyScroll > 50) {
-                $('.navbar-logo img').attr('src', 'images/logo-black.png');
-                navbar.addClass("nav-scroll");
-            } else {
-                $('.navbar-logo img').attr('src', 'images/logo-white.png');
-                navbar.removeClass("nav-scroll");
-            }
-
             $.scrollIt({
                 easing: 'swing',
                 scrollTime: 900,
