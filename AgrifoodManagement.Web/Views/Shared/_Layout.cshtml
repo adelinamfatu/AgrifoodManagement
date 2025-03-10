@@ -31,5 +31,27 @@
     <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
     <script src="js/scrollIt.min.js"></script>
     <script src="js/wow.min.js"></script>
+    <script>
+        $(window).on("load", function () {
+            var bodyScroll = $(window).scrollTop(),
+                navbar = $(".navbar");
+
+            if (bodyScroll > 50) {
+                $('.navbar-logo img').attr('src', 'images/logo-black.png');
+                navbar.addClass("nav-scroll");
+            } else {
+                $('.navbar-logo img').attr('src', 'images/logo-white.png');
+                navbar.removeClass("nav-scroll");
+            }
+
+            $.scrollIt({
+                easing: 'swing',
+                scrollTime: 900,
+                activeClass: 'active',
+                onPageChange: null,
+                topOffset: -63
+            });
+        });
+    </script>
 </body>
 </html>

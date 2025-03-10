@@ -1,11 +1,13 @@
-﻿<section class="contact section-padding" data-scroll-index="6">
+﻿@using AgrifoodManagement.Web.Views.Presentation.Resources;
+
+<section class="contact section-padding" data-scroll-index="6">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="sectioner-header text-center">
-                    <h3>Contact us</h3>
+                    <h3>@_ContactResources.Title</h3>
                     <span class="line"></span>
-                    <p>Sed quis nisi nisi. Proin consectetur porttitor dui sit amet viverra. Fusce sit amet lorem faucibus, vestibulum ante in, pharetra ante.</p>
+                    <p>@_ContactResources.Header</p>
                 </div>
                 <div class="section-content">
                     <div class="row">
@@ -29,33 +31,33 @@
                                 <div class="contact-item media">
                                     <i class="fa fa-map-marker-alt media-left media-right-margin"></i>
                                     <div class="media-body">
-                                        <p class="text-uppercase">Address</p>
-                                        <p class="text-uppercase">New Delhi, India</p>
+                                        <p class="text-uppercase">@_ContactResources.AddressTitle</p>
+                                        <p class="text-uppercase">@_ContactResources.AddressDescription</p>
                                     </div>
                                 </div>
                                 <div class="contact-item media">
                                     <i class="fa fa-mobile media-left media-right-margin"></i>
                                     <div class="media-body">
-                                        <p class="text-uppercase">Phone</p>
+                                        <p class="text-uppercase">@_ContactResources.PhoneTitle</p>
                                         <p class="text-uppercase">
-                                            <a class="text-white" href="tel:+15173977100">009900990099</a>
+                                            <a class="text-white" href="tel:+15173977100">@_ContactResources.PhoneDescription</a>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="contact-item media">
                                     <i class="fa fa-envelope media-left media-right-margin"></i>
                                     <div class="media-body">
-                                        <p class="text-uppercase">E-mail</p>
+                                        <p class="text-uppercase">@_ContactResources.EmailTitle</p>
                                         <p class="text-uppercase">
-                                            <a class="text-white" href="mailto:abcdefg@gmail.com">yogeshsingh.now@gmail.com</a>
+                                            <a class="text-white" href="mailto:noreply.orderus@gmail.com">@_ContactResources.EmailDescription</a>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="contact-item media">
                                     <i class="fa fa-clock media-left media-right-margin"></i>
                                     <div class="media-body">
-                                        <p class="text-uppercase">Working Hours</p>
-                                        <p class="text-uppercase">Mon-Fri 9.00 AM to 5.00PM.</p>
+                                        <p class="text-uppercase">@_ContactResources.HoursTitle</p>
+                                        <p class="text-uppercase">@_ContactResources.HoursDescription</p>
                                     </div>
                                 </div>
                             </div>

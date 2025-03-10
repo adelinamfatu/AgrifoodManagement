@@ -9,11 +9,11 @@ body {
 }
 
 a {
-    color: #5f0099;
+    color: #a8deac;
 }
 
     a:hover {
-        color: #5f0099;
+        color: #a8deac;
     }
 
 h1, h2, h3 {
@@ -50,7 +50,7 @@ h6 {
 }
 
     .navbar .active {
-        color: #5f0099 !important;
+        color: #a8deac !important;
     }
 
     .navbar .navbar-brand {
@@ -69,7 +69,7 @@ h6 {
         }
 
             .navbar .nav-item a:hover {
-                color: #5f0099;
+                color: #a8deac;
             }
 
     .navbar .nav-link {
@@ -123,8 +123,8 @@ h6 {
     }
 
 .banner {
-    background: #7a60ff;
-    background: linear-gradient(to left, #7a60ff, #cd9ffa);
+    background: #7bae7f;
+    background: linear-gradient(to left, #7bae7f, #a8deac);
     padding: 100px 0px;
     position: relative;
 }
@@ -198,7 +198,7 @@ h6 {
 .line {
     height: 2px;
     width: 50px;
-    background: #8e1efc;
+    background: #a8deac;
     display: block;
     margin: 20px auto 20px;
 }
@@ -209,7 +209,7 @@ h6 {
         left: 50%;
         width: 150px;
         height: 2px;
-        border-bottom: 2px dashed #8e1efc;
+        border-bottom: 2px dashed #a8deac;
         margin-left: -75px;
     }
 
@@ -232,8 +232,8 @@ h6 {
         width: 135px;
         height: 135px;
         border-radius: 100px;
-        background: #7a60ff;
-        background: linear-gradient(to left, #7a60ff, #cd9ffa);
+        background: #7bae7f;
+        background: linear-gradient(to left, #7bae7f, #a8deac);
         color: #ffffff;
         font-size: 50px;
         line-height: 135px;
@@ -252,9 +252,9 @@ h6 {
     }
 
 .about-btn {
-    color: #8e1efc;
+    color: #a8deac;
     padding: 10px 40px;
-    border: 2px solid #8e1efc;
+    border: 2px solid #a8deac;
     border-radius: 7px;
     margin-top: 30px;
     display: inline-block;
@@ -262,7 +262,7 @@ h6 {
 }
 
     .about-btn:hover {
-        background: #8e1efc;
+        background: #a8deac;
         color: #ffffff;
         text-decoration: none;
     }
@@ -274,7 +274,7 @@ h6 {
 }
 
 .video-overlay {
-    background: linear-gradient(to left, rgba(122, 96, 255, 0.90), rgba(205, 159, 250, 0.90));
+    background: linear-gradient(to left, rgba(123, 174, 127, 0.90), rgba(66, 164, 138, 0.90));
 }
 
 .video-section h3 {
@@ -289,7 +289,7 @@ h6 {
     height: 70px;
     border-radius: 100px;
     background: #ffffff;
-    color: #8e1efc;
+    color: #a8deac;
     font-size: 30px;
     line-height: 70px;
     margin: 0 auto;
@@ -361,10 +361,10 @@ h6 {
         width: 50px;
         height: 50px;
         border-radius: 100px;
-        color: rgb(142, 30, 252);
+        color: #a8deac;
         font-size: 18px;
         line-height: 50px;
-        border: 1px solid rgb(142, 30, 252);
+        border: 1px solid #a8deac;
     }
 
 .team {
@@ -382,15 +382,15 @@ h6 {
     }
 
     .team-detail h4 {
-        color: rgb(142, 30, 252);
+        color: #a8deac;
         margin-top: 20px;
         font-size: 17px;
         margin-bottom: 0px;
     }
 
 .testimonial {
-    background: #7a60ff;
-    background: linear-gradient(to left, #7a60ff, #cd9ffa);
+    background: #7bae7f;
+    background: linear-gradient(to left, #7bae7f, #a8deac);
     padding: 100px 0px;
     position: relative;
 }
@@ -520,16 +520,16 @@ input {
     color: #fff;
     border-radius: 2rem;
     border: 0;
-    background: #7a60ff;
-    background: linear-gradient(to left, #7a60ff, #cd9ffa);
+    background: #7bae7f;
+    background: linear-gradient(to left, #7bae7f, #a8deac);
     cursor: pointer;
 }
 
 .contact-info {
     padding: 2rem 2rem 1rem;
     border-radius: 8px;
-    background: #7a60ff;
-    background: linear-gradient(to left, #7a60ff, #cd9ffa);
+    background: #7bae7f;
+    background: linear-gradient(to left, #7bae7f, #a8deac);
 }
 
 .contact-item {
@@ -537,49 +537,13 @@ input {
 }
 
     .contact-item i {
-        font-size: 20px;
-    }
+    font-size: 20px;
+}
 
     .contact-item p {
         line-height: 20px;
         margin: 0;
     }
-
-.download {
-    background: #7a60ff;
-    background: linear-gradient(to left, #7a60ff, #cd9ffa);
-    padding: 100px 0px;
-    position: relative;
-}
-
-    .download::before {
-        content: "";
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: url(images/pattern.png);
-    }
-
-    .download ul {
-        list-style: none;
-    }
-
-        .download ul li {
-            display: inline-block;
-            margin: 0px 10px 10px 0px;
-        }
-
-            .download ul li a {
-                display: block;
-            }
-
-                .download ul li a img {
-                    width: 150px;
-                    border-radius: 7px;
-                }
 
 .footer-copy {
     background: #ffffff;
