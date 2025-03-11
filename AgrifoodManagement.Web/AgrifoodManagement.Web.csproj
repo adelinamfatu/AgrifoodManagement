@@ -37,6 +37,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>RegisterResources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Views\Presentation\Resources\_BannerResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>_BannerResources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Views\Presentation\Resources\_MissionResources.Designer.cs">
       <DependentUpon>_MissionResources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -91,6 +96,10 @@
     <EmbeddedResource Update="Views\Account\Resources\RegisterResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>RegisterResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Presentation\Resources\_BannerResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>_BannerResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Presentation\Resources\_MissionResources.resx">
       <LastGenOutput>_MissionResources.Designer.cs</LastGenOutput>
