@@ -15,12 +15,12 @@
         <div class="input-boxes">
             <div class="input-box">
                 <i class="fas fa-envelope"></i>
-                <ejs-textbox id="loginEmail" cssClass="e-outline" placeholder="@LoginResources.EmailPlaceholder"
+                <ejs-textbox id="loginEmail" name="Email" cssClass="e-outline" placeholder="@LoginResources.EmailPlaceholder"
                              floatLabelType="Auto" asp-for="Email"></ejs-textbox>
             </div>
             <div class="input-box">
                 <i class="fas fa-lock"></i>
-                <ejs-textbox id="loginPassword" cssClass="e-outline" placeholder="@LoginResources.PasswordPlaceholder"
+                <ejs-textbox id="loginPassword" name="Password" cssClass="e-outline" placeholder="@LoginResources.PasswordPlaceholder"
                              floatLabelType="Auto" type="password" asp-for="Password"></ejs-textbox>
             </div>
             <div class="text"><a href="#" class="main-color">@LoginResources.ForgetPasswordButton</a></div>
