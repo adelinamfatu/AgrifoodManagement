@@ -1,0 +1,98 @@
+﻿@using Syncfusion.EJ2.Navigations
+@using AgrifoodManagement.Web.Models;
+
+@{
+    Layout = null;
+    var sidebarItems = ViewBag.SidebarItems as List<SidebarItem>;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - My Application</title>
+    <link href="~/css/syncfusion.css" rel="stylesheet" />
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+        
+        .layout-container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        #sidebar-wrapper {
+            position: relative;
+            z-index: 999;
+        }
+        
+        #sidebarObj {
+            width: 260px;
+        }
+        
+        #contentArea {
+            flex: 1;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        #toolbar, #sidebarObj {
+            background: linear-gradient(to left, #7bae7f, #a8deac) !important;
+            border: none !important;
+        }
+
+        #e-tbr-btn_0 {
+            background-color: black !important;
+            border: 1px solid #444 !important;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5) !important;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="sidebar-wrapper">
+        <ejs-toolbar id="toolbar" clicked="function(args) {Toggle(args)}">
+            <e-toolbar-items>
+                <e-toolbar-item PrefixIcon="e-icons e-menu" TooltipText="Menu"></e-toolbar-item>
+            </e-toolbar-items>
+        </ejs-toolbar>
+
+        <ejs-sidebar id="sidebarObj" Width="260px" Position="Left" target="#contentArea">
+            <e-content-template>
+                <ejs-treeview id="treeObj" nodeSelected="function(args) {OnSelect(args)}">
+                    <e-treeview-fields Id="Id" Text="Name" ParentID="Pid" HasChildren="HasChild" DataSource="@sidebarItems" NavigateUrl="Url" />
+                </ejs-treeview>
+            </e-content-template>
+        </ejs-sidebar>
+    </div>
+
+    <div id="contentArea">
+        @RenderBody()
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.syncfusion.com/ej2/28.2.3/dist/ej2.min.js"></script>
+    <ejs-scripts></ejs-scripts>
+
+    <script>
+        function Toggle(args) {
+            var sidebarObj = document.getElementById("sidebarObj").ej2_instances[0];
+            sidebarObj.toggle();
+        }
+
+        function OnSelect(args) {
+            if (args.nodeData && args.nodeData.Url) {
+                fetch(args.nodeData.Url, { method: 'GET' })
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById("contentArea").innerHTML = html;
+                    })
+                    .catch(err => console.error("Error loading partial:", err));
+            }
+        }
+    </script>
+</body>
+</html>

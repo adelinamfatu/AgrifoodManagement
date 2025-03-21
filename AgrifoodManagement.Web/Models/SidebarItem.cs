@@ -8,5 +8,6 @@
         public bool HasChild { get; set; }
         public bool Expanded { get; set; }
         public string Badge { get; set; }
+        public string Url { get; set; }
     }
 }

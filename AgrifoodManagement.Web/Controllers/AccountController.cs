@@ -27,7 +27,7 @@ namespace AgrifoodManagement.Web.Controllers
             {
                 if (model.Email == "test@example.com" && model.Password == "password")
                 {
-                    return RedirectToAction("Dashboard", "Admin");
+                    return RedirectToAction("Index", "Admin");
                 }
                 else
                 {
