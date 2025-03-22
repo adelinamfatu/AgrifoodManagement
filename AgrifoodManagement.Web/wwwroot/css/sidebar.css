@@ -1,0 +1,142 @@
+﻿body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+}
+
+h1, h2, h3, h4, h5, h6, p, span, div {
+    font-family: 'Inter', sans-serif;
+}
+
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.toolbar-container {
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.content-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+#sidebar-wrapper {
+    position: relative;
+    z-index: 999;
+    height: 100%;
+}
+
+#sidebarObj {
+    height: 100%;
+    width: 260px;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+#contentArea {
+    flex: 1;
+    padding: 20px;
+    overflow: auto;
+    background-color: #fff;
+}
+
+#toolbar {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #eaeaea !important;
+    padding: 0 16px;
+}
+
+#sidebarObj {
+    background-color: #4CAF50 !important;
+    border: none !important;
+    color: white;
+}
+
+.menu-button {
+    background: transparent !important;
+    border: none !important;
+    color: #4CAF50;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.menu-button:hover {
+    background-color: rgba(76, 175, 80, 0.1) !important;
+}
+
+.menu-icon {
+    font-size: 24px;
+}
+
+.app-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #4CAF50;
+    margin-left: 12px;
+    display: inline-block;
+}
+
+#treeObj {
+    margin-top: 12px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    color: white;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+    margin: 2px 8px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-item.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+}
+
+.menu-item-icon {
+    margin-right: 12px;
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+}
+
+.menu-item-text {
+    font-size: 14px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: #333;
+}
+
+.e-toolbar .e-toolbar-items .e-toolbar-item button.e-btn {
+    background-color: transparent;
+    border: none;
+    color: #4CAF50;
+}
+
+.e-toolbar .e-toolbar-items .e-toolbar-item button.e-btn:hover {
+    background-color: rgba(76, 175, 80, 0.1);
+}

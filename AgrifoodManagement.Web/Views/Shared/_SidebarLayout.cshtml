@@ -1,231 +1,65 @@
-﻿@using Syncfusion.EJ2.Navigations
-@using AgrifoodManagement.Web.Models;
-
-@{
-    Layout = null;
+﻿@{
+    Layout = "_AdminLayout";
     var sidebarItems = ViewBag.SidebarItems as List<SidebarItem>;
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>@ViewBag.Title - My Application</title>
-    <link href="~/css/syncfusion.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
-        }
+<div class="layout-container">
+    <div class="toolbar-container">
+        <ejs-toolbar id="toolbar">
+            <e-toolbar-items>
+                <e-toolbar-item prefixIcon="bi bi-list" cssClass="menu-button" id="menu-toggle"></e-toolbar-item>
+                <e-toolbar-item text="Agri-Food Management" cssClass="app-title"></e-toolbar-item>
+            </e-toolbar-items>
+        </ejs-toolbar>
+    </div>
 
-        h1, h2, h3, h4, h5, h6, p, span, div {
-            font-family: 'Inter', sans-serif;
-        }
-
-        .layout-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        .toolbar-container {
-            width: 100%;
-            z-index: 1000;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .content-wrapper {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        #sidebar-wrapper {
-            position: relative;
-            z-index: 999;
-            height: 100%;
-        }
-
-        #sidebarObj {
-            height: 100%;
-            width: 260px;
-            font-family: 'Inter', sans-serif;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
-        }
-
-        #contentArea {
-            flex: 1;
-            padding: 20px;
-            overflow: auto;
-            background-color: #fff;
-        }
-
-        #toolbar {
-            background-color: #ffffff !important;
-            border-bottom: 1px solid #eaeaea !important;
-            padding: 0 16px;
-        }
-
-        #sidebarObj {
-            background-color: #4CAF50 !important;
-            border: none !important;
-            color: white;
-        }
-        
-        .menu-button {
-            background: transparent !important;
-            border: none !important;
-            color: #4CAF50;
-            cursor: pointer;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            transition: background-color 0.2s;
-        }
-
-        .menu-button:hover {
-            background-color: rgba(76, 175, 80, 0.1) !important;
-        }
-
-        .menu-icon {
-            font-size: 24px;
-        }
-        
-        .app-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #4CAF50;
-            margin-left: 12px;
-            display: inline-block;
-        }
-
-        #treeObj {
-            margin-top: 12px;
-        }
-
-        .menu-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 16px;
-            color: white;
-            transition: background-color 0.2s;
-            border-radius: 4px;
-            margin: 2px 8px;
-            cursor: pointer;
-        }
-        
-        .menu-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .menu-item.active {
-            background-color: rgba(255, 255, 255, 0.2);
-            font-weight: 600;
-        }
-
-        .menu-item-icon {
-            margin-right: 12px;
-            font-size: 18px;
-            width: 20px;
-            text-align: center;
-        }
-
-        .menu-item-text {
-            font-size: 14px;
-        }
-
-        .page-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 24px;
-            color: #333;
-        }
-
-        .e-toolbar .e-toolbar-items .e-toolbar-item button.e-btn {
-            background-color: transparent;
-            border: none;
-            color: #4CAF50;
-        }
-        
-        .e-toolbar .e-toolbar-items .e-toolbar-item button.e-btn:hover {
-            background-color: rgba(76, 175, 80, 0.1);
-        }
-    </style>
-</head>
-<body>
-    <div class="layout-container">
-        <div class="toolbar-container">
-            <ejs-toolbar id="toolbar">
-                <e-toolbar-items>
-                    <e-toolbar-item prefixIcon="bi bi-list" cssClass="menu-button" id="menu-toggle"></e-toolbar-item>
-                    <e-toolbar-item text="Agri-Food Management" cssClass="app-title"></e-toolbar-item>
-                </e-toolbar-items>
-            </ejs-toolbar>
+    <div class="content-wrapper">
+        <div id="sidebar-wrapper">
+            <ejs-sidebar id="sidebarObj" Width="260px" Position="Left" target="#contentArea" type="Push">
+                <e-content-template>
+                    <div id="sidebar-menu">
+                        @if (sidebarItems != null)
+                        {
+                            @foreach (var item in sidebarItems)
+                            {
+                                <div class="menu-item @(item.Id == ViewBag.ActiveItemId ? "active" : "")" onclick="navigateTo('@item.Url', '@item.Id')">
+                                    <i class="menu-item-icon @item.IconCss"></i>
+                                    <span class="menu-item-text">@item.Name</span>
+                                </div>
+                            }
+                        }
+                    </div>
+                </e-content-template>
+            </ejs-sidebar>
         </div>
 
-        <div class="content-wrapper">
-            <div id="sidebar-wrapper">
-                <ejs-sidebar id="sidebarObj" Width="260px" Position="Left" target="#contentArea" type="Push">
-                    <e-content-template>
-                        <div id="sidebar-menu">
-                            @if (sidebarItems != null) 
-                            {
-                                @foreach (var item in sidebarItems)
-                                {
-                                    <div class="menu-item @(item.Id == "1" ? "active" : "")" onclick="navigateTo('@item.Url', '@item.Id')">
-                                        <i class="menu-item-icon @item.IconCss"></i>
-                                        <span class="menu-item-text">@item.Name</span>
-                                    </div>
-                                }
-                            }
-                        </div>
-                    </e-content-template>
-                </ejs-sidebar>
-            </div>
-            <div id="contentArea">
-                @RenderBody()
-            </div>
+        <div id="contentArea">
+            @RenderBody()
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.syncfusion.com/ej2/28.2.3/dist/ej2.min.js"></script>
-    <ejs-scripts></ejs-scripts>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Set up click handler for the menu toggle button
-            document.getElementById('menu-toggle').addEventListener('click', function () {
-                toggleSidebar();
-            });
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize the sidebar
+        var sidebar = document.getElementById('sidebarObj').ej2_instances[0];
+
+        // Toggle sidebar on menu button click
+        document.getElementById('menu-toggle').addEventListener('click', function () {
+            sidebar.toggle();
+        });
+    });
+
+    function navigateTo(url, id) {
+        // Remove active class from all menu items
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.classList.remove('active');
         });
 
-        function toggleSidebar() {
-            var sidebarObj = document.getElementById("sidebarObj").ej2_instances[0];
-            sidebarObj.toggle();
-        }
+        // Add active class to clicked item
+        document.querySelector(`.menu-item[onclick*='${id}']`).classList.add('active');
 
-        function navigateTo(url, itemId) {
-            // Update active state
-            var menuItems = document.querySelectorAll('.menu-item');
-            menuItems.forEach(item => item.classList.remove('active'));
-
-            // Add active class to clicked item
-            event.currentTarget.classList.add('active');
-
-            // Navigate to the URL
-            fetch(url, { method: 'GET' })
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById("contentArea").innerHTML = html;
-                })
-                .catch(err => console.error("Error loading partial:", err));
-        }
-    </script>
-</body>
-</html>
+        // Navigate to the new page
+        window.location.href = url;
+    }
+</script>
