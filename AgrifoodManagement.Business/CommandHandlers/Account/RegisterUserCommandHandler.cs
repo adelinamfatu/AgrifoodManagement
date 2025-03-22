@@ -1,11 +1,12 @@
-﻿using AgrifoodManagement.Business.Commands;
+﻿using AgrifoodManagement.Business.Commands.Account;
 using AgrifoodManagement.Domain.Entities;
 using AgrifoodManagement.Domain.Interfaces;
 using AgrifoodManagement.Util;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
-namespace AgrifoodManagement.Business.CommandHandlers
+namespace AgrifoodManagement.Business.CommandHandlers.Account
 {
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Result<Guid>>
     {

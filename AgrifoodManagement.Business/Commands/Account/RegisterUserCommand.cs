@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AgrifoodManagement.Business.Commands
+namespace AgrifoodManagement.Business.Commands.Account
 {
     public class RegisterUserCommand : IRequest<Result<Guid>>
     {

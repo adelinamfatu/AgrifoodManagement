@@ -1,10 +1,19 @@
-﻿using AgrifoodManagement.Web.Models;
+﻿using AgrifoodManagement.Business.Commands.Account;
+using AgrifoodManagement.Web.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgrifoodManagement.Web.Controllers
 {
     public class AdminController : Controller
     {
+        private readonly IMediator _mediator;
+
+        public AdminController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         public IActionResult Dashboard()
         {
             ViewBag.SidebarItems = GetSidebarItems();
@@ -59,6 +68,37 @@ namespace AgrifoodManagement.Web.Controllers
             ViewBag.ActiveItemId = "7";
 
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadPhoto(IFormFile photo)
+        {
+            try
+            {
+                if (photo == null || photo.Length == 0)
+                {
+                    return Json(new { success = false, message = "No file was uploaded" });
+                }
+
+                var command = new UploadUserPhotoCommand
+                {
+                    Photo = photo
+                };
+
+                var result = await _mediator.Send(command);
+
+                if (result.IsSuccess)
+                {
+                    return Json(new { success = true, imageUrl = "/images/avatar.jpg" }); // Replace with actual path
+                }
+
+                return Json(new { success = false, message = result.Error });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Json(new { success = false, message = "An error occurred while processing your request." });
+            }
         }
 
         private List<SidebarViewModel> GetSidebarItems()

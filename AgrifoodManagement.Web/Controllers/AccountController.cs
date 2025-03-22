@@ -1,4 +1,4 @@
-﻿using AgrifoodManagement.Business.Commands;
+﻿using AgrifoodManagement.Business.Commands.Account;
 using AgrifoodManagement.Web.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
