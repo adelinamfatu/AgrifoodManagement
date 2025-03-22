@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "_AdminLayout";
-    var sidebarItems = ViewBag.SidebarItems as List<SidebarItem>;
+    var sidebarItems = ViewBag.SidebarItems as List<SidebarViewModel>;
 }
 
 <div class="layout-container">
@@ -9,6 +9,24 @@
             <e-toolbar-items>
                 <e-toolbar-item prefixIcon="bi bi-list" cssClass="menu-button" id="menu-toggle"></e-toolbar-item>
                 <e-toolbar-item text="Agri-Food Management" cssClass="app-title"></e-toolbar-item>
+                <e-toolbar-item template="<div class='toolbar-right-items'>
+                    <div class='notification-item'>
+                        <div class='notification-badge'></div>
+                        <i class='bi bi-bell'></i>
+                    </div>
+                    <div class='notification-item'>
+                        <div class='notification-badge'></div>
+                        <i class='bi bi-chat-dots'></i>
+                    </div>
+                    <div class='avatar-container'>
+                        <img src='/images/avatar.jpg' alt='User Avatar' class='user-avatar'>
+                        <div class='user-info'>
+                            <div class='user-name'>Adam Joe</div>
+                            <div class='user-role'>Admin</div>
+                        </div>
+                    </div>
+                </div>" cssClass="toolbar-right">
+                </e-toolbar-item>
             </e-toolbar-items>
         </ejs-toolbar>
     </div>
@@ -23,11 +41,28 @@
                             @foreach (var item in sidebarItems)
                             {
                                 <div class="menu-item @(item.Id == ViewBag.ActiveItemId ? "active" : "")" onclick="navigateTo('@item.Url', '@item.Id')">
-                                    <i class="menu-item-icon @item.IconCss"></i>
-                                    <span class="menu-item-text">@item.Name</span>
+                                    <div class="menu-item-content">
+                                        <i class="menu-item-icon @item.IconCss"></i>
+                                        <span class="menu-item-text">@item.Name</span>
+                                    </div>
+                                    @if (item.IsPro)
+                                    {
+                                        <span class="pro-badge">Pro</span>
+                                    }
                                 </div>
                             }
                         }
+
+                        <div class="upgrade-pro-container">
+                            <div class="upgrade-pro-logo">
+                                <i class="bi bi-gem"></i>
+                            </div>
+                            <h3>Upgrade to PRO</h3>
+                            <p>Improve your development process and start doing more with Agri-Food Management PRO!</p>
+                            <button class="upgrade-button" onclick="window.location.href='/Subscription/Upgrade'">
+                                Upgrade to PRO
+                            </button>
+                        </div>
                     </div>
                 </e-content-template>
             </ejs-sidebar>
