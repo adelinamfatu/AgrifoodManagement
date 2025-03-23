@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.Commands.Account;
+using AgrifoodManagement.Util;
 using AgrifoodManagement.Web.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -59,7 +60,78 @@ namespace AgrifoodManagement.Web.Controllers
             ViewBag.SidebarItems = GetSidebarItems();
             ViewBag.ActiveItemId = "6";
 
-            return View();
+            var viewModel = new ProductViewModel
+            {
+                Products = new List<ProductViewModel>
+                {
+                    new ProductViewModel
+                    {
+                        Name = "Organic Apples",
+                        Description = "Fresh organic apples from our orchard. Pesticide-free and harvested this week.",
+                        Price = 2.99m,
+                        Quantity = 150.5,
+                        UnitOfMeasurement = "kg",
+                        ExpirationDate = DateTime.Now.AddDays(14),
+                        Location = "North Field",
+                        Category = "Fruits",
+                        ViewCount = 45,
+                        InquiryCount = 12,
+                        DemandForecast = "High",
+                        EstimatedMarketPrice = 3.45m,
+                        IsArchived = false
+                    },
+                    new ProductViewModel
+                    {
+                        Name = "Winter Wheat",
+                        Description = "Locally grown winter wheat, perfect for milling and baking. Chemical-free farming methods.",
+                        Price = 1.75m,
+                        Quantity = 500,
+                        UnitOfMeasurement = "kg",
+                        ExpirationDate = DateTime.Now.AddDays(60),
+                        Location = "South Field",
+                        Category = "Grains",
+                        ViewCount = 28,
+                        InquiryCount = 3,
+                        DemandForecast = "Medium",
+                        EstimatedMarketPrice = 1.85m,
+                        IsArchived = false
+                    },
+                    new ProductViewModel
+                    {
+                        Name = "Fresh Tomatoes",
+                        Description = "Vine-ripened tomatoes, picked at peak ripeness. Great for salads and sauces.",
+                        Price = 3.49m,
+                        Quantity = 75,
+                        UnitOfMeasurement = "kg",
+                        ExpirationDate = DateTime.Now.AddDays(5),
+                        Location = "Greenhouse 2",
+                        Category = "Vegetables",
+                        ViewCount = 67,
+                        InquiryCount = 15,
+                        DemandForecast = "High",
+                        EstimatedMarketPrice = 3.99m,
+                        IsArchived = false
+                    },
+                    new ProductViewModel
+                    {
+                        Name = "Organic Milk",
+                        Description = "Fresh organic milk from our grass-fed cows. Pasteurized but not homogenized.",
+                        Price = 3.99m,
+                        Quantity = 100,
+                        UnitOfMeasurement = "liter",
+                        ExpirationDate = DateTime.Now.AddDays(7),
+                        Location = "Dairy Barn",
+                        Category = "Dairy",
+                        ViewCount = 38,
+                        InquiryCount = 8,
+                        DemandForecast = "Medium",
+                        EstimatedMarketPrice = 4.25m,
+                        IsArchived = false
+                    }
+                }
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Forum()
@@ -89,14 +161,13 @@ namespace AgrifoodManagement.Web.Controllers
 
                 if (result.IsSuccess)
                 {
-                    return Json(new { success = true, imageUrl = "/images/avatar.jpg" }); // Replace with actual path
+                    return Json(new { success = true, imageUrl = "/images/avatar.jpg" });
                 }
 
                 return Json(new { success = false, message = result.Error });
             }
             catch (Exception ex)
             {
-                // Log the exception
                 return Json(new { success = false, message = "An error occurred while processing your request." });
             }
         }

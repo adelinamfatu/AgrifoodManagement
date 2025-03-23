@@ -4,6 +4,8 @@
     font-family: 'Inter', sans-serif;
     background-color: #f5f7fa;
     color: #333;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6, p, span, div {
@@ -41,13 +43,6 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     width: 260px;
     font-family: 'Inter', sans-serif;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
-}
-
-#contentArea {
-    flex: 1;
-    padding: 20px;
-    overflow: auto;
-    background-color: #fff;
 }
 
 #toolbar {
@@ -291,6 +286,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
+    background-color: #fff;
 }
 
 .user-avatar-placeholder {

@@ -1,6 +1,134 @@
-﻿@{
+﻿@using AgrifoodManagement.Util;
+
+@{
     Layout = "~/Views/Shared/_SidebarLayout.cshtml";
+
+    var productCategoriesData = Enum.GetValues(typeof(ProductCategory))
+                        .Cast<ProductCategory>()
+                        .Select(g => g.ToString())
+                        .ToList();
 }
 
-<h2>Announcements Page</h2>
-<p>This is your Announcements page.</p>
+@model ProductViewModel
+
+<div class="announcement-container">
+    <div class="search-filter-row">
+        <div class="search-area">
+            <input type="text" class="search-input" placeholder="Search your listings..." />
+            <button class="search-button">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+
+        <div class="filter-options">
+            <ejs-dropdownlist id="productCategories"
+                dataSource="@productCategoriesData"
+                placeholder="Select a product category"
+                index="0"
+                popupHeight="220px"
+                change="valueChange">
+                <e-dropdownlist-fields text="Product category" value="Id"></e-dropdownlist-fields>
+            </ejs-dropdownlist>
+
+            <ejs-button id="addNewButton" content='<i class="fa fa-plus"></i> ADD NEW'></ejs-button>
+        </div>
+    </div>
+
+    <ejs-chiplist id="chip-default">
+        <e-chips>
+            <e-chip text="Active" cssClass="e-primary" enabled="true"></e-chip>
+            <e-chip text="Expiring Soon" cssClass="e-warning" enabled="true"></e-chip>
+            <e-chip text="High Demand" cssClass="e-success" enabled="true"></e-chip>
+            <e-chip text="Low Stock" cssClass="e-danger" enabled="true"></e-chip>
+            <e-chip text="Archived" cssClass="e-secondary" enabled="true"></e-chip>
+        </e-chips>
+    </ejs-chiplist>
+
+    <div class="results-header">
+        <p>Showing @Model.Products.Count active listings</p>
+
+        <div class="view-options">
+            <div class="sort-dropdown">
+                <span>Sort by: </span>
+                <select>
+                    <option>Expiration Date</option>
+                    <option>Price: High to Low</option>
+                    <option>Price: Low to High</option>
+                    <option>Quantity</option>
+                    <option>Demand Forecast</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="products-container">
+        @foreach (var product in Model.Products)
+        {
+            <div class="product-card">
+                <div class="product-header" style="background-color: #4CAF50;">
+                    <img src="/images/product-placeholder.png" alt="@product.Name" class="product-image" />
+                </div>
+
+                <div class="product-content">
+                    <div class="product-title-section">
+                        <h3 class="product-name">@product.Name</h3>
+                        <div class="product-controls">
+                            <button class="edit-btn" title="Edit Listing"><i class="fa fa-pencil"></i></button>
+                            <button class="archive-btn" title="Archive Listing"><i class="fa fa-archive"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="product-price">$@product.Price.ToString("0.00") per @product.UnitOfMeasurement</div>
+
+                    <p class="product-description">@product.Description</p>
+
+                    <div class="product-details">
+                        <div class="detail">
+                            <i class="fa fa-balance-scale"></i>
+                            <span>Available: @product.Quantity @product.UnitOfMeasurement</span>
+                        </div>
+                        <div class="detail">
+                            <i class="fa fa-calendar"></i>
+                            <span>Expires: @product.ExpirationDate.ToString("MMM dd, yyyy")</span>
+                            @if ((product.ExpirationDate - DateTime.Now).TotalDays < 7)
+                            {
+                                <span class="warning-tag">Expiring Soon</span>
+                            }
+                        </div>
+                        <div class="detail">
+                            <i class="fa fa-map-marker"></i>
+                            <span>Location: Farm Location</span>
+                        </div>
+                        <div class="detail">
+                            <i class="fa fa-line-chart"></i>
+                            <span>Demand Forecast: <strong class="high-demand">High</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="product-footer">
+                        <div class="metrics">
+                            <div class="metric">
+                                <span class="metric-value">12</span>
+                                <span class="metric-label">Views</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-value">3</span>
+                                <span class="metric-label">Inquiries</span>
+                            </div>
+                        </div>
+                        <div class="suggested-price-tag">
+                            Est. Market: $@((product.Price * 1.15m).ToString("0.00"))
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function valueChange(args) {
+        console.log("Selected value: ", args.value);
+        // Add any additional handling code here
+    }
+</script>
