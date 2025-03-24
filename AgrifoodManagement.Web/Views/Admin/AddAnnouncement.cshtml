@@ -1,0 +1,339 @@
+﻿@using AgrifoodManagement.Util;
+
+@model ProductViewModel
+
+@{
+    Layout = "~/Views/Shared/_SidebarLayout.cshtml";
+
+    var productCategoriesData = Enum.GetValues(typeof(ProductCategory))
+                        .Cast<ProductCategory>()
+                        .Select(g => g.ToString())
+                        .ToList();
+
+    var discountTypesData = new[] {
+        "Choose New Year Discount",
+        "Seasonal Discount",
+        "Clearance Sale"
+    };
+
+    var unitsData = new[] {
+        new { Id = "kg", Unit = "Kilogram (kg)" },
+        new { Id = "lb", Unit = "Pound (lb)" },
+        new { Id = "unit", Unit = "Unit" },
+        new { Id = "box", Unit = "Box" },
+        new { Id = "ton", Unit = "Ton" }
+    };
+
+    var demandForecastData = new[] {
+        new { Id = "High", Demand = "High" },
+        new { Id = "Medium", Demand = "Medium" },
+        new { Id = "Low", Demand = "Low" }
+    };
+}
+
+<div class="add-product-container">
+    <div class="page-header">
+        <div class="header-title">
+            <h1>Add New Product</h1>
+        </div>
+        <div class="action-buttons">
+            <button type="button" class="btn btn-outline-secondary" id="saveDraftBtn">Save Draft</button>
+            <button type="submit" class="btn btn-success" id="addProductBtn">Add Product</button>
+        </div>
+    </div>
+
+    <form id="addProductForm" method="post" enctype="multipart/form-data">
+        <div class="form-container">
+            <div class="form-left-panel">
+                <div class="form-section">
+                    <h2>General Information</h2>
+
+                    <div class="form-group">
+                        <label for="Name">Name Product</label>
+                        <ejs-textbox id="Name" name="Name" cssClass="e-outline"
+                                     placeholder="Name Product" floatLabelType="Auto" required="true">
+                        </ejs-textbox>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Description">Description Product</label>
+                        <ejs-textbox id="Description" name="Description" cssClass="e-outline"
+                                     placeholder="Description Product" floatLabelType="Auto"
+                                     multiline="true" rows="4">
+                        </ejs-textbox>
+                    </div>
+
+                    <div class="form-group form-row">
+                        <div class="col">
+                            <label for="Size">Size</label>
+                            <div class="size-selector">
+                                <p class="size-hint">Pick Available Size</p>
+                                <div class="size-options">
+                                    <label class="size-option">
+                                        <input type="checkbox" name="Size" value="XS">
+                                        <span>XS</span>
+                                    </label>
+                                    <label class="size-option selected">
+                                        <input type="checkbox" name="Size" value="S" checked>
+                                        <span>S</span>
+                                    </label>
+                                    <label class="size-option">
+                                        <input type="checkbox" name="Size" value="M">
+                                        <span>M</span>
+                                    </label>
+                                    <label class="size-option">
+                                        <input type="checkbox" name="Size" value="XL">
+                                        <span>XL</span>
+                                    </label>
+                                    <label class="size-option">
+                                        <input type="checkbox" name="Size" value="XXL">
+                                        <span>XXL</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <label for="Gender">Gender</label>
+                            <div class="gender-selector">
+                                <p class="gender-hint">Pick Available Gender</p>
+                                <div class="gender-options">
+                                    <label class="gender-option">
+                                        <input type="radio" name="Gender" value="Men">
+                                        <span><i class="fa fa-male"></i> Men</span>
+                                    </label>
+                                    <label class="gender-option selected">
+                                        <input type="radio" name="Gender" value="Women" checked>
+                                        <span><i class="fa fa-female"></i> Women</span>
+                                    </label>
+                                    <label class="gender-option">
+                                        <input type="radio" name="Gender" value="Unisex">
+                                        <span><i class="fa fa-user"></i> Unisex</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>Pricing And Stock</h2>
+
+                    <div class="form-group form-row">
+                        <div class="col">
+                            <label for="Price">Base Pricing</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                <ejs-textbox id="Price" name="Price" cssClass="e-outline"
+                                             placeholder="Price" floatLabelType="Auto" type="number"
+                                             step="0.01" required="true">
+                                </ejs-textbox>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <label for="Quantity">Stock</label>
+                            <ejs-textbox id="Quantity" name="Quantity" cssClass="e-outline"
+                                         placeholder="Stock" floatLabelType="Auto" type="number" required="true">
+                            </ejs-textbox>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-row">
+                        <div class="col">
+                            <label for="Discount">Discount</label>
+                            <div class="input-group">
+                                <ejs-textbox id="Discount" name="Discount" cssClass="e-outline"
+                                             placeholder="Discount" floatLabelType="Auto" type="number" min="0" max="100">
+                                </ejs-textbox>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <label for="DiscountType">Discount Type</label>
+                            <div class="input-group">
+                                <ejs-dropdownlist id="DiscountType" name="DiscountType"
+                                                  dataSource="@discountTypesData"
+                                                  placeholder="Select discount type"
+                                                  index="0"
+                                                  popupHeight="220px"
+                                                  change="valueChange">
+                                    <e-dropdownlist-fields text="this" value="this"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fa fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2>Additional Information</h2>
+
+                    <div class="form-group form-row">
+                        <div class="col">
+                            <label for="UnitOfMeasurement">Unit of Measurement</label>
+                            <ejs-dropdownlist id="UnitOfMeasurement" name="UnitOfMeasurement"
+                                              dataSource="@unitsData"
+                                              placeholder="Select unit of measurement"
+                                              index="0"
+                                              popupHeight="220px"
+                                              change="valueChange">
+                                <e-dropdownlist-fields text="Unit" value="Id"></e-dropdownlist-fields>
+                            </ejs-dropdownlist>
+                        </div>
+
+                        <div class="col">
+                            <label for="Location">Location</label>
+                            <ejs-textbox id="Location" name="Location" cssClass="e-outline"
+                                         placeholder="Location" floatLabelType="Auto" required="true">
+                            </ejs-textbox>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-row">
+                        <div class="col">
+                            <label for="ExpirationDate">Expiration Date</label>
+                            <ejs-textbox id="ExpirationDate" name="ExpirationDate" cssClass="e-outline"
+                                         placeholder="Expiration Date" floatLabelType="Auto" type="date" required="true">
+                            </ejs-textbox>
+                        </div>
+
+                        <div class="col">
+                            <label for="DemandForecast">Demand Forecast</label>
+                            <ejs-dropdownlist id="DemandForecast" name="DemandForecast"
+                                              dataSource="@demandForecastData"
+                                              placeholder="Select demand forecast"
+                                              index="0"
+                                              popupHeight="220px"
+                                              change="valueChange"
+                                              floatLabelType="Auto"
+                                              fields="@(new Syncfusion.EJ2.DropDowns.DropDownListFieldSettings { Text = "Demand", Value = "Id" })">
+                            </ejs-dropdownlist>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-right-panel">
+                <div class="upload-section">
+                    <h2>Upload Img</h2>
+
+                    <div class="main-image-upload">
+                        <div class="image-preview" id="mainImagePreview">
+                            <img src="/images/upload-placeholder.png" alt="Upload product image" id="mainPreviewImg">
+                            <div class="upload-overlay">
+                                <i class="fa fa-cloud-upload"></i>
+                                <p>Click or drag image to upload</p>
+                            </div>
+                        </div>
+                        <input type="file" id="mainImageUpload" name="MainImage" accept="image/*" class="hidden-file-input">
+                    </div>
+
+                    <div class="thumbnail-container">
+                        <div class="thumbnail-upload">
+                            <div class="thumbnail-preview">
+                                <img src="/images/upload-placeholder.png" alt="Thumbnail 1">
+                            </div>
+                            <input type="file" name="Thumbnail1" accept="image/*" class="hidden-file-input">
+                        </div>
+
+                        <div class="thumbnail-upload">
+                            <div class="thumbnail-preview">
+                                <img src="/images/upload-placeholder.png" alt="Thumbnail 2">
+                            </div>
+                            <input type="file" name="Thumbnail2" accept="image/*" class="hidden-file-input">
+                        </div>
+
+                        <div class="thumbnail-upload">
+                            <div class="thumbnail-preview">
+                                <img src="/images/upload-placeholder.png" alt="Thumbnail 3">
+                            </div>
+                            <input type="file" name="Thumbnail3" accept="image/*" class="hidden-file-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-section">
+                    <h2>Category</h2>
+                    <div class="form-group">
+                        <label for="Category">Product Category</label>
+                        <ejs-dropdownlist id="Category" name="Category"
+                            dataSource="@productCategoriesData"
+                            placeholder="Select a product category"
+                            index="0"
+                            popupHeight="220px"
+                            change="valueChange">
+                            <e-dropdownlist-fields text="Category" value="Id"></e-dropdownlist-fields>
+                        </ejs-dropdownlist>
+                    </div>
+
+                    <button type="button" class="btn btn-light add-category-btn">
+                        <i class="fa fa-plus"></i> Add Category
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Preview uploaded images
+    document.getElementById('mainImageUpload').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('mainPreviewImg').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Click to trigger file upload
+    document.getElementById('mainImagePreview').addEventListener('click', function () {
+        document.getElementById('mainImageUpload').click();
+    });
+
+    // Form submission handling
+    document.getElementById('addProductForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // Add your form submission logic here
+        // You can use FormData to collect all form data including files
+        const formData = new FormData(this);
+
+        // Example AJAX submission
+        // fetch('/Product/Add', {
+        //     method: 'POST',
+        //     body: formData
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     console.log('Success:', data);
+        //     window.location.href = '/Product/Index';
+        // })
+        // .catch(error => {
+        //     console.error('Error:', error);
+        // });
+    });
+
+    // Save draft button handling
+    document.getElementById('saveDraftBtn').addEventListener('click', function () {
+        // Add your save draft logic here
+        console.log('Saving draft...');
+    });
+
+    function valueChange(args) {
+        console.log("Selected value:", args.value);
+        // Additional handling code here
+    }
+</script>

@@ -134,6 +134,14 @@ namespace AgrifoodManagement.Web.Controllers
             return View(viewModel);
         }
 
+        public IActionResult AddAnnouncement()
+        {
+            ViewBag.SidebarItems = GetSidebarItems();
+            ViewBag.ActiveItemId = "6";
+
+            return View();
+        }
+
         public IActionResult Forum()
         {
             ViewBag.SidebarItems = GetSidebarItems();

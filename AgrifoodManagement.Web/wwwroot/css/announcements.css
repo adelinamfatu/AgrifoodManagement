@@ -214,3 +214,286 @@
     font-size: 12px;
     color: #0077cc;
 }
+
+/* Add announcements */
+.add-product-container {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.header-title h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+}
+
+.btn-outline-secondary {
+    background-color: transparent;
+    border-color: #ddd;
+    color: #666;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #f5f5f5;
+}
+
+.btn-success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #45a049;
+}
+
+.btn-light {
+    background-color: #f5f5f5;
+    border-color: #ddd;
+    color: #333;
+}
+
+.form-container {
+    display: flex;
+    gap: 24px;
+}
+
+.form-left-panel {
+    flex: 2;
+}
+
+.form-right-panel {
+    flex: 1;
+}
+
+.form-section, .upload-section, .category-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.form-section h2, .upload-section h2, .category-section h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.col {
+    flex: 1;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+.input-group {
+    display: flex;
+}
+
+.input-group-prepend, .input-group-append {
+    display: flex;
+}
+
+.input-group-text {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+    color: #666;
+}
+
+.input-group .form-control {
+    border-radius: 0 6px 6px 0;
+}
+
+.input-group-append .btn {
+    border-radius: 0 6px 6px 0;
+    border-left: none;
+}
+
+.size-hint, .gender-hint {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.size-options, .gender-options {
+    display: flex;
+    gap: 8px;
+}
+
+.size-option, .gender-option {
+    position: relative;
+    cursor: pointer;
+}
+
+.size-option input, .gender-option input {
+    position: absolute;
+    opacity: 0;
+}
+
+.size-option span, .gender-option span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: white;
+    transition: all 0.2s;
+}
+
+.size-option.selected span, .gender-option.selected span,
+.size-option input:checked + span, .gender-option input:checked + span {
+    background-color: #e8f5e9;
+    border-color: #4CAF50;
+    color: #4CAF50;
+}
+
+.main-image-upload {
+    margin-bottom: 20px;
+}
+
+.image-preview {
+    width: 100%;
+    height: 300px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.upload-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    color: white;
+}
+
+.upload-overlay i {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.image-preview:hover .upload-overlay {
+    opacity: 1;
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+.thumbnail-container {
+    display: flex;
+    gap: 10px;
+}
+
+.thumbnail-upload {
+    flex: 1;
+}
+
+.thumbnail-preview {
+    height: 80px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.thumbnail-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.add-category-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+}
+
+.add-category-btn i {
+    margin-right: 8px;
+}

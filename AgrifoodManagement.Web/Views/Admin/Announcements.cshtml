@@ -30,7 +30,7 @@
                 <e-dropdownlist-fields text="Product category" value="Id"></e-dropdownlist-fields>
             </ejs-dropdownlist>
 
-            <ejs-button id="addNewButton" content='<i class="fa fa-plus"></i> ADD NEW'></ejs-button>
+            <ejs-button id="addNewButton" content='<i class="fa fa-plus"></i> ADD NEW' onclick="navigateToAddAnnouncement()"></ejs-button>
         </div>
     </div>
 
@@ -130,5 +130,9 @@
     function valueChange(args) {
         console.log("Selected value: ", args.value);
         // Add any additional handling code here
+    }
+
+    function navigateToAddAnnouncement() {
+        window.location.href = "/Admin/AddAnnouncement";
     }
 </script>
