@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AgrifoodManagement.Util.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,5 +27,14 @@ namespace AgrifoodManagement.Domain.Entities
         public string? UnitOfMeasurement { get; set; }
 
         public DateTime ExpirationDate { get; set; }
+
+        public int ProductCategoryId { get; set; }
+
+        [ForeignKey("ProductCategoryId")]
+        public ProductCategory? ProductCategory { get; set; }
+
+        public AnnouncementStatus AnnouncementStatus { get; set; }
+
+        public DateTime? TimePosted { get; set; }
     }
 }

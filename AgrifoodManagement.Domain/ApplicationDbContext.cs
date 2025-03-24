@@ -21,6 +21,10 @@ namespace AgrifoodManagement.Domain
 
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+
+        public DbSet<ExtendedProperty> ExtendedProperties { get; set; }
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             return await base.SaveChangesAsync(cancellationToken);
@@ -41,7 +45,19 @@ namespace AgrifoodManagement.Domain
                 .HasOne(od => od.Seller)
                 .WithMany()
                 .HasForeignKey(od => od.SellerId)
-                .OnDelete(DeleteBehavior.NoAction); 
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductCategory>()
+                .HasOne(pc => pc.ParentCategory)
+                .WithMany(pc => pc.SubCategories)
+                .HasForeignKey(pc => pc.ParentCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.ProductCategory)
+                .WithMany()
+                .HasForeignKey(p => p.ProductCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Set exactly 2 decimals
             modelBuilder.Entity<Product>()
@@ -55,6 +71,10 @@ namespace AgrifoodManagement.Domain
             modelBuilder.Entity<OrderDetail>()
                 .Property(p => p.UnitPrice)
                 .HasColumnType("decimal(18, 2)");
+
+            //Create indexes
+            modelBuilder.Entity<ExtendedProperty>()
+                .HasIndex(ep => new { ep.EntityId, ep.EntityType });    
         }
     }
 }

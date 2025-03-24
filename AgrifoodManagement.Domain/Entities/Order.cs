@@ -1,4 +1,4 @@
-﻿using AgrifoodManagement.Util;
+﻿using AgrifoodManagement.Util.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

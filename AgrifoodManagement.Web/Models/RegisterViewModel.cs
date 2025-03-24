@@ -1,4 +1,4 @@
-﻿using AgrifoodManagement.Util;
+﻿using AgrifoodManagement.Util.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
 namespace AgrifoodManagement.Web.Models

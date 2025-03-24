@@ -1,4 +1,4 @@
-﻿using AgrifoodManagement.Util;
+﻿using AgrifoodManagement.Util.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,6 +20,8 @@ namespace AgrifoodManagement.Domain.Entities
 
         [Required]
         public string Password { get; set; }
+
+        public string Avatar { get; set; }
 
         public string LastName { get; set; }
 

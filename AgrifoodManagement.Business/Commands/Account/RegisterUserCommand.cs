@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Util;
+using AgrifoodManagement.Util.ValueObjects;
 using MediatR;
 using System;
 using System.Collections.Generic;
