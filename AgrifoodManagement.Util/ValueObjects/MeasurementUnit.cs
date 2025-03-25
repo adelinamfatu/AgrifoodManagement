@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Util.ValueObjects
 {
-    public enum ProductCategory
+    public enum MeasurementUnit
     {
-        Fruits,
-        Vegetables,
-        Grains,
-        Dairy,
-        Livestock
+        kg,
+        lb,
+        unit,
+        box,
+        ton
     }
 }

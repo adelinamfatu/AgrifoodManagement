@@ -1,12 +1,9 @@
-﻿@using AgrifoodManagement.Util.ValueObjects
+﻿@using AgrifoodManagement.Util.Models;
 
 @{
     Layout = "~/Views/Shared/_SidebarLayout.cshtml";
 
-    var productCategoriesData = Enum.GetValues(typeof(ProductCategory))
-                        .Cast<ProductCategory>()
-                        .Select(g => g.ToString())
-                        .ToList();
+    var productCategoriesData = ViewBag.ProductCategories as List<CategoryNode>;
 }
 
 @model ProductViewModel
@@ -27,7 +24,7 @@
                 index="0"
                 popupHeight="220px"
                 change="valueChange">
-                <e-dropdownlist-fields text="Product category" value="Id"></e-dropdownlist-fields>
+                <e-dropdownlist-fields text="Category" value="Id"></e-dropdownlist-fields>
             </ejs-dropdownlist>
 
             <ejs-button id="addNewButton" content='<i class="fa fa-plus"></i> ADD NEW' onclick="navigateToAddAnnouncement()"></ejs-button>

@@ -14,6 +14,8 @@ namespace AgrifoodManagement.Domain.Interfaces
         DbSet<User> Users { get; }
         DbSet<Order> Orders { get; }
         DbSet<OrderDetail> OrderDetails { get; }
+        DbSet<ProductCategory> ProductCategories { get; }
+        DbSet<ExtendedProperty> ExtendedProperties { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

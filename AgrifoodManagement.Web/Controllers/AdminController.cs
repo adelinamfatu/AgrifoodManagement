@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.Commands.Account;
+using AgrifoodManagement.Business.Queries.Account;
 using AgrifoodManagement.Util;
 using AgrifoodManagement.Web.Models;
 using MediatR;
@@ -55,10 +56,13 @@ namespace AgrifoodManagement.Web.Controllers
             return View();
         }
 
-        public IActionResult Announcements()
+        public async Task<IActionResult> AnnouncementsAsync()
         {
+            var productCategories = await _mediator.Send(new ChildCategoriesQuery());
+
             ViewBag.SidebarItems = GetSidebarItems();
             ViewBag.ActiveItemId = "6";
+            ViewBag.ProductCategories = productCategories;
 
             var viewModel = new ProductViewModel
             {
@@ -134,10 +138,13 @@ namespace AgrifoodManagement.Web.Controllers
             return View(viewModel);
         }
 
-        public IActionResult AddAnnouncement()
+        public async Task<IActionResult> AddAnnouncementAsync()
         {
+            var productCategories = await _mediator.Send(new ProductCategoriesQuery());
+
             ViewBag.SidebarItems = GetSidebarItems();
             ViewBag.ActiveItemId = "6";
+            ViewBag.ProductCategories = productCategories;
 
             return View();
         }

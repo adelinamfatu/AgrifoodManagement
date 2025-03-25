@@ -1,14 +1,13 @@
 ﻿@using AgrifoodManagement.Util.ValueObjects;
 
+@using AgrifoodManagement.Util.Models;
+
 @model ProductViewModel
 
 @{
     Layout = "~/Views/Shared/_SidebarLayout.cshtml";
 
-    var productCategoriesData = Enum.GetValues(typeof(ProductCategory))
-                        .Cast<ProductCategory>()
-                        .Select(g => g.ToString())
-                        .ToList();
+    var productCategoriesData = ViewBag.ProductCategories as List<CategoryNode>;
 
     var discountTypesData = new[] {
         "Choose New Year Discount",
@@ -16,19 +15,10 @@
         "Clearance Sale"
     };
 
-    var unitsData = new[] {
-        new { Id = "kg", Unit = "Kilogram (kg)" },
-        new { Id = "lb", Unit = "Pound (lb)" },
-        new { Id = "unit", Unit = "Unit" },
-        new { Id = "box", Unit = "Box" },
-        new { Id = "ton", Unit = "Ton" }
-    };
-
-    var demandForecastData = new[] {
-        new { Id = "High", Demand = "High" },
-        new { Id = "Medium", Demand = "Medium" },
-        new { Id = "Low", Demand = "Low" }
-    };
+    var unitsData = Enum.GetValues(typeof(MeasurementUnit))
+                        .Cast<MeasurementUnit>()
+                        .Select(g => g.ToString())
+                        .ToList();
 }
 
 <div class="add-product-container">
@@ -37,8 +27,8 @@
             <h1>Add New Product</h1>
         </div>
         <div class="action-buttons">
-            <button type="button" class="btn btn-outline-secondary" id="saveDraftBtn">Save Draft</button>
-            <button type="submit" class="btn btn-success" id="addProductBtn">Add Product</button>
+            <ejs-button id="saveDraftBtn" content="Save Draft" cssClass="e-outline"></ejs-button>
+            <ejs-button id="addProductBtn" content="Add Product" cssClass="e-success"></ejs-button>
         </div>
     </div>
 
@@ -47,7 +37,6 @@
             <div class="form-left-panel">
                 <div class="form-section">
                     <h2>General Information</h2>
-
                     <div class="form-group">
                         <label for="Name">Name Product</label>
                         <ejs-textbox id="Name" name="Name" cssClass="e-outline"
@@ -63,62 +52,61 @@
                         </ejs-textbox>
                     </div>
 
-                    <div class="form-group form-row">
-                        <div class="col">
-                            <label for="Size">Size</label>
-                            <div class="size-selector">
-                                <p class="size-hint">Pick Available Size</p>
-                                <div class="size-options">
-                                    <label class="size-option">
-                                        <input type="checkbox" name="Size" value="XS">
-                                        <span>XS</span>
-                                    </label>
-                                    <label class="size-option selected">
-                                        <input type="checkbox" name="Size" value="S" checked>
-                                        <span>S</span>
-                                    </label>
-                                    <label class="size-option">
-                                        <input type="checkbox" name="Size" value="M">
-                                        <span>M</span>
-                                    </label>
-                                    <label class="size-option">
-                                        <input type="checkbox" name="Size" value="XL">
-                                        <span>XL</span>
-                                    </label>
-                                    <label class="size-option">
-                                        <input type="checkbox" name="Size" value="XXL">
-                                        <span>XXL</span>
-                                    </label>
-                                </div>
+                <div class="form-group form-row">
+                    <div class="col">
+                        <label for="Size">Size</label>
+                        <div class="size-selector">
+                            <p class="size-hint">Pick Available Size</p>
+                            <div class="size-options">
+                                <label class="size-option">
+                                    <input type="checkbox" name="Size" value="XS">
+                                    <span>XS</span>
+                                </label>
+                                <label class="size-option selected">
+                                    <input type="checkbox" name="Size" value="S" checked>
+                                    <span>S</span>
+                                </label>
+                                <label class="size-option">
+                                    <input type="checkbox" name="Size" value="M">
+                                    <span>M</span>
+                                </label>
+                                <label class="size-option">
+                                    <input type="checkbox" name="Size" value="XL">
+                                    <span>XL</span>
+                                </label>
+                                <label class="size-option">
+                                    <input type="checkbox" name="Size" value="XXL">
+                                    <span>XXL</span>
+                                </label>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col">
-                            <label for="Gender">Gender</label>
-                            <div class="gender-selector">
-                                <p class="gender-hint">Pick Available Gender</p>
-                                <div class="gender-options">
-                                    <label class="gender-option">
-                                        <input type="radio" name="Gender" value="Men">
-                                        <span><i class="fa fa-male"></i> Men</span>
-                                    </label>
-                                    <label class="gender-option selected">
-                                        <input type="radio" name="Gender" value="Women" checked>
-                                        <span><i class="fa fa-female"></i> Women</span>
-                                    </label>
-                                    <label class="gender-option">
-                                        <input type="radio" name="Gender" value="Unisex">
-                                        <span><i class="fa fa-user"></i> Unisex</span>
-                                    </label>
-                                </div>
+                    <div class="col">
+                        <label for="Gender">Gender</label>
+                        <div class="gender-selector">
+                            <p class="gender-hint">Pick Available Gender</p>
+                            <div class="gender-options">
+                                <label class="gender-option">
+                                    <input type="radio" name="Gender" value="Men">
+                                    <span><i class="fa fa-male"></i> Men</span>
+                                </label>
+                                <label class="gender-option selected">
+                                    <input type="radio" name="Gender" value="Women" checked>
+                                    <span><i class="fa fa-female"></i> Women</span>
+                                </label>
+                                <label class="gender-option">
+                                    <input type="radio" name="Gender" value="Unisex">
+                                    <span><i class="fa fa-user"></i> Unisex</span>
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
+                </div>
 
                 <div class="form-section">
                     <h2>Pricing And Stock</h2>
-
                     <div class="form-group form-row">
                         <div class="col">
                             <label for="Price">Base Pricing</label>
@@ -177,7 +165,6 @@
 
                 <div class="form-section">
                     <h2>Additional Information</h2>
-
                     <div class="form-group form-row">
                         <div class="col">
                             <label for="UnitOfMeasurement">Unit of Measurement</label>
@@ -192,32 +179,10 @@
                         </div>
 
                         <div class="col">
-                            <label for="Location">Location</label>
-                            <ejs-textbox id="Location" name="Location" cssClass="e-outline"
-                                         placeholder="Location" floatLabelType="Auto" required="true">
-                            </ejs-textbox>
-                        </div>
-                    </div>
-
-                    <div class="form-group form-row">
-                        <div class="col">
                             <label for="ExpirationDate">Expiration Date</label>
-                            <ejs-textbox id="ExpirationDate" name="ExpirationDate" cssClass="e-outline"
-                                         placeholder="Expiration Date" floatLabelType="Auto" type="date" required="true">
-                            </ejs-textbox>
-                        </div>
-
-                        <div class="col">
-                            <label for="DemandForecast">Demand Forecast</label>
-                            <ejs-dropdownlist id="DemandForecast" name="DemandForecast"
-                                              dataSource="@demandForecastData"
-                                              placeholder="Select demand forecast"
-                                              index="0"
-                                              popupHeight="220px"
-                                              change="valueChange"
-                                              floatLabelType="Auto"
-                                              fields="@(new Syncfusion.EJ2.DropDowns.DropDownListFieldSettings { Text = "Demand", Value = "Id" })">
-                            </ejs-dropdownlist>
+                            <ejs-datepicker id="ExpirationDate" name="ExpirationDate"
+                                            placeholder="Choose a Date" floatLabelType="Auto">
+                            </ejs-datepicker>
                         </div>
                     </div>
                 </div>
@@ -266,24 +231,24 @@
                     <h2>Category</h2>
                     <div class="form-group">
                         <label for="Category">Product Category</label>
-                        <ejs-dropdownlist id="Category" name="Category"
-                            dataSource="@productCategoriesData"
-                            placeholder="Select a product category"
-                            index="0"
-                            popupHeight="220px"
-                            change="valueChange">
-                            <e-dropdownlist-fields text="Category" value="Id"></e-dropdownlist-fields>
-                        </ejs-dropdownlist>
+                        <ejs-dropdowntree id="Category" name="Category"
+                                          popupHeight="220px"
+                                          placeholder="Select a product category"
+                                          change="valueChange"
+                                          changeOnBlur="false">
+                            <e-dropdowntree-fields dataSource="@productCategoriesData"
+                                                   value="Id"
+                                                   text="Category"
+                                                   parentValue="ParentId"
+                                                   hasChildren="HasChildren"
+                                                   expanded="Expanded">
+                            </e-dropdowntree-fields>
+                        </ejs-dropdowntree>
                     </div>
-
-                    <button type="button" class="btn btn-light add-category-btn">
-                        <i class="fa fa-plus"></i> Add Category
-                    </button>
                 </div>
             </div>
         </div>
     </form>
-</div>
 
 <script>
     // Preview uploaded images
