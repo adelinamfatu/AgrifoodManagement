@@ -26,6 +26,7 @@ namespace AgrifoodManagement.Domain.Entities
 
         public string? UnitOfMeasurement { get; set; }
 
+        //public MeasurementUnit? UnitOfMeasurement { get; set; }
         public DateTime ExpirationDate { get; set; }
 
         public int ProductCategoryId { get; set; }
@@ -36,5 +37,7 @@ namespace AgrifoodManagement.Domain.Entities
         public AnnouncementStatus AnnouncementStatus { get; set; }
 
         public DateTime? TimePosted { get; set; }
+
+        //public bool IsPromoted { get; set; }
     }
 }

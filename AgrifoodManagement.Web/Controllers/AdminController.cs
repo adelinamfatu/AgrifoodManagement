@@ -16,52 +16,49 @@ namespace AgrifoodManagement.Web.Controllers
             _mediator = mediator;
         }
 
-        public IActionResult Dashboard()
+        /// <summary>
+        /// Helper method to set the sidebar items and active item.
+        /// </summary>
+        private void SetSidebar(string activeItemId)
         {
             ViewBag.SidebarItems = GetSidebarItems();
-            ViewBag.ActiveItemId = "1";
+            ViewBag.ActiveItemId = activeItemId;
+        }
 
+        public IActionResult Dashboard()
+        {
+            SetSidebar("1");
             return View();
         }
 
         public IActionResult Stocks()
         {
-            ViewBag.SidebarItems = GetSidebarItems();
-            ViewBag.ActiveItemId = "2";
-
+            SetSidebar("2");
             return View();
         }
 
         public IActionResult Orders()
         {
-            ViewBag.SidebarItems = GetSidebarItems();
-            ViewBag.ActiveItemId = "3";
-
+            SetSidebar("3");
             return View();
         }
 
         public IActionResult Reports()
         {
-            ViewBag.SidebarItems = GetSidebarItems();
-            ViewBag.ActiveItemId = "4";
-
+            SetSidebar("4");
             return View();
         }
 
         public IActionResult Forecasting()
         {
-            ViewBag.SidebarItems = GetSidebarItems();
-            ViewBag.ActiveItemId = "5";
-
+            SetSidebar("5");
             return View();
         }
 
         public async Task<IActionResult> AnnouncementsAsync()
         {
             var productCategories = await _mediator.Send(new ChildCategoriesQuery());
-
-            ViewBag.SidebarItems = GetSidebarItems();
-            ViewBag.ActiveItemId = "6";
+            SetSidebar("7");
             ViewBag.ProductCategories = productCategories;
 
             var viewModel = new ProductViewModel
@@ -141,9 +138,7 @@ namespace AgrifoodManagement.Web.Controllers
         public async Task<IActionResult> AddAnnouncementAsync()
         {
             var productCategories = await _mediator.Send(new ProductCategoriesQuery());
-
-            ViewBag.SidebarItems = GetSidebarItems();
-            ViewBag.ActiveItemId = "6";
+            SetSidebar("6");
             ViewBag.ProductCategories = productCategories;
 
             return View();
@@ -151,9 +146,7 @@ namespace AgrifoodManagement.Web.Controllers
 
         public IActionResult Forum()
         {
-            ViewBag.SidebarItems = GetSidebarItems();
-            ViewBag.ActiveItemId = "7";
-
+            SetSidebar("7");
             return View();
         }
 
