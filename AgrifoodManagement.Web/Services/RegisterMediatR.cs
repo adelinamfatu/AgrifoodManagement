@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.CommandHandlers.Account;
+using AgrifoodManagement.Business.CommandHandlers.Announcement;
 
 namespace AgrifoodManagement.Web.Services
 {
@@ -6,10 +7,14 @@ namespace AgrifoodManagement.Web.Services
     {
         public static IServiceCollection AddApplicationMediatR(this IServiceCollection services)
         {
-            // Register the assembly containing handlers for your application
+            // Register the assembly containing handlers
             services.AddMediatR(cfg => cfg
                 .RegisterServicesFromAssemblyContaining<RegisterUserCommandHandler>()
                 .RegisterServicesFromAssemblyContaining<UploadUserPhotoCommandHandler>());
+
+            services.AddMediatR(cfg => cfg
+                .RegisterServicesFromAssemblyContaining<CreateProductCommandHandler>());
+
             return services;
         }
     }

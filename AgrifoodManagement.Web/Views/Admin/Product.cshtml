@@ -1,5 +1,4 @@
 ﻿@using AgrifoodManagement.Util.ValueObjects;
-
 @using AgrifoodManagement.Util.Models;
 
 @model ProductViewModel
@@ -22,70 +21,52 @@
 }
 
 <div class="add-product-container">
-    <div class="page-header">
-        <div class="header-title">
-            <h1>Add New Product</h1>
-        </div>
-        <div class="action-buttons">
-            <ejs-button id="saveDraftBtn" content="Save Draft" cssClass="e-outline"></ejs-button>
-            <ejs-button id="addProductBtn" content="Add Product" cssClass="e-success"></ejs-button>
-        </div>
-    </div>
+    <form id="addProductForm" asp-controller="Product" asp-action="UpsertProductAsync" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
 
-    <form id="addProductForm" method="post" enctype="multipart/form-data">
+        <div class="page-header">
+            <div class="header-title">
+                <h1>@(Model.Id == Guid.Empty ? "Add New Product" : "Edit Product")</h1>
+            </div>
+            <div class="action-buttons">
+                <ejs-button id="saveDraftBtn" content="Save Draft" cssClass="e-outline"></ejs-button>
+                <ejs-button id="addProductBtn" type="submit" content="Add Product" cssClass="e-success"></ejs-button>
+            </div>
+        </div>
+
         <div class="form-container">
             <div class="form-left-panel">
                 <div class="form-section">
                     <h2>General Information</h2>
-                    <div class="form-group">
-                        <label for="Name">Name Product</label>
-                        <ejs-textbox id="Name" name="Name" cssClass="e-outline"
+                    <div class="form-group inline-input">
+                        <label for="Name" title="Name Product">
+                            <i class="fa fa-tag"></i>
+                        </label>
+                        <ejs-textbox id="Name" name="Name" value="@Model.Name" cssClass="e-outline"
                                      placeholder="Name Product" floatLabelType="Auto" required="true">
                         </ejs-textbox>
                     </div>
 
-                    <div class="form-group">
-                        <label for="Description">Description Product</label>
-                        <ejs-textbox id="Description" name="Description" cssClass="e-outline"
+                    <div class="form-group inline-input">
+                        <label for="Description" title="Description Product">
+                            <i class="fa fa-info-circle"></i>
+                        </label>
+                        <ejs-textbox id="Description" name="Description" value="@Model.Description" cssClass="e-outline"
                                      placeholder="Description Product" floatLabelType="Auto"
                                      multiline="true" rows="4">
                         </ejs-textbox>
                     </div>
-
-                <div class="form-group form-row">
-                    <div class="col">
-                        <label for="Gender">Gender</label>
-                        <div class="gender-selector">
-                            <p class="gender-hint">Pick Available Gender</p>
-                            <div class="gender-options">
-                                <label class="gender-option">
-                                    <input type="radio" name="Gender" value="Men">
-                                    <span><i class="fa fa-male"></i> Men</span>
-                                </label>
-                                <label class="gender-option selected">
-                                    <input type="radio" name="Gender" value="Women" checked>
-                                    <span><i class="fa fa-female"></i> Women</span>
-                                </label>
-                                <label class="gender-option">
-                                    <input type="radio" name="Gender" value="Unisex">
-                                    <span><i class="fa fa-user"></i> Unisex</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 </div>
 
                 <div class="form-section">
                     <h2>Pricing And Stock</h2>
-                    <div class="form-group form-row">
+                    <div class="form-group inline-input form-row">
                         <div class="col">
-                            <label for="Price">Base Pricing</label>
+                            <label for="Price" title="Base Pricing">
+                                <i class="fa fa-dollar-sign"></i>
+                            </label>
                             <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">$</span>
-                                </div>
-                                <ejs-textbox id="Price" name="Price" cssClass="e-outline"
+                                <ejs-textbox id="Price" name="Price" value="@Model.Price" cssClass="e-outline"
                                              placeholder="Price" floatLabelType="Auto" type="number"
                                              step="0.01" required="true">
                                 </ejs-textbox>
@@ -93,42 +74,40 @@
                         </div>
 
                         <div class="col">
-                            <label for="Quantity">Stock</label>
-                            <ejs-textbox id="Quantity" name="Quantity" cssClass="e-outline"
+                            <label for="Quantity" title="Stock">
+                                <i class="fa fa-warehouse"></i>
+                            </label>
+                            <ejs-textbox id="Quantity" name="Quantity" value="@Model.Quantity" cssClass="e-outline"
                                          placeholder="Stock" floatLabelType="Auto" type="number" required="true">
                             </ejs-textbox>
                         </div>
                     </div>
 
-                    <div class="form-group form-row">
+                    <div class="form-group inline-input form-row">
                         <div class="col">
-                            <label for="Discount">Discount</label>
+                            <label for="DiscountType" title="Discount Type">
+                                <i class="fa fa-tag"></i>
+                            </label>
                             <div class="input-group">
-                                <ejs-textbox id="Discount" name="Discount" cssClass="e-outline"
-                                             placeholder="Discount" floatLabelType="Auto" type="number" min="0" max="100">
-                                </ejs-textbox>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">%</span>
-                                </div>
+                                <ejs-dropdownlist id="DiscountType" name="DiscountType"
+                                        dataSource="@discountTypesData"
+                                        placeholder="Select discount type"
+                                        index="0"
+                                        popupHeight="220px"
+                                        change="valueChange">
+                                    <e-dropdownlist-fields text="this" value="this"></e-dropdownlist-fields>
+                                </ejs-dropdownlist>
                             </div>
                         </div>
 
                         <div class="col">
-                            <label for="DiscountType">Discount Type</label>
+                            <label for="Discount" title="Discount">
+                                <i class="fa fa-percentage"></i>
+                            </label>
                             <div class="input-group">
-                                <ejs-dropdownlist id="DiscountType" name="DiscountType"
-                                                  dataSource="@discountTypesData"
-                                                  placeholder="Select discount type"
-                                                  index="0"
-                                                  popupHeight="220px"
-                                                  change="valueChange">
-                                    <e-dropdownlist-fields text="this" value="this"></e-dropdownlist-fields>
-                                </ejs-dropdownlist>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button">
-                                        <i class="fa fa-chevron-down"></i>
-                                    </button>
-                                </div>
+                                <ejs-textbox id="Discount" name="Discount" cssClass="e-outline"
+                                             placeholder="Discount" floatLabelType="Auto" type="number" min="0" max="100">
+                                </ejs-textbox>
                             </div>
                         </div>
                     </div>
@@ -136,11 +115,14 @@
 
                 <div class="form-section">
                     <h2>Additional Information</h2>
-                    <div class="form-group form-row">
+                    <div class="form-group inline-input form-row">
                         <div class="col">
-                            <label for="UnitOfMeasurement">Unit of Measurement</label>
+                            <label for="UnitOfMeasurement" title="Unit of Measurement">
+                                <i class="fa fa-ruler"></i>
+                            </label>
                             <ejs-dropdownlist id="UnitOfMeasurement" name="UnitOfMeasurement"
                                               dataSource="@unitsData"
+                                              value="@Model.UnitOfMeasurement"
                                               placeholder="Select unit of measurement"
                                               index="0"
                                               popupHeight="220px"
@@ -150,14 +132,17 @@
                         </div>
 
                         <div class="col">
-                            <label for="ExpirationDate">Expiration Date</label>
+                            <label for="ExpirationDate" title="Expiration Date">
+                                <i class="fa fa-calendar-alt"></i>
+                            </label>
                             <ejs-datepicker id="ExpirationDate" name="ExpirationDate"
+                                            value="@Model.ExpirationDate"
                                             placeholder="Choose a Date" floatLabelType="Auto">
                             </ejs-datepicker>
                         </div>
                     </div>
                 </div>
-            </div>
+                </div>
 
             <div class="form-right-panel">
                 <div class="upload-section">
@@ -200,15 +185,16 @@
 
                 <div class="category-section">
                     <h2>Category</h2>
-                    <div class="form-group">
-                        <label for="Category">Product Category</label>
+                    <div class="form-group inline-input">
+                        <label for="Category" title="Product Category">
+                            <i class="fa fa-list"></i>
+                        </label>
                         <ejs-dropdowntree id="Category" name="Category"
                                           popupHeight="220px"
                                           placeholder="Select a product category"
-                                          change="valueChange"
                                           changeOnBlur="false">
                             <e-dropdowntree-fields dataSource="@productCategoriesData"
-                                                   value="Id"
+                                                   value="@Model.Category"
                                                    text="Category"
                                                    parentValue="ParentId"
                                                    hasChildren="HasChildren"
@@ -240,29 +226,6 @@
         document.getElementById('mainImageUpload').click();
     });
 
-    // Form submission handling
-    document.getElementById('addProductForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        // Add your form submission logic here
-        // You can use FormData to collect all form data including files
-        const formData = new FormData(this);
-
-        // Example AJAX submission
-        // fetch('/Product/Add', {
-        //     method: 'POST',
-        //     body: formData
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     console.log('Success:', data);
-        //     window.location.href = '/Product/Index';
-        // })
-        // .catch(error => {
-        //     console.error('Error:', error);
-        // });
-    });
-
     // Save draft button handling
     document.getElementById('saveDraftBtn').addEventListener('click', function () {
         // Add your save draft logic here
@@ -270,7 +233,67 @@
     });
 
     function valueChange(args) {
-        console.log("Selected value:", args.value);
-        // Additional handling code here
+        console.log("Selected value: ", args.value);
+        // Add any additional handling code here
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the form element
+        var form = document.getElementById('addProductForm');
+
+        // Get the Syncfusion button instance
+        var addProductBtn = document.getElementById('addProductBtn').ej2_instances[0];
+
+        // Add click event handler to the button
+        addProductBtn.element.addEventListener('click', function (e) {
+            e.preventDefault();
+            console.log('Submit button clicked - processing with AJAX');
+
+            // Collect form data
+            var formData = new FormData(form);
+
+            // Log form data to verify it's being collected correctly
+            console.log('Form data being sent:');
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
+            // Send AJAX request
+            fetch('/Product/UpsertProduct', {
+                method: 'POST',
+                body: formData,
+                // Don't set Content-Type header - fetch will set it properly with the boundary for multipart/form-data
+            })
+                .then(response => {
+                    console.log('Response status:', response.status);
+
+                    if (response.redirected) {
+                        // If the server returns a redirect, follow it
+                        window.location.href = response.url;
+                        return;
+                    }
+
+                    if (!response.ok) {
+                        throw new Error('Server returned ' + response.status + ' : ' + response.statusText);
+                    }
+
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    // Handle success - redirect if needed or show success message
+                    // window.location.href = '/Admin/Announcements';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle error - show error message
+                });
+        });
+
+        // Prevent the regular form submission
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            console.log('Form standard submission prevented');
+        });
+    });
 </script>

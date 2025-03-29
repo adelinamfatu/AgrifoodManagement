@@ -66,5 +66,35 @@ namespace AgrifoodManagement.Web.Controllers
 
             return RedirectToAction("Login");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadPhoto(IFormFile photo)
+        {
+            try
+            {
+                if (photo == null || photo.Length == 0)
+                {
+                    return Json(new { success = false, message = "No file was uploaded" });
+                }
+
+                var command = new UploadUserPhotoCommand
+                {
+                    Photo = photo
+                };
+
+                var result = await _mediator.Send(command);
+
+                if (result.IsSuccess)
+                {
+                    return Json(new { success = true, imageUrl = "/images/avatar.jpg" });
+                }
+
+                return Json(new { success = false, message = result.Error });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "An error occurred while processing your request." });
+            }
+        }
     }
 }

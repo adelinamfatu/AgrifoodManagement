@@ -27,7 +27,7 @@
                 <e-dropdownlist-fields text="Category" value="Id"></e-dropdownlist-fields>
             </ejs-dropdownlist>
 
-            <ejs-button id="addNewButton" content='<i class="fa fa-plus"></i> ADD NEW' onclick="navigateToAddAnnouncement()"></ejs-button>
+            <ejs-button id="addNewButton" content='<i class="fa fa-plus"></i> ADD NEW' onclick="navigateToProductPage()"></ejs-button>
         </div>
     </div>
 
@@ -129,7 +129,7 @@
         // Add any additional handling code here
     }
 
-    function navigateToAddAnnouncement() {
-        window.location.href = "/Admin/AddAnnouncement";
+    function navigateToProductPage() {
+        window.location.href = "/Admin/Product";
     }
 </script>

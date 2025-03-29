@@ -1,47 +1,25 @@
 ﻿using AgrifoodManagement.Util.ValueObjects;
+using MediatR;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AgrifoodManagement.Domain.Entities
+namespace AgrifoodManagement.Business.Commands.Product
 {
-    [Table("Products")]
-    public class Product
+    public class CreateProductCommand : IRequest<Guid>
     {
-        [Key]
-        public Guid Id { get; set; }
-
-        [Required]
         public string Name { get; set; }
-
         public string? Description { get; set; }
-
         public decimal Price { get; set; }
-
         public double Quantity { get; set; }
-
         public MeasurementUnit? UnitOfMeasurement { get; set; }
-
         public DateTime ExpirationDate { get; set; }
-
         public int? ProductCategoryId { get; set; }
-
-        [ForeignKey("ProductCategoryId")]
-        public ProductCategory? ProductCategory { get; set; }
-
         public AnnouncementStatus AnnouncementStatus { get; set; }
-
         public DateTime? TimePosted { get; set; }
-
         public bool IsPromoted { get; set; }
-
-        public Guid UserId { get; set; }
-
-        [ForeignKey("UserId")]
-        public User? Seller { get; set; }
+        public Guid UserId { get; set; } 
     }
 }

@@ -30,5 +30,7 @@ namespace AgrifoodManagement.Domain.Entities
         public UserType UserType { get; set; }
 
         public string PhoneNumber { get; set; }
+
+        public ICollection<Product>? Products { get; set; }
     }
 }

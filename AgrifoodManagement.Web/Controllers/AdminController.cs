@@ -1,6 +1,8 @@
 ﻿using AgrifoodManagement.Business.Commands.Account;
+using AgrifoodManagement.Business.Commands.Product;
 using AgrifoodManagement.Business.Queries.Account;
 using AgrifoodManagement.Util;
+using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -71,10 +73,10 @@ namespace AgrifoodManagement.Web.Controllers
                         Description = "Fresh organic apples from our orchard. Pesticide-free and harvested this week.",
                         Price = 2.99m,
                         Quantity = 150.5,
-                        UnitOfMeasurement = "kg",
+                        UnitOfMeasurement = MeasurementUnit.kg,
                         ExpirationDate = DateTime.Now.AddDays(14),
                         Location = "North Field",
-                        Category = "Fruits",
+                        Category = 1,
                         ViewCount = 45,
                         InquiryCount = 12,
                         DemandForecast = "High",
@@ -87,10 +89,10 @@ namespace AgrifoodManagement.Web.Controllers
                         Description = "Locally grown winter wheat, perfect for milling and baking. Chemical-free farming methods.",
                         Price = 1.75m,
                         Quantity = 500,
-                        UnitOfMeasurement = "kg",
+                        UnitOfMeasurement = MeasurementUnit.kg,
                         ExpirationDate = DateTime.Now.AddDays(60),
                         Location = "South Field",
-                        Category = "Grains",
+                        Category = 2,
                         ViewCount = 28,
                         InquiryCount = 3,
                         DemandForecast = "Medium",
@@ -103,10 +105,10 @@ namespace AgrifoodManagement.Web.Controllers
                         Description = "Vine-ripened tomatoes, picked at peak ripeness. Great for salads and sauces.",
                         Price = 3.49m,
                         Quantity = 75,
-                        UnitOfMeasurement = "kg",
+                        UnitOfMeasurement = MeasurementUnit.kg,
                         ExpirationDate = DateTime.Now.AddDays(5),
                         Location = "Greenhouse 2",
-                        Category = "Vegetables",
+                        Category = 3,
                         ViewCount = 67,
                         InquiryCount = 15,
                         DemandForecast = "High",
@@ -119,10 +121,10 @@ namespace AgrifoodManagement.Web.Controllers
                         Description = "Fresh organic milk from our grass-fed cows. Pasteurized but not homogenized.",
                         Price = 3.99m,
                         Quantity = 100,
-                        UnitOfMeasurement = "liter",
+                        UnitOfMeasurement = MeasurementUnit.lb,
                         ExpirationDate = DateTime.Now.AddDays(7),
                         Location = "Dairy Barn",
-                        Category = "Dairy",
+                        Category = 4,
                         ViewCount = 38,
                         InquiryCount = 8,
                         DemandForecast = "Medium",
@@ -135,49 +137,42 @@ namespace AgrifoodManagement.Web.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> AddAnnouncementAsync()
+        public async Task<IActionResult> ProductAsync(Guid? id)
         {
             var productCategories = await _mediator.Send(new ProductCategoriesQuery());
             SetSidebar("6");
             ViewBag.ProductCategories = productCategories;
 
-            return View();
+            ProductViewModel viewModel = new ProductViewModel();
+
+            if (id.HasValue)
+            {
+                //var product = await _mediator.Send(new GetProductByIdQuery { Id = id.Value });
+                //if (product == null)
+                //{
+                //    return NotFound();
+                //}
+
+                //viewModel = new ProductViewModel
+                //{
+                //    Id = product.Id,
+                //    Name = product.Name,
+                //    Description = product.Description,
+                //    Price = product.Price,
+                //    Quantity = product.Quantity,
+                //    UnitOfMeasurement = product.UnitOfMeasurement,
+                //    ExpirationDate = product.ExpirationDate,
+                //    Category = product.ProductCategoryId
+                //};
+            }
+
+            return View(viewModel);
         }
 
         public IActionResult Forum()
         {
             SetSidebar("7");
             return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UploadPhoto(IFormFile photo)
-        {
-            try
-            {
-                if (photo == null || photo.Length == 0)
-                {
-                    return Json(new { success = false, message = "No file was uploaded" });
-                }
-
-                var command = new UploadUserPhotoCommand
-                {
-                    Photo = photo
-                };
-
-                var result = await _mediator.Send(command);
-
-                if (result.IsSuccess)
-                {
-                    return Json(new { success = true, imageUrl = "/images/avatar.jpg" });
-                }
-
-                return Json(new { success = false, message = result.Error });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = "An error occurred while processing your request." });
-            }
         }
 
         private List<SidebarViewModel> GetSidebarItems()

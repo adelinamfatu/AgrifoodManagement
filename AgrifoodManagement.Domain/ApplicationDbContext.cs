@@ -59,6 +59,12 @@ namespace AgrifoodManagement.Domain
                 .HasForeignKey(p => p.ProductCategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Seller)
+                .WithMany(u => u.Products)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             //Set exactly 2 decimals
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
