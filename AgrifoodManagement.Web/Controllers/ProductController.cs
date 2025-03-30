@@ -70,6 +70,7 @@ namespace AgrifoodManagement.Web.Controllers
                     //    ProductCategoryId = viewModel.Category
                     //};
                     //await _mediator.Send(command);
+
                     return Ok(new
                     {
                         success = true,

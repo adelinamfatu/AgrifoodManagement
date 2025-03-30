@@ -12,5 +12,6 @@ namespace AgrifoodManagement.Util.Models
         public string Category { get; set; }
         public int? ParentId { get; set; }
         public bool HasChildren { get; set; }
+        public bool Enabled { get; set; }
     }
 }

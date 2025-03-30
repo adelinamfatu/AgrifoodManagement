@@ -23,14 +23,17 @@ namespace AgrifoodManagement.Business.CommandHandlers.Account
 
         public async Task<List<CategoryNode>> Handle(ProductCategoriesQuery request, CancellationToken cancellationToken)
         {
-            var categories = await _context.ProductCategories.ToListAsync(cancellationToken);
+            var categories = await _context.ProductCategories
+                .Include(c => c.SubCategories)
+                .ToListAsync(cancellationToken);
 
             var categoryNodes = categories.Select(c => new CategoryNode
             {
                 Id = c.Id,
                 Category = c.Name,
                 ParentId = c.ParentCategoryId,
-                HasChildren = c.SubCategories != null && c.SubCategories.Any()
+                HasChildren = c.SubCategories != null && c.SubCategories.Any(),
+                Enabled = c.SubCategories != null && c.SubCategories.Any() ? false : true
             }).ToList();
 
             return categoryNodes;

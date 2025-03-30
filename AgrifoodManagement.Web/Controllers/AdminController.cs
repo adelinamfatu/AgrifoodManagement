@@ -1,7 +1,4 @@
-﻿using AgrifoodManagement.Business.Commands.Account;
-using AgrifoodManagement.Business.Commands.Product;
-using AgrifoodManagement.Business.Queries.Account;
-using AgrifoodManagement.Util;
+﻿using AgrifoodManagement.Business.Queries.Account;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models;
 using MediatR;

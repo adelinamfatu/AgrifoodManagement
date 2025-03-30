@@ -29,7 +29,6 @@
                 <h1>@(Model.Id == Guid.Empty ? "Add New Product" : "Edit Product")</h1>
             </div>
             <div class="action-buttons">
-                <ejs-button id="saveDraftBtn" content="Save Draft" cssClass="e-outline"></ejs-button>
                 <ejs-button id="addProductBtn" type="submit" content="Add Product" cssClass="e-success"></ejs-button>
             </div>
         </div>
@@ -191,14 +190,15 @@
                         </label>
                         <ejs-dropdowntree id="Category" name="Category"
                                           popupHeight="220px"
+                                          value="@Model.Category"
                                           placeholder="Select a product category"
                                           changeOnBlur="false">
                             <e-dropdowntree-fields dataSource="@productCategoriesData"
-                                                   value="@Model.Category"
+                                                   value="Id"
                                                    text="Category"
                                                    parentValue="ParentId"
                                                    hasChildren="HasChildren"
-                                                   expanded="Expanded">
+                                                   expanded="true">
                             </e-dropdowntree-fields>
                         </ejs-dropdowntree>
                     </div>
@@ -226,58 +226,38 @@
         document.getElementById('mainImageUpload').click();
     });
 
-    // Save draft button handling
-    document.getElementById('saveDraftBtn').addEventListener('click', function () {
-        // Add your save draft logic here
-        console.log('Saving draft...');
-    });
-
     function valueChange(args) {
         console.log("Selected value: ", args.value);
         // Add any additional handling code here
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        // Get the form element
         var form = document.getElementById('addProductForm');
 
-        // Get the Syncfusion button instance
         var addProductBtn = document.getElementById('addProductBtn').ej2_instances[0];
 
-        // Add click event handler to the button
         addProductBtn.element.addEventListener('click', function (e) {
             e.preventDefault();
-            console.log('Submit button clicked - processing with AJAX');
 
-            // Collect form data
             var formData = new FormData(form);
 
-            // Log form data to verify it's being collected correctly
-            console.log('Form data being sent:');
-            for (var pair of formData.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
-            }
-
-            // Send AJAX request
             fetch('/Product/UpsertProduct', {
                 method: 'POST',
                 body: formData,
-                // Don't set Content-Type header - fetch will set it properly with the boundary for multipart/form-data
             })
-                .then(response => {
-                    console.log('Response status:', response.status);
+            .then(response => {
+                console.log('Response status:', response.status);
 
-                    if (response.redirected) {
-                        // If the server returns a redirect, follow it
-                        window.location.href = response.url;
-                        return;
-                    }
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return;
+                }
 
-                    if (!response.ok) {
-                        throw new Error('Server returned ' + response.status + ' : ' + response.statusText);
-                    }
-
-                    return response.text();
+                if (!response.ok) {
+                    throw new Error('Server returned ' + response.status + ' : ' + response.statusText);
+                }
+                
+                return response.text();
                 })
                 .then(data => {
                     console.log('Success:', data);
@@ -290,7 +270,6 @@
                 });
         });
 
-        // Prevent the regular form submission
         form.addEventListener('submit', function (e) {
             e.preventDefault();
             console.log('Form standard submission prevented');
