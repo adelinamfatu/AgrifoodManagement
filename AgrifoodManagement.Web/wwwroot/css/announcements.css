@@ -265,10 +265,20 @@
 }
 
 .upload-section {
+    text-align: center;
     background-color: white;
     border-radius: 6px;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.upload-section .e-upload.e-control-wrapper {
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.thumbnail-upload.filled .remove-btn {
+    display: block;
 }
 
 .category-section {
@@ -404,6 +414,28 @@ label {
     padding: 10px;
     cursor: pointer;
     transition: border-color 0.3s ease;
+    position: relative;
+}
+
+.remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ddd;
+    color: #666;
+    font-size: 16px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    line-height: 1;
+    z-index: 10;
 }
 
 .thumbnail-upload:hover {
@@ -411,7 +443,7 @@ label {
 }
 
 .thumbnail-preview {
-    height: 80px;
+    height: 160px;
     border: 1px solid #ddd;
     border-radius: 6px;
     overflow: hidden;
@@ -419,6 +451,7 @@ label {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    position: relative;
 }
 
 .thumbnail-preview img {

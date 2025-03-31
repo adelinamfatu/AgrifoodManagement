@@ -1,5 +1,6 @@
 ﻿@using AgrifoodManagement.Util.ValueObjects;
 @using AgrifoodManagement.Util.Models;
+@using Syncfusion.EJ2.Inputs;
 
 @model ProductViewModel
 
@@ -92,8 +93,7 @@
                                         dataSource="@discountTypesData"
                                         placeholder="Select discount type"
                                         index="0"
-                                        popupHeight="220px"
-                                        change="valueChange">
+                                        popupHeight="220px">
                                     <e-dropdownlist-fields text="this" value="this"></e-dropdownlist-fields>
                                 </ejs-dropdownlist>
                             </div>
@@ -124,8 +124,7 @@
                                               value="@Model.UnitOfMeasurement"
                                               placeholder="Select unit of measurement"
                                               index="0"
-                                              popupHeight="220px"
-                                              change="valueChange">
+                                              popupHeight="220px">
                                 <e-dropdownlist-fields text="Unit" value="Id"></e-dropdownlist-fields>
                             </ejs-dropdownlist>
                         </div>
@@ -141,43 +140,37 @@
                         </div>
                     </div>
                 </div>
-                </div>
+            </div>
 
             <div class="form-right-panel">
                 <div class="upload-section">
-                    <h2>Upload Img</h2>
+                    <h2>Upload Product Images</h2>
 
-                    <div class="main-image-upload">
-                        <div class="image-preview" id="mainImagePreview">
-                            <img src="/images/upload-placeholder.png" alt="Upload product image" id="mainPreviewImg">
-                            <div class="upload-overlay">
-                                <i class="fa fa-cloud-upload"></i>
-                                <p>Click or drag image to upload</p>
-                            </div>
-                        </div>
-                        <input type="file" id="mainImageUpload" name="MainImage" accept="image/*" class="hidden-file-input">
-                    </div>
+                    <ejs-uploader id="UploadFiles"
+                        autoUpload="false"
+                        multiple="true"
+                        showFileList="false"
+                        selected="onFileSelect">
+                    </ejs-uploader>
 
                     <div class="thumbnail-container">
                         <div class="thumbnail-upload">
                             <div class="thumbnail-preview">
-                                <img src="/images/upload-placeholder.png" alt="Thumbnail 1">
+                                <img src="/images/upload-placeholder.png" alt="Thumbnail 1" id="thumbnail1Img">
                             </div>
-                            <input type="file" name="Thumbnail1" accept="image/*" class="hidden-file-input">
+                            <button type="button" class="remove-btn" onclick="removeThumbnail(0)" aria-label="Remove image">×</button>
                         </div>
-
                         <div class="thumbnail-upload">
                             <div class="thumbnail-preview">
-                                <img src="/images/upload-placeholder.png" alt="Thumbnail 2">
+                                <img src="/images/upload-placeholder.png" alt="Thumbnail 2" id="thumbnail2Img">
                             </div>
-                            <input type="file" name="Thumbnail2" accept="image/*" class="hidden-file-input">
+                            <button type="button" class="remove-btn" onclick="removeThumbnail(1)" aria-label="Remove image">×</button>
                         </div>
-
                         <div class="thumbnail-upload">
                             <div class="thumbnail-preview">
-                                <img src="/images/upload-placeholder.png" alt="Thumbnail 3">
+                                <img src="/images/upload-placeholder.png" alt="Thumbnail 3" id="thumbnail3Img">
                             </div>
-                            <input type="file" name="Thumbnail3" accept="image/*" class="hidden-file-input">
+                            <button type="button" class="remove-btn" onclick="removeThumbnail(2)" aria-label="Remove image">×</button>
                         </div>
                     </div>
                 </div>
@@ -209,31 +202,100 @@
 </div>
 
 <script>
-    // Preview uploaded images
-    document.getElementById('mainImageUpload').addEventListener('change', function (e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById('mainPreviewImg').src = e.target.result;
+    var thumbnailFiles = [null, null, null];
+
+    function onFileSelect(args) {
+        for (let i = 0; i < args.filesData.length; i++) {
+            const emptyIndex = findFirstEmptySlot();
+            if (emptyIndex === -1) {
+                alert("You can upload a maximum of 3 images. Please remove one to add a new one.");
+                break;
             }
-            reader.readAsDataURL(file);
+
+            const fileData = args.filesData[i];
+            const reader = new FileReader();
+            reader.onload = (function (index) {
+                return function (e) {
+                    fileData.dataURL = e.target.result;
+
+                    var thumbImg = document.getElementById("thumbnail" + (index + 1) + "Img");
+                    if (thumbImg) {
+                        thumbImg.src = e.target.result;
+                    }
+
+                    var removeBtn = document.querySelector('.thumbnail-upload:nth-child(' + (index + 1) + ') .remove-btn');
+                    if (removeBtn) {
+                        removeBtn.style.display = 'flex';
+                    }
+                };
+            })(emptyIndex);
+            reader.readAsDataURL(fileData.rawFile);
+
+            thumbnailFiles[emptyIndex] = fileData;
         }
-    });
+    }
 
-    // Click to trigger file upload
-    document.getElementById('mainImagePreview').addEventListener('click', function () {
-        document.getElementById('mainImageUpload').click();
-    });
+    function findFirstEmptySlot() {
+        for (let i = 0; i < thumbnailFiles.length; i++) {
+            if (thumbnailFiles[i] === null) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
-    function valueChange(args) {
-        console.log("Selected value: ", args.value);
-        // Add any additional handling code here
+    function removeThumbnail(index) {
+        if (thumbnailFiles[index] !== null) {
+            var uploaderElement = document.getElementById('UploadFiles');
+            if (uploaderElement &&
+                uploaderElement.ej2_instances &&
+                uploaderElement.ej2_instances[0]) {
+                var uploaderObj = uploaderElement.ej2_instances[0];
+                try {
+                    uploaderObj.remove(thumbnailFiles[index].uid);
+                } catch (e) {
+                    console.error("Error removing file from uploader:", e);
+                }
+            }
+            thumbnailFiles[index] = null;
+            reorderThumbnails();
+        }
+    }
+
+    // Reorders thumbnails so that remaining images shift left
+    function reorderThumbnails() {
+        let newArray = thumbnailFiles.filter(file => file !== null);
+        while (newArray.length < 3) {
+            newArray.push(null);
+        }
+        thumbnailFiles = newArray;
+
+        for (let i = 0; i < thumbnailFiles.length; i++) {
+            var thumbImg = document.getElementById("thumbnail" + (i + 1) + "Img");
+            var removeBtn = document.querySelector('.thumbnail-upload:nth-child(' + (i + 1) + ') .remove-btn');
+
+            if (thumbnailFiles[i] !== null) {
+                if (thumbImg) {
+                    thumbImg.src = thumbnailFiles[i].dataURL;
+                }
+                
+                if (removeBtn) {
+                    removeBtn.style.display = 'flex';
+                }
+            } else {
+                if (thumbImg) {
+                    thumbImg.src = "/images/upload-placeholder.png";
+                }
+                
+                if (removeBtn) {
+                    removeBtn.style.display = 'none';
+                }
+            }
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function () {
         var form = document.getElementById('addProductForm');
-
         var addProductBtn = document.getElementById('addProductBtn').ej2_instances[0];
 
         addProductBtn.element.addEventListener('click', function (e) {
@@ -245,34 +307,28 @@
                 method: 'POST',
                 body: formData,
             })
-            .then(response => {
-                console.log('Response status:', response.status);
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                        return;
+                    }
 
-                if (response.redirected) {
-                    window.location.href = response.url;
-                    return;
-                }
+                    if (!response.ok) {
+                        throw new Error('Server returned ' + response.status + ' : ' + response.statusText);
+                    }
 
-                if (!response.ok) {
-                    throw new Error('Server returned ' + response.status + ' : ' + response.statusText);
-                }
-                
-                return response.text();
+                    return response.text();
                 })
                 .then(data => {
                     console.log('Success:', data);
-                    // Handle success - redirect if needed or show success message
-                    // window.location.href = '/Admin/Announcements';
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    // Handle error - show error message
                 });
         });
 
         form.addEventListener('submit', function (e) {
             e.preventDefault();
-            console.log('Form standard submission prevented');
         });
     });
 </script>
