@@ -15,6 +15,7 @@ SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBPh8sVXJ8S0d+X1JPd11dXmJWd1p/T
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddApplicationMediatR();
+builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddSingleton<CloudinaryService>();
@@ -35,6 +36,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -1,18 +1,25 @@
 ﻿using AgrifoodManagement.Business.Commands.Account;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models;
+using Azure.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace AgrifoodManagement.Web.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(IMediator mediator)
+        public AccountController(IMediator mediator, IConfiguration configuration)
         {
             _mediator = mediator;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -24,19 +31,36 @@ namespace AgrifoodManagement.Web.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                if (model.Email == "test@example.com" && model.Password == "password")
-                {
-                    return RedirectToAction("Dashboard", "Admin");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid email or password.");
-                }
-            }
+            if (model.Email != "testuser" || model.Password != "password123")
+                return Unauthorized("Invalid credentials");
 
-            return View("Index", model);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:SecretKey"]);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, model.Email)
+                }),
+                    Expires = DateTime.UtcNow.AddHours(1),
+                    Issuer = _configuration["Jwt:Issuer"],
+                    Audience = _configuration["Jwt:Audience"],
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            Response.Cookies.Append("AuthToken", tokenString, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddHours(1)
+            });
+
+            return Redirect("/Admin/Dashboard");
         }
         
         [HttpPost]

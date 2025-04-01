@@ -2,10 +2,12 @@
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgrifoodManagement.Web.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly IMediator _mediator;
