@@ -10,7 +10,7 @@ namespace AgrifoodManagement.Web.Services
             // Register the assembly containing handlers
             services.AddMediatR(cfg => cfg
                 .RegisterServicesFromAssemblyContaining<RegisterUserCommandHandler>()
-                .RegisterServicesFromAssemblyContaining<UploadUserPhotoCommandHandler>());
+                .RegisterServicesFromAssemblyContaining<UploadProductPhotoCommandHandler>());
 
             services.AddMediatR(cfg => cfg
                 .RegisterServicesFromAssemblyContaining<CreateProductCommandHandler>());

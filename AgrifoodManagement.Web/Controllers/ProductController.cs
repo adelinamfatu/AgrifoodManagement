@@ -32,6 +32,16 @@ namespace AgrifoodManagement.Web.Controllers
 
             try
             {
+                var uploadedPhotos = Request.Form.Files.ToList();
+
+                var photoCommand = new UploadProductPhotoCommand
+                {
+                    Photos = uploadedPhotos,
+                    Folder = PhotoFolder.Products
+                };
+
+                var result = await _mediator.Send(photoCommand);
+
                 if (viewModel.Id == Guid.Empty) // Creating a new product
                 {
                     var command = new CreateProductCommand
@@ -46,6 +56,7 @@ namespace AgrifoodManagement.Web.Controllers
                         TimePosted = DateTime.UtcNow,
                         AnnouncementStatus = AnnouncementStatus.Published,
                         IsPromoted = false,
+                        PhotoUrls = viewModel.PhotoUrls,
                         UserId = new Guid("2346C2BF-1717-4AE3-9A69-F83B3A2D68FE")
                     };
                     Guid productId = await _mediator.Send(command);
@@ -80,10 +91,6 @@ namespace AgrifoodManagement.Web.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception
-                Console.WriteLine($"Error processing product: {ex.Message}");
-
-                // Return error information
                 return StatusCode(500, new { error = "An error occurred while processing your request." });
             }
         }

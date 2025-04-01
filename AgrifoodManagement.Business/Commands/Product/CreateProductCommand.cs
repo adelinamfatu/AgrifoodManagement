@@ -20,6 +20,7 @@ namespace AgrifoodManagement.Business.Commands.Product
         public AnnouncementStatus AnnouncementStatus { get; set; }
         public DateTime? TimePosted { get; set; }
         public bool IsPromoted { get; set; }
-        public Guid UserId { get; set; } 
+        public Guid UserId { get; set; }
+        public List<string>? PhotoUrls { get; set; }
     }
 }

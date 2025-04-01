@@ -262,7 +262,6 @@
         }
     }
 
-    // Reorders thumbnails so that remaining images shift left
     function reorderThumbnails() {
         let newArray = thumbnailFiles.filter(file => file !== null);
         while (newArray.length < 3) {
@@ -302,6 +301,15 @@
             e.preventDefault();
 
             var formData = new FormData(form);
+
+            let uniqueFiles = new Set();
+
+            for (let i = 0; i < thumbnailFiles.length; i++) {
+                if (thumbnailFiles[i] !== null && !uniqueFiles.has(thumbnailFiles[i].rawFile.name)) {
+                    uniqueFiles.add(thumbnailFiles[i].rawFile.name);
+                    formData.append("Photos", thumbnailFiles[i].rawFile);
+                }
+            }
 
             fetch('/Product/UpsertProduct', {
                 method: 'POST',

@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.Commands.Account;
+using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -79,7 +80,8 @@ namespace AgrifoodManagement.Web.Controllers
 
                 var command = new UploadUserPhotoCommand
                 {
-                    Photo = photo
+                    Photo = photo,
+                    PhotoFolder = PhotoFolder.Users
                 };
 
                 var result = await _mediator.Send(command);

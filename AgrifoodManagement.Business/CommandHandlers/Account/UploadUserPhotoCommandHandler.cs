@@ -23,7 +23,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Account
 
         public async Task<Result<Guid>> Handle(UploadUserPhotoCommand request, CancellationToken cancellationToken)
         {
-            var imageUrl = await _cloudinaryService.UploadPhotoAsync(request.Photo);
+            var imageUrl = await _cloudinaryService.UploadPhotoAsync(request.Photo, request.PhotoFolder);
             if (string.IsNullOrEmpty(imageUrl))
             {
                 return Result<Guid>.Failure("Upload final.");

@@ -8,12 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AgrifoodManagement.Business.Commands.Account
+namespace AgrifoodManagement.Business.Commands.Product
 {
-    public class UploadUserPhotoCommand : IRequest<Result<Guid>>
+    public class UploadProductPhotoCommand : IRequest<Result<Guid>>
     {
-        public IFormFile Photo { get; set; }
+        public List<IFormFile> Photos { get; set; }
         public int UserId { get; set; }
-        public PhotoFolder PhotoFolder { get; set; }
+        public PhotoFolder Folder { get; set; }
     }
 }

@@ -43,6 +43,8 @@ namespace AgrifoodManagement.Web.Models
 
         public bool IsPromoted { get; set; }
 
+        public List<string> PhotoUrls { get; set; } = new List<string>();
+
         public List<ProductViewModel> Products { get; set; } = new List<ProductViewModel>();
     }
 }

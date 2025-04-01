@@ -1,4 +1,5 @@
-﻿using CloudinaryDotNet;
+﻿using AgrifoodManagement.Util.ValueObjects;
+using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +27,7 @@ namespace AgrifoodManagement.Util
             _cloudinary.Api.Secure = true;
         }
 
-        public async Task<string?> UploadPhotoAsync(IFormFile photo)
+        public async Task<string?> UploadPhotoAsync(IFormFile photo, PhotoFolder folder)
         {
             if (photo == null || photo.Length == 0)
                 return null;
@@ -36,7 +37,7 @@ namespace AgrifoodManagement.Util
                 var uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(photo.FileName, stream),
-                    Folder = "users"
+                    Folder = folder.ToString().ToLower()
                 };
 
                 var uploadResult = await _cloudinary.UploadAsync(uploadParams);
