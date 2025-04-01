@@ -1,16 +1,10 @@
-﻿using AgrifoodManagement.Business.Queries.Account;
-using AgrifoodManagement.Domain.Entities;
+﻿using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Domain.Interfaces;
 using AgrifoodManagement.Util.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AgrifoodManagement.Business.CommandHandlers.Account
+namespace AgrifoodManagement.Business.CommandHandlers.Announcement
 {
     public class ProductCategoriesQueryHandler : IRequestHandler<ProductCategoriesQuery, List<CategoryNode>>
     {

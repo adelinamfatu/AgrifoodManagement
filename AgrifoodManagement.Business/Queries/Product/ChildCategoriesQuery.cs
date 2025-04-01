@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AgrifoodManagement.Business.Queries.Account
+namespace AgrifoodManagement.Business.Queries.Product
 {
     public class ChildCategoriesQuery : IRequest<List<CategoryNode>>
     {

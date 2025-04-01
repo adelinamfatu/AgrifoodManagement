@@ -1,21 +1,19 @@
 ﻿using AgrifoodManagement.Business.Queries.Account;
+using AgrifoodManagement.Business.Queries.Product;
+using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AgrifoodManagement.Web.Controllers
 {
     [Authorize]
-    public class AdminController : Controller
+    public class AdminController : BaseAdminController
     {
-        private readonly IMediator _mediator;
-
-        public AdminController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        public AdminController(IMediator mediator) : base(mediator) { }
 
         /// <summary>
         /// Helper method to set the sidebar items and active item.
@@ -26,7 +24,7 @@ namespace AgrifoodManagement.Web.Controllers
             ViewBag.ActiveItemId = activeItemId;
         }
 
-        public IActionResult Dashboard()
+        public async Task<IActionResult> DashboardAsync()
         {
             SetSidebar("1");
             return View();

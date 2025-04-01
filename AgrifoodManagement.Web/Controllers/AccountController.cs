@@ -29,35 +29,27 @@ namespace AgrifoodManagement.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel model)
+        public async Task<IActionResult> LoginAsync(LoginViewModel model)
         {
-            if (model.Email != "testuser" || model.Password != "password123")
-                return Unauthorized("Invalid credentials");
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:SecretKey"]);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var command = new LoginUserCommand
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, model.Email)
-                }),
-                    Expires = DateTime.UtcNow.AddHours(1),
-                    Issuer = _configuration["Jwt:Issuer"],
-                    Audience = _configuration["Jwt:Audience"],
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
+                Email = model.Email,
+                Password = model.Password
+            };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+            var result = await _mediator.Send(command);
+            if (!result.IsSuccess)
+            {
+                return Unauthorized(result.Error);
+            }
 
-            Response.Cookies.Append("AuthToken", tokenString, new CookieOptions
+            // Set the token in a cookie (or handle it as needed)
+            Response.Cookies.Append("AuthToken", result.Value.Token, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddHours(1)
+                Expires = result.Value.Expiration
             });
 
             return Redirect("/Admin/Dashboard");
@@ -102,17 +94,24 @@ namespace AgrifoodManagement.Web.Controllers
                     return Json(new { success = false, message = "No file was uploaded" });
                 }
 
+                var userEmailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
+                if (string.IsNullOrEmpty(userEmailClaim))
+                {
+                    return Json(new { success = false, message = "User not found" });
+                }
+
                 var command = new UploadUserPhotoCommand
                 {
                     Photo = photo,
-                    PhotoFolder = PhotoFolder.Users
+                    PhotoFolder = PhotoFolder.Users,
+                    UserEmail = userEmailClaim
                 };
 
                 var result = await _mediator.Send(command);
 
                 if (result.IsSuccess)
                 {
-                    return Json(new { success = true, imageUrl = "/images/avatar.jpg" });
+                    return Json(new { success = true, imageUrl = result.Value });
                 }
 
                 return Json(new { success = false, message = result.Error });

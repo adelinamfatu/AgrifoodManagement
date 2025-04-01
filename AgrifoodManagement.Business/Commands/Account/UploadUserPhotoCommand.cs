@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.Commands.Account
 {
-    public class UploadUserPhotoCommand : IRequest<Result<Guid>>
+    public class UploadUserPhotoCommand : IRequest<Result<string>>
     {
         public IFormFile Photo { get; set; }
-        public int UserId { get; set; }
+        public string UserEmail { get; set; }
         public PhotoFolder PhotoFolder { get; set; }
     }
 }

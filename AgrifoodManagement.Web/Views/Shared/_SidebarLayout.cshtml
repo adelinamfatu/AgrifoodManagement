@@ -19,9 +19,9 @@
                         <i class='bi bi-chat-dots'></i>
                     </div>
                     <div class='avatar-container'>
-                        <img src='/images/avatar.jpg' alt='User Avatar' class='user-avatar' id='userAvatar'>
+                        <img src='@ViewBag.AvatarUrl' alt='User Avatar' class='user-avatar' id='userAvatar'>
                         <div class='user-info'>
-                            <div class='user-name'>Adam Joe</div>
+                            <div class='user-name'>@ViewBag.FullName</div>
                             <div class='user-role'>Admin</div>
                         </div>
                         <input type='file' id='photoInput' accept='image/*' style='display:none;' />
@@ -78,10 +78,8 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Initialize the sidebar
         var sidebar = document.getElementById('sidebarObj').ej2_instances[0];
 
-        // Toggle sidebar on menu button click
         document.getElementById('menu-toggle').addEventListener('click', function () {
             sidebar.toggle();
         });
@@ -97,7 +95,6 @@
                 var formData = new FormData();
                 formData.append('photo', this.files[0]);
 
-                // Show some kind of loading indicator
                 const avatarImg = document.getElementById('userAvatar');
                 const originalSrc = avatarImg.src;
 
@@ -129,15 +126,12 @@
     });
 
     function navigateTo(url, id) {
-        // Remove active class from all menu items
         document.querySelectorAll('.menu-item').forEach(item => {
             item.classList.remove('active');
         });
 
-        // Add active class to clicked item
         document.querySelector(`.menu-item[onclick*='${id}']`).classList.add('active');
 
-        // Navigate to the new page
         window.location.href = url;
     }
 </script>
