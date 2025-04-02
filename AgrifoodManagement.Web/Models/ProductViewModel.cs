@@ -31,6 +31,8 @@ namespace AgrifoodManagement.Web.Models
         [Required]
         public int? Category { get; set; }
 
+        public string? CategoryName { get; set; }
+
         public int ViewCount { get; set; }
 
         public int InquiryCount { get; set; }

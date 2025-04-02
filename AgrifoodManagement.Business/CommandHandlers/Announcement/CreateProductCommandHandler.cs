@@ -16,6 +16,10 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
 
         public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
+            var userId = _context.Users.Where(x => x.Email == request.Email)
+                .FirstOrDefault()?
+                .Id;
+
             var product = new Product
             {
                 Id = Guid.NewGuid(),
@@ -29,7 +33,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
                 AnnouncementStatus = request.AnnouncementStatus,
                 TimePosted = request.TimePosted,
                 IsPromoted = request.IsPromoted,
-                UserId = request.UserId
+                UserId = (Guid)userId
             };
 
             _context.Products.Add(product);

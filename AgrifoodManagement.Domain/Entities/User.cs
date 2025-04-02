@@ -21,7 +21,7 @@ namespace AgrifoodManagement.Domain.Entities
         [Required]
         public string Password { get; set; }
 
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
 
         public string LastName { get; set; }
 
@@ -30,6 +30,12 @@ namespace AgrifoodManagement.Domain.Entities
         public UserType UserType { get; set; }
 
         public string PhoneNumber { get; set; }
+
+        public string? Address { get; set; }
+
+        public double? Latitude { get; set; }
+
+        public double? Longitude { get; set; }
 
         public ICollection<Product>? Products { get; set; }
     }

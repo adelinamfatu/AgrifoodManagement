@@ -23,6 +23,10 @@ namespace AgrifoodManagement.Domain
 
         public DbSet<ProductCategory> ProductCategories { get; set; }
 
+        public DbSet<ForumThread> ForumThreads { get; set; }
+
+        public DbSet<ForumPost> ForumPosts { get; set; }
+
         public DbSet<ExtendedProperty> ExtendedProperties { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
@@ -34,7 +38,7 @@ namespace AgrifoodManagement.Domain
         {
             base.OnModelCreating(modelBuilder);
 
-            //Evade on delete cascade
+            // Evade on delete cascade
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Buyer)
                 .WithMany()
@@ -65,7 +69,13 @@ namespace AgrifoodManagement.Domain
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //Set exactly 2 decimals
+            modelBuilder.Entity<ForumThread>()
+                .HasMany(ft => ft.Posts)
+                .WithOne(fp => fp.Thread)
+                .HasForeignKey(fp => fp.ThreadId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Set exactly 2 decimals
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18, 2)");
@@ -78,9 +88,12 @@ namespace AgrifoodManagement.Domain
                 .Property(p => p.UnitPrice)
                 .HasColumnType("decimal(18, 2)");
 
-            //Create indexes
+            // Create indexes
             modelBuilder.Entity<ExtendedProperty>()
-                .HasIndex(ep => new { ep.EntityId, ep.EntityType });    
+                .HasIndex(ep => new { ep.EntityId, ep.EntityType });
+
+            modelBuilder.Entity<ForumPost>()
+                .HasIndex(fp => fp.PostedAt);
         }
     }
 }

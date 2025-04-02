@@ -18,7 +18,7 @@ namespace AgrifoodManagement.Domain.Entities
         public string EntityType { get; set; }
 
         [Required]
-        public int EntityId { get; set; }
+        public Guid EntityId { get; set; }
 
         public string Key { get; set; }
 

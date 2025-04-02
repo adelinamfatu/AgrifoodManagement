@@ -28,8 +28,8 @@ namespace AgrifoodManagement.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("EntityId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EntityType")
                         .IsRequired()
@@ -48,6 +48,57 @@ namespace AgrifoodManagement.Domain.Migrations
                     b.HasIndex("EntityId", "EntityType");
 
                     b.ToTable("ExtendedProperties");
+                });
+
+            modelBuilder.Entity("AgrifoodManagement.Domain.Entities.ForumPost", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PostedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ThreadId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostedAt");
+
+                    b.HasIndex("ThreadId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ForumPosts");
+                });
+
+            modelBuilder.Entity("AgrifoodManagement.Domain.Entities.ForumThread", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ForumThreads");
                 });
 
             modelBuilder.Entity("AgrifoodManagement.Domain.Entities.Order", b =>
@@ -132,7 +183,7 @@ namespace AgrifoodManagement.Domain.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<int>("ProductCategoryId")
+                    b.Property<int?>("ProductCategoryId")
                         .HasColumnType("int");
 
                     b.Property<double>("Quantity")
@@ -193,8 +244,10 @@ namespace AgrifoodManagement.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Avatar")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -208,6 +261,12 @@ namespace AgrifoodManagement.Domain.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -223,6 +282,25 @@ namespace AgrifoodManagement.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("AgrifoodManagement.Domain.Entities.ForumPost", b =>
+                {
+                    b.HasOne("AgrifoodManagement.Domain.Entities.ForumThread", "Thread")
+                        .WithMany("Posts")
+                        .HasForeignKey("ThreadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AgrifoodManagement.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Thread");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AgrifoodManagement.Domain.Entities.Order", b =>
@@ -268,8 +346,7 @@ namespace AgrifoodManagement.Domain.Migrations
                     b.HasOne("AgrifoodManagement.Domain.Entities.ProductCategory", "ProductCategory")
                         .WithMany()
                         .HasForeignKey("ProductCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("AgrifoodManagement.Domain.Entities.User", "Seller")
                         .WithMany("Products")
@@ -290,6 +367,11 @@ namespace AgrifoodManagement.Domain.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ParentCategory");
+                });
+
+            modelBuilder.Entity("AgrifoodManagement.Domain.Entities.ForumThread", b =>
+                {
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("AgrifoodManagement.Domain.Entities.ProductCategory", b =>

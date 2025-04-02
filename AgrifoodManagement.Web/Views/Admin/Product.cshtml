@@ -301,6 +301,7 @@
             e.preventDefault();
 
             var formData = new FormData(form);
+            formData.delete('UploadFiles');
 
             let uniqueFiles = new Set();
 
@@ -316,19 +317,17 @@
                 body: formData,
             })
                 .then(response => {
-                    if (response.redirected) {
-                        window.location.href = response.url;
-                        return;
-                    }
-
                     if (!response.ok) {
                         throw new Error('Server returned ' + response.status + ' : ' + response.statusText);
                     }
-
-                    return response.text();
+                    return response.json();
                 })
                 .then(data => {
-                    console.log('Success:', data);
+                    if (data.success && data.redirectUrl) {
+                        window.location.href = data.redirectUrl;
+                    } else {
+                        console.log('Product upload successful but no redirect URL provided.');
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);

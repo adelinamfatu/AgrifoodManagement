@@ -4,6 +4,7 @@ using AgrifoodManagement.Web.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AgrifoodManagement.Web.Controllers
 {
@@ -36,16 +37,10 @@ namespace AgrifoodManagement.Web.Controllers
             {
                 var uploadedPhotos = Request.Form.Files.ToList();
 
-                var photoCommand = new UploadProductPhotoCommand
-                {
-                    Photos = uploadedPhotos,
-                    Folder = PhotoFolder.Products
-                };
-
-                var result = await _mediator.Send(photoCommand);
-
                 if (viewModel.Id == Guid.Empty) // Creating a new product
                 {
+                    var userEmailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
+
                     var command = new CreateProductCommand
                     {
                         Name = viewModel.Name,
@@ -59,14 +54,24 @@ namespace AgrifoodManagement.Web.Controllers
                         AnnouncementStatus = AnnouncementStatus.Published,
                         IsPromoted = false,
                         PhotoUrls = viewModel.PhotoUrls,
-                        UserId = new Guid("2346C2BF-1717-4AE3-9A69-F83B3A2D68FE")
+                        Email = userEmailClaim
                     };
+
                     Guid productId = await _mediator.Send(command);
+
+                    var photoCommand = new UploadProductPhotoCommand
+                    {
+                        Photos = uploadedPhotos,
+                        ProductId = productId,
+                        Folder = PhotoFolder.Products
+                    };
+
+                    var result = await _mediator.Send(photoCommand);
 
                     return Ok(new
                     {
                         success = true,
-                        redirectUrl = Url.Action("Admin", "Announcements", new { id = productId })
+                        redirectUrl = Url.Action("Announcements", "Admin")
                     });
                 }
                 else // Updating an existing product
@@ -87,7 +92,7 @@ namespace AgrifoodManagement.Web.Controllers
                     return Ok(new
                     {
                         success = true,
-                        redirectUrl = Url.Action("Admin", "Announcements", new { id = viewModel.Id })
+                        redirectUrl = Url.Action("Announcements", "Admin")
                     });
                 }
             }

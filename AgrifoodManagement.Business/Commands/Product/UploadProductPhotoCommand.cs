@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.Commands.Product
 {
-    public class UploadProductPhotoCommand : IRequest<Result<Guid>>
+    public class UploadProductPhotoCommand : IRequest<Result<string>>
     {
         public List<IFormFile> Photos { get; set; }
-        public int UserId { get; set; }
+        public Guid ProductId { get; set; }
         public PhotoFolder Folder { get; set; }
     }
 }

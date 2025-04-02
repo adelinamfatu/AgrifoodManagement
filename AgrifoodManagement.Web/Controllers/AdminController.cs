@@ -60,75 +60,28 @@ namespace AgrifoodManagement.Web.Controllers
             SetSidebar("7");
             ViewBag.ProductCategories = productCategories;
 
+            var productDtos = await _mediator.Send(new ProductsQuery());
+
             var viewModel = new ProductViewModel
             {
-                Products = new List<ProductViewModel>
+                Products = productDtos.Select(dto => new ProductViewModel
                 {
-                    new ProductViewModel
-                    {
-                        Name = "Organic Apples",
-                        Description = "Fresh organic apples from our orchard. Pesticide-free and harvested this week.",
-                        Price = 2.99m,
-                        Quantity = 150.5,
-                        UnitOfMeasurement = MeasurementUnit.kg,
-                        ExpirationDate = DateTime.Now.AddDays(14),
-                        Location = "North Field",
-                        Category = 1,
-                        ViewCount = 45,
-                        InquiryCount = 12,
-                        DemandForecast = "High",
-                        EstimatedMarketPrice = 3.45m,
-                        IsArchived = false
-                    },
-                    new ProductViewModel
-                    {
-                        Name = "Winter Wheat",
-                        Description = "Locally grown winter wheat, perfect for milling and baking. Chemical-free farming methods.",
-                        Price = 1.75m,
-                        Quantity = 500,
-                        UnitOfMeasurement = MeasurementUnit.kg,
-                        ExpirationDate = DateTime.Now.AddDays(60),
-                        Location = "South Field",
-                        Category = 2,
-                        ViewCount = 28,
-                        InquiryCount = 3,
-                        DemandForecast = "Medium",
-                        EstimatedMarketPrice = 1.85m,
-                        IsArchived = false
-                    },
-                    new ProductViewModel
-                    {
-                        Name = "Fresh Tomatoes",
-                        Description = "Vine-ripened tomatoes, picked at peak ripeness. Great for salads and sauces.",
-                        Price = 3.49m,
-                        Quantity = 75,
-                        UnitOfMeasurement = MeasurementUnit.kg,
-                        ExpirationDate = DateTime.Now.AddDays(5),
-                        Location = "Greenhouse 2",
-                        Category = 3,
-                        ViewCount = 67,
-                        InquiryCount = 15,
-                        DemandForecast = "High",
-                        EstimatedMarketPrice = 3.99m,
-                        IsArchived = false
-                    },
-                    new ProductViewModel
-                    {
-                        Name = "Organic Milk",
-                        Description = "Fresh organic milk from our grass-fed cows. Pasteurized but not homogenized.",
-                        Price = 3.99m,
-                        Quantity = 100,
-                        UnitOfMeasurement = MeasurementUnit.lb,
-                        ExpirationDate = DateTime.Now.AddDays(7),
-                        Location = "Dairy Barn",
-                        Category = 4,
-                        ViewCount = 38,
-                        InquiryCount = 8,
-                        DemandForecast = "Medium",
-                        EstimatedMarketPrice = 4.25m,
-                        IsArchived = false
-                    }
-                }
+                    Id = dto.Id,
+                    Name = dto.Name,
+                    Description = dto.Description,
+                    Price = dto.Price,
+                    Quantity = dto.Quantity,
+                    UnitOfMeasurement = Enum.Parse<MeasurementUnit>(dto.UnitOfMeasurement),
+                    ExpirationDate = dto.ExpirationDate,
+                    Location = dto.Location,
+                    Category = dto.CategoryId,
+                    CategoryName = dto.CategoryName,
+                    ViewCount = dto.ViewCount,
+                    InquiryCount = dto.InquiryCount,
+                    DemandForecast = dto.DemandForecast,
+                    EstimatedMarketPrice = dto.EstimatedMarketPrice,
+                    IsArchived = dto.IsArchived
+                }).ToList()
             };
 
             return View(viewModel);

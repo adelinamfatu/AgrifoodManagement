@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.Commands.Product;
+using AgrifoodManagement.Domain.Entities;
 using AgrifoodManagement.Domain.Interfaces;
 using AgrifoodManagement.Util;
 using AgrifoodManagement.Util.ValueObjects;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.CommandHandlers.Announcement
 {
-    public class UploadProductPhotoCommandHandler : IRequestHandler<UploadProductPhotoCommand, Result<Guid>>
+    public class UploadProductPhotoCommandHandler : IRequestHandler<UploadProductPhotoCommand, Result<string>>
     {
         private readonly IApplicationDbContext _context;
         private readonly CloudinaryService _cloudinaryService;
@@ -22,22 +23,29 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
             _cloudinaryService = cloudinaryService;
         }
 
-        public async Task<Result<Guid>> Handle(UploadProductPhotoCommand request, CancellationToken cancellationToken)
+        public async Task<Result<string>> Handle(UploadProductPhotoCommand request, CancellationToken cancellationToken)
         {
-            var photoUrls = new List<string>();
-
             foreach (var photo in request.Photos)
             {
                 var url = await _cloudinaryService.UploadPhotoAsync(photo, PhotoFolder.Products);
                 if (!string.IsNullOrEmpty(url))
                 {
-                    photoUrls.Add(url);
+                    var extendedProperty = new ExtendedProperty
+                    {
+                        ID = Guid.NewGuid(),
+                        EntityType = "Product",
+                        EntityId = request.ProductId,
+                        Key = "PhotoUrl",
+                        Value = url
+                    };
+
+                    _context.ExtendedProperties.Add(extendedProperty);
                 }
             }
 
-            // Save photos in the database
+            await _context.SaveChangesAsync(cancellationToken);
 
-            return Result<Guid>.Success(new Guid());
+            return Result<string>.Success("Photos uploaded successfully.");
         }
     }
 }

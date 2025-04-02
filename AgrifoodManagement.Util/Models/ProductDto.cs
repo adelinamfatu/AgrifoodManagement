@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AgrifoodManagement.Util.Models
+{
+    public class ProductDto
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
+        public double Quantity { get; set; }
+        public string UnitOfMeasurement { get; set; }
+        public DateTime ExpirationDate { get; set; }
+        public string Location { get; set; }
+        public int? CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public int ViewCount { get; set; }
+        public int InquiryCount { get; set; }
+        public string DemandForecast { get; set; }
+        public decimal EstimatedMarketPrice { get; set; }
+        public bool IsArchived { get; set; }
+    }
+}
