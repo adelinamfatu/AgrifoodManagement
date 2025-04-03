@@ -1,5 +1,6 @@
 ﻿using AgrifoodManagement.Business.Queries.Account;
 using AgrifoodManagement.Business.Queries.Product;
+using AgrifoodManagement.Domain.Entities;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models;
@@ -62,27 +63,24 @@ namespace AgrifoodManagement.Web.Controllers
 
             var productDtos = await _mediator.Send(new ProductsQuery());
 
-            var viewModel = new ProductViewModel
+            var viewModel = productDtos.Select(p => new ProductViewModel
             {
-                Products = productDtos.Select(dto => new ProductViewModel
-                {
-                    Id = dto.Id,
-                    Name = dto.Name,
-                    Description = dto.Description,
-                    Price = dto.Price,
-                    Quantity = dto.Quantity,
-                    UnitOfMeasurement = Enum.Parse<MeasurementUnit>(dto.UnitOfMeasurement),
-                    ExpirationDate = dto.ExpirationDate,
-                    Location = dto.Location,
-                    Category = dto.CategoryId,
-                    CategoryName = dto.CategoryName,
-                    ViewCount = dto.ViewCount,
-                    InquiryCount = dto.InquiryCount,
-                    DemandForecast = dto.DemandForecast,
-                    EstimatedMarketPrice = dto.EstimatedMarketPrice,
-                    IsArchived = dto.IsArchived
-                }).ToList()
-            };
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Quantity = p.Quantity,
+                UnitOfMeasurement = Enum.Parse<MeasurementUnit>(p.UnitOfMeasurement),
+                ExpirationDate = p.ExpirationDate,
+                Category = p.CategoryId,
+                CategoryName = p.CategoryName,
+                ViewCount = p.ViewCount,
+                InquiryCount = p.InquiryCount,
+                EstimatedMarketPrice = p.EstimatedMarketPrice,
+                IsPromoted = p.IsPromoted,
+                AnnouncementStatus = p.AnnouncementStatus,
+                PhotoUrls = p.PhotoUrls
+            }).ToList();
 
             return View(viewModel);
         }

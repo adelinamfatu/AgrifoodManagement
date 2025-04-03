@@ -33,14 +33,18 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
                     Quantity = p.Quantity,
                     UnitOfMeasurement = p.UnitOfMeasurement.ToString(),
                     ExpirationDate = p.ExpirationDate,
-                    Location = "Bucuresti",
                     CategoryId = p.ProductCategoryId,
                     CategoryName = p.ProductCategory != null ? p.ProductCategory.Name : "Uncategorized",
                     ViewCount = 15,
                     InquiryCount = 20,
                     DemandForecast = "High",
                     EstimatedMarketPrice = 50,
-                    IsArchived = false
+                    IsPromoted = p.IsPromoted,
+                    AnnouncementStatus = p.AnnouncementStatus,
+                    PhotoUrls = _context.ExtendedProperties
+                        .Where(ep => ep.EntityId == p.Id && ep.Key == "PhotoUrl")
+                        .Select(ep => ep.Value)
+                        .ToList()
                 })
                 .ToListAsync(cancellationToken);
         }

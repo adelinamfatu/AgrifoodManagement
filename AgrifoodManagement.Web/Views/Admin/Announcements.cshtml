@@ -6,7 +6,7 @@
     var productCategoriesData = ViewBag.ProductCategories as List<CategoryNode>;
 }
 
-@model ProductViewModel
+@model List<ProductViewModel>
 
 <div class="announcement-container">
     <div class="search-filter-row">
@@ -19,11 +19,11 @@
 
         <div class="filter-options">
             <ejs-dropdownlist id="productCategories"
-                dataSource="@productCategoriesData"
-                placeholder="Select a product category"
-                index="0"
-                popupHeight="220px"
-                change="valueChange">
+                              dataSource="@productCategoriesData"
+                              placeholder="Select a product category"
+                              index="0"
+                              popupHeight="220px"
+                              change="valueChange">
                 <e-dropdownlist-fields text="Category" value="Id"></e-dropdownlist-fields>
             </ejs-dropdownlist>
 
@@ -42,7 +42,7 @@
     </ejs-chiplist>
 
     <div class="results-header">
-        <p>Showing @Model.Products.Count active listings</p>
+        <p>Showing @Model.Count active listings</p>
 
         <div class="view-options">
             <div class="sort-dropdown">
@@ -59,11 +59,31 @@
     </div>
 
     <div class="products-container">
-        @foreach (var product in Model.Products)
+        @foreach (var product in Model)
         {
             <div class="product-card">
-                <div class="product-header" style="background-color: #4CAF50;">
-                    <img src="/images/product-placeholder.png" alt="@product.Name" class="product-image" />
+                <div class="product-header">
+                    @if (product.PhotoUrls != null && product.PhotoUrls.Count > 0)
+                    {
+                        <img src="@product.PhotoUrls[0]" alt="@product.Name" class="product-image" />
+                    }
+                    else
+                    {
+                        <img src="/images/product-placeholder.png" alt="@product.Name" class="product-image" />
+                    }
+
+                    <div class="product-header-controls">
+                        <button class="manage-btn" onclick="navigateToProductPage(@product.Id)" title="Manage Product">
+                            <i class="fa fa-cog"></i> Manage
+                        </button>
+
+                        @if (!product.IsPromoted)
+                        {
+                            <button class="promote-btn" onclick="promoteProduct(@product.Id)">
+                                <i class="fa fa-bullhorn"></i> Promote
+                            </button>
+                        }
+                    </div>
                 </div>
 
                 <div class="product-content">
@@ -75,15 +95,21 @@
                         </div>
                     </div>
 
+                    <div class="status-and-quantity">
+                        <div class="status-badge @product.AnnouncementStatus.ToString().ToLower()">
+                            @product.AnnouncementStatus
+                        </div>
+
+                        <div class="quantity-badge">
+                            <i class="fa fa-balance-scale"></i> @product.Quantity @product.UnitOfMeasurement
+                        </div>
+                    </div>
+
                     <div class="product-price">$@product.Price.ToString("0.00") per @product.UnitOfMeasurement</div>
 
                     <p class="product-description">@product.Description</p>
 
                     <div class="product-details">
-                        <div class="detail">
-                            <i class="fa fa-balance-scale"></i>
-                            <span>Available: @product.Quantity @product.UnitOfMeasurement</span>
-                        </div>
                         <div class="detail">
                             <i class="fa fa-calendar"></i>
                             <span>Expires: @product.ExpirationDate.ToString("MMM dd, yyyy")</span>
@@ -93,12 +119,8 @@
                             }
                         </div>
                         <div class="detail">
-                            <i class="fa fa-map-marker"></i>
-                            <span>Location: Farm Location</span>
-                        </div>
-                        <div class="detail">
-                            <i class="fa fa-line-chart"></i>
-                            <span>Demand Forecast: <strong class="high-demand">High</strong></span>
+                            <i class="fa fa-tag"></i>
+                            <span>Category: @product.CategoryName</span>
                         </div>
                     </div>
 
@@ -112,9 +134,9 @@
                                 <span class="metric-value">3</span>
                                 <span class="metric-label">Inquiries</span>
                             </div>
-                        </div>
-                        <div class="suggested-price-tag">
-                            Est. Market: $@((product.Price * 1.15m).ToString("0.00"))
+                            <div class="suggested-price-tag">
+                                Est. Market: $@((product.Price * 1.15m).ToString("0.00"))
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -126,10 +148,37 @@
 <script>
     function valueChange(args) {
         console.log("Selected value: ", args.value);
-        // Add any additional handling code here
     }
 
     function navigateToProductPage() {
         window.location.href = "/Admin/Product";
+    }
+
+    function promoteProduct(productId) {
+        fetch(`/api/products/${productId}/promote`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const promoteBtn = event.target.closest('.promote-btn');
+                    const productCard = promoteBtn.closest('.product-card');
+
+                    const promotedBadge = document.createElement('div');
+                    promotedBadge.className = 'promoted-badge';
+                    promotedBadge.innerHTML = '<i class="fa fa-star"></i> Promoted';
+
+                    const statusBadge = productCard.querySelector('.status-badge');
+                    statusBadge.parentNode.insertBefore(promotedBadge, statusBadge.nextSibling);
+
+                    promoteBtn.remove();
+                }
+            })
+            .catch(error => {
+                console.error('Error promoting product:', error);
+            });
     }
 </script>

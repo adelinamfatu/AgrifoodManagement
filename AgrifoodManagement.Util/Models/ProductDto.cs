@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AgrifoodManagement.Util.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,8 @@ namespace AgrifoodManagement.Util.Models
         public int InquiryCount { get; set; }
         public string DemandForecast { get; set; }
         public decimal EstimatedMarketPrice { get; set; }
-        public bool IsArchived { get; set; }
+        public bool IsPromoted { get; set; }
+        public AnnouncementStatus AnnouncementStatus { get; set; }
+        public List<string> PhotoUrls { get; set; }
     }
 }

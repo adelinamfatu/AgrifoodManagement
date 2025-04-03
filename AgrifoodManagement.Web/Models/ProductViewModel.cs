@@ -26,8 +26,6 @@ namespace AgrifoodManagement.Web.Models
         [FutureDate(ErrorMessage = "Expiration date must be in the future.")]
         public DateTime ExpirationDate { get; set; } = DateTime.Now;
 
-        public string? Location { get; set; }
-
         [Required]
         public int? Category { get; set; }
 
@@ -37,16 +35,12 @@ namespace AgrifoodManagement.Web.Models
 
         public int InquiryCount { get; set; }
 
-        public string? DemandForecast { get; set; }
-
         public decimal EstimatedMarketPrice { get; set; }
-
-        public bool IsArchived { get; set; }
 
         public bool IsPromoted { get; set; }
 
-        public List<string> PhotoUrls { get; set; } = new List<string>();
+        public AnnouncementStatus AnnouncementStatus { get; set; }
 
-        public List<ProductViewModel> Products { get; set; } = new List<ProductViewModel>();
+        public List<string> PhotoUrls { get; set; } = new List<string>();
     }
 }
