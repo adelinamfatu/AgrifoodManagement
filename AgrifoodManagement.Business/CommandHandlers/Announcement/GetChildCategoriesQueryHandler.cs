@@ -7,16 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AgrifoodManagement.Business.CommandHandlers.Announcement
 {
-    public class ChildCategoriesQueryHandler : IRequestHandler<ChildCategoriesQuery, List<CategoryNode>>
+    public class GetChildCategoriesQueryHandler : IRequestHandler<GetChildCategoriesQuery, List<CategoryNode>>
     {
         private readonly ApplicationDbContext _context;
 
-        public ChildCategoriesQueryHandler(ApplicationDbContext context)
+        public GetChildCategoriesQueryHandler(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<List<CategoryNode>> Handle(ChildCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<List<CategoryNode>> Handle(GetChildCategoriesQuery request, CancellationToken cancellationToken)
         {
             IQueryable<ProductCategory> query = _context.ProductCategories;
 

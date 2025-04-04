@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.Queries.Account
 {
-    public class UserQuery : IRequest<UserDto>
+    public class GetUserByEmailQuery : IRequest<UserDto>
     {
         public string Email { get; }
 
-        public UserQuery(string email)
+        public GetUserByEmailQuery(string email)
         {
             Email = email;
         }

@@ -22,7 +22,7 @@ namespace AgrifoodManagement.Web.Controllers
 
             if (!string.IsNullOrEmpty(email))
             {
-                UserDto user = await _mediator.Send(new UserQuery(email));
+                UserDto user = await _mediator.Send(new GetUserByEmailQuery(email));
                 ViewBag.FullName = user != null ? $"{user.FirstName} {user.LastName}" : "Guest";
                 ViewBag.AvatarUrl = user?.AvatarUrl != string.Empty ? user?.AvatarUrl 
                     : "/images/avatar-placeholder.png";

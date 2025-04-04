@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.Queries.Product
 {
-    public class ProductsQuery : IRequest<List<ProductDto>>
+    public class GetUserProductsQuery : IRequest<List<ProductDto>>
     {
     }
 }

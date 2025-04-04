@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.Queries.Product
 {
-    public class ChildCategoriesQuery : IRequest<List<CategoryNode>>
+    public class GetChildCategoriesQuery : IRequest<List<CategoryNode>>
     {
         public int? ParentCategoryId { get; set; }
 
-        public ChildCategoriesQuery(int? parentCategoryId = null)
+        public GetChildCategoriesQuery(int? parentCategoryId = null)
         {
             ParentCategoryId = parentCategoryId;
         }

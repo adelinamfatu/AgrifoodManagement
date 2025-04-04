@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.Queries.Product
 {
-    public class ProductCategoriesQuery : IRequest<List<CategoryNode>> { }
+    public class GetProductCategoriesQuery : IRequest<List<CategoryNode>> { }
 }

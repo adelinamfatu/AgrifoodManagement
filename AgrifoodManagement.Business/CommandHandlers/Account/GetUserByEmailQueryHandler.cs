@@ -11,16 +11,16 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.CommandHandlers.Account
 {
-    public class UserQueryHandler : IRequestHandler<UserQuery, UserDto>
+    public class GetUserByEmailQueryHandler : IRequestHandler<GetUserByEmailQuery, UserDto>
     {
         private readonly IApplicationDbContext _context;
 
-        public UserQueryHandler(IApplicationDbContext context)
+        public GetUserByEmailQueryHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<UserDto?> Handle(UserQuery request, CancellationToken cancellationToken)
+        public async Task<UserDto?> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
         {
             return await _context.Users
                 .Where(u => u.Email == request.Email)

@@ -49,7 +49,7 @@ namespace AgrifoodManagement.Web.Controllers
                         Quantity = viewModel.Quantity,
                         UnitOfMeasurement = viewModel.UnitOfMeasurement,
                         ExpirationDate = viewModel.ExpirationDate,
-                        ProductCategoryId = viewModel.Category?? 14,
+                        ProductCategoryId = viewModel.Category,
                         TimePosted = DateTime.UtcNow,
                         AnnouncementStatus = AnnouncementStatus.Published,
                         IsPromoted = false,

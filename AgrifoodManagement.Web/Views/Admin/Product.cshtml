@@ -30,7 +30,10 @@
                 <h1>@(Model.Id == Guid.Empty ? "Add New Product" : "Edit Product")</h1>
             </div>
             <div class="action-buttons">
-                <ejs-button id="addProductBtn" type="submit" content="Add Product" cssClass="e-success"></ejs-button>
+                <ejs-button id="addProductBtn" type="submit"
+                            content="@(Model.Id == Guid.Empty ? "Add Product" : "Save Product")"
+                            cssClass="e-success">
+                </ejs-button>
             </div>
         </div>
 
@@ -121,7 +124,7 @@
                             </label>
                             <ejs-dropdownlist id="UnitOfMeasurement" name="UnitOfMeasurement"
                                               dataSource="@unitsData"
-                                              value="@Model.UnitOfMeasurement"
+                                              value="@(Model.UnitOfMeasurement.HasValue ? Model.UnitOfMeasurement.Value.ToString() : null)"
                                               placeholder="Select unit of measurement"
                                               index="0"
                                               popupHeight="220px">
@@ -183,7 +186,7 @@
                         </label>
                         <ejs-dropdowntree id="Category" name="Category"
                                           popupHeight="220px"
-                                          value="@Model.Category"
+                                          value="@(Model.Category.HasValue ? Model.Category.Value.ToString() : "")"
                                           placeholder="Select a product category"
                                           changeOnBlur="false">
                             <e-dropdowntree-fields dataSource="@productCategoriesData"

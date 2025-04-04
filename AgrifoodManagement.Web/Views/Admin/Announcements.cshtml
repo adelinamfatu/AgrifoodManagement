@@ -73,7 +73,7 @@
                     }
 
                     <div class="product-header-controls">
-                        <button class="manage-btn" onclick="navigateToProductPage(@product.Id)" title="Manage Product">
+                        <button class="manage-btn" onclick="navigateToProductPage('@product.Id')" title="Manage Product">
                             <i class="fa fa-cog"></i> Manage
                         </button>
 
@@ -150,8 +150,20 @@
         console.log("Selected value: ", args.value);
     }
 
-    function navigateToProductPage() {
-        window.location.href = "/Admin/Product";
+    function navigateToProductPage(productId) {
+        console.log("navigateToProductPage called with productId:", productId);
+
+        try {
+            if (productId) {
+                window.location.href = "/Admin/Product?id=" + productId;
+                console.log("Redirecting to product page with id:", productId);
+            } else {
+                window.location.href = "/Admin/Product";
+                console.log("Redirecting to general product page");
+            }
+        } catch (error) {
+            console.error("Error during navigation:", error);
+        }
     }
 
     function promoteProduct(productId) {

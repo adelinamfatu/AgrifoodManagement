@@ -57,11 +57,11 @@ namespace AgrifoodManagement.Web.Controllers
 
         public async Task<IActionResult> AnnouncementsAsync()
         {
-            var productCategories = await _mediator.Send(new ChildCategoriesQuery());
+            var productCategories = await _mediator.Send(new GetChildCategoriesQuery());
             SetSidebar("7");
             ViewBag.ProductCategories = productCategories;
 
-            var productDtos = await _mediator.Send(new ProductsQuery());
+            var productDtos = await _mediator.Send(new GetUserProductsQuery());
 
             var viewModel = productDtos.Select(p => new ProductViewModel
             {
@@ -70,7 +70,7 @@ namespace AgrifoodManagement.Web.Controllers
                 Description = p.Description,
                 Price = p.Price,
                 Quantity = p.Quantity,
-                UnitOfMeasurement = Enum.Parse<MeasurementUnit>(p.UnitOfMeasurement),
+                UnitOfMeasurement = p.UnitOfMeasurement,
                 ExpirationDate = p.ExpirationDate,
                 Category = p.CategoryId,
                 CategoryName = p.CategoryName,
@@ -87,7 +87,7 @@ namespace AgrifoodManagement.Web.Controllers
 
         public async Task<IActionResult> ProductAsync(Guid? id)
         {
-            var productCategories = await _mediator.Send(new ProductCategoriesQuery());
+            var productCategories = await _mediator.Send(new GetProductCategoriesQuery());
             SetSidebar("6");
             ViewBag.ProductCategories = productCategories;
 
@@ -95,23 +95,25 @@ namespace AgrifoodManagement.Web.Controllers
 
             if (id.HasValue)
             {
-                //var product = await _mediator.Send(new GetProductByIdQuery { Id = id.Value });
-                //if (product == null)
-                //{
-                //    return NotFound();
-                //}
+                var product = await _mediator.Send(new GetProductByIdQuery { Id = id.Value });
+                if (product == null)
+                {
+                    return NotFound();
+                }
 
-                //viewModel = new ProductViewModel
-                //{
-                //    Id = product.Id,
-                //    Name = product.Name,
-                //    Description = product.Description,
-                //    Price = product.Price,
-                //    Quantity = product.Quantity,
-                //    UnitOfMeasurement = product.UnitOfMeasurement,
-                //    ExpirationDate = product.ExpirationDate,
-                //    Category = product.ProductCategoryId
-                //};
+                viewModel = new ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    Quantity = product.Quantity,
+                    UnitOfMeasurement = product.UnitOfMeasurement,
+                    ExpirationDate = product.ExpirationDate,
+                    Category = product.CategoryId,
+                    CategoryName = product.CategoryName,
+                    PhotoUrls = product.PhotoUrls
+                };
             }
 
             return View(viewModel);

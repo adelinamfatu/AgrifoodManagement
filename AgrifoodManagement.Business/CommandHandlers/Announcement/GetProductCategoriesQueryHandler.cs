@@ -6,16 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AgrifoodManagement.Business.CommandHandlers.Announcement
 {
-    public class ProductCategoriesQueryHandler : IRequestHandler<ProductCategoriesQuery, List<CategoryNode>>
+    public class GetProductCategoriesQueryHandler : IRequestHandler<GetProductCategoriesQuery, List<CategoryNode>>
     {
         private readonly IApplicationDbContext _context;
 
-        public ProductCategoriesQueryHandler(IApplicationDbContext context)
+        public GetProductCategoriesQueryHandler(IApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<List<CategoryNode>> Handle(ProductCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<List<CategoryNode>> Handle(GetProductCategoriesQuery request, CancellationToken cancellationToken)
         {
             var categories = await _context.ProductCategories
                 .Include(c => c.SubCategories)
