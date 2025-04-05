@@ -13,8 +13,8 @@
     var filterOptions = new string[] { "Latest first", "Popular first", "Oldest first" };
 
     var forumCategories = Enum.GetValues(typeof(ForumCategory))
-    .Cast<ForumCategory>()
-    .Select(fc => new SelectListItem
+        .Cast<ForumCategory>()
+        .Select(fc => new SelectListItem
             {
                 Text = SplitPascalCase.Format(fc.ToString()),
                 Value = fc.ToString()
@@ -52,7 +52,10 @@
                             {
                                 <div class="category-tag tag-@topic.Category.ToLower().Replace(" ", "-")">@topic.Category</div>
                             }
-                            <div class="topic-meta">Latest reply from @topic.LatestReplyAuthor @topic.LatestReplyTimeAgo</div>
+                            @if (topic.CommentsCount > 0)
+                            {
+                                <div class="topic-meta">Latest reply from @topic.LatestReplyAuthor @topic.LatestReplyTimeAgo</div>
+                            }
                             <p class="topic-text">@topic.Text</p>
                             <div class="topic-stats">
                                 <div class="topic-commenters">
