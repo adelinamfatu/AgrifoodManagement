@@ -1,14 +1,9 @@
-﻿using AgrifoodManagement.Business.Queries.Account;
-using AgrifoodManagement.Business.Queries.Product;
-using AgrifoodManagement.Domain.Entities;
-using AgrifoodManagement.Util.Models;
-using AgrifoodManagement.Util.ValueObjects;
+﻿using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Web.Models;
 using AgrifoodManagement.Web.Models.Forum;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace AgrifoodManagement.Web.Controllers
 {

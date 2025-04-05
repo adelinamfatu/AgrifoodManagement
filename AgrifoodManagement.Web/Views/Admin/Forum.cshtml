@@ -1,4 +1,7 @@
 ﻿@using AgrifoodManagement.Web.Models.Forum;
+@using Syncfusion.EJ2.Popups
+@using Syncfusion.EJ2.Inputs
+@using Syncfusion.EJ2.DropDowns
 
 @{
     Layout = "~/Views/Shared/_SidebarLayout.cshtml";
@@ -6,7 +9,7 @@
 
 @model List<TopicViewModel>
 
-<div class="container">
+<div id="target" class="container">
     <div class="forum-header">
         <div class="filters">
             <select class="filter-dropdown">
@@ -92,7 +95,7 @@
         </div>
 
         <div class="sidebar">
-            <button class="new-discussion-btn-large">Start New Discussion</button>
+            <button id="openDialogBtn" class="new-discussion-btn-large">Start New Discussion</button>
 
             <div class="sidebar-section">
                 <ul class="sidebar-links">
@@ -134,6 +137,8 @@
     </div>
 </div>
 
+<div id="newDiscussionDialog"></div>
+
 <script>
     // Function to toggle comments visibility
     function toggleComments(topicId) {
@@ -141,7 +146,6 @@
         if (commentsSection.style.display === 'block') {
             commentsSection.style.display = 'none';
         } else {
-            // Hide all other comment sections first
             document.querySelectorAll('.comments-section').forEach(section => {
                 section.style.display = 'none';
             });
@@ -149,14 +153,12 @@
         }
     }
 
-    // Function to handle comment submission
     function submitComment(topicId) {
         const commentSection = document.getElementById(`comments-${topicId}`);
         const commentInput = commentSection.querySelector('.comment-input');
         const commentText = commentInput.value.trim();
 
         if (commentText) {
-            // Use fetch API to submit the comment to the server
             fetch('/Forum/AddComment', {
                 method: 'POST',
                 headers: {
@@ -171,41 +173,33 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Add the new comment to the UI
                         const commentsList = commentSection.querySelector('.comments-list');
-
-                        // Clear "no comments" message if it exists
                         const noCommentsMsg = commentsList.querySelector('p');
                         if (noCommentsMsg && noCommentsMsg.textContent.includes('No comments yet')) {
                             commentsList.innerHTML = '';
                         }
-
                         const newComment = document.createElement('div');
                         newComment.className = 'comment';
-
                         newComment.innerHTML = `
-                                <div class="comment-author">
-                                    <div class="author-avatar">
-                                        <img src="${data.author.avatarUrl}" alt="${data.author.name} avatar">
-                                    </div>
+                            <div class="comment-author">
+                                <div class="author-avatar">
+                                    <img src="${data.author.avatarUrl}" alt="${data.author.name} avatar">
                                 </div>
-                                <div class="comment-content">
-                                    <div class="comment-header">
-                                        <span class="comment-author-name">${data.author.name}</span>
-                                        <span class="comment-date">${data.timeAgo}</span>
-                                    </div>
-                                    <p class="comment-text">${commentText}</p>
-                                    <div class="comment-actions">
-                                        <span class="comment-action">Like</span>
-                                        <span class="comment-action">Reply</span>
-                                    </div>
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-header">
+                                    <span class="comment-author-name">${data.author.name}</span>
+                                    <span class="comment-date">${data.timeAgo}</span>
                                 </div>
-                            `;
-
+                                <p class="comment-text">${commentText}</p>
+                                <div class="comment-actions">
+                                    <span class="comment-action">Like</span>
+                                    <span class="comment-action">Reply</span>
+                                </div>
+                            </div>
+                        `;
                         commentsList.appendChild(newComment);
                         commentInput.value = '';
-
-                        // Update comment count
                         const topicCard = document.querySelector(`.topic-card[data-topic-id="${topicId}"]`);
                         const commentsCountElem = topicCard.querySelector('.comments-count');
                         const currentCount = parseInt(commentsCountElem.textContent);
@@ -218,38 +212,26 @@
         }
     }
 
-    // Make topic cards clickable to toggle comments
     document.querySelectorAll('.topic-main').forEach(topicMain => {
         topicMain.addEventListener('click', function () {
             const topicId = this.closest('.topic-card').dataset.topicId;
             toggleComments(topicId);
         });
     });
-
-    // Prevent click on comments count from propagating to parent
     document.querySelectorAll('.comments-count').forEach(commentsCount => {
         commentsCount.addEventListener('click', function (e) {
             e.stopPropagation();
         });
     });
-
-    // Make the sidebar category links clickable
     document.querySelectorAll('.sidebar-link').forEach(link => {
         link.addEventListener('click', function () {
-            // Remove active class from all links
             document.querySelectorAll('.sidebar-link').forEach(l => {
                 l.classList.remove('active');
             });
-
-            // Add active class to clicked link
             this.classList.add('active');
-
-            // In a real application, you would filter topics based on the selected category
-            // For now, we'll just update the checkmark
             document.querySelectorAll('.sidebar-link .checkmark').forEach(checkmark => {
                 checkmark.remove();
             });
-
             const checkmark = document.createElement('span');
             checkmark.className = 'checkmark';
             checkmark.textContent = '✓';
@@ -257,11 +239,71 @@
         });
     });
 
-    // Make the new discussion buttons work
-    document.querySelectorAll('.new-discussion-btn, .new-discussion-btn-large').forEach(btn => {
-        btn.addEventListener('click', function () {
-            // In a real application, this would redirect to a new topic form or open a modal
-            alert('Create new discussion feature would go here!');
+    function initializeDialog() {
+        var dialogObj = new ej.popups.Dialog({
+            header: 'Add New Discussion',
+            showCloseIcon: true,
+            width: '500px',
+            position: { X: 'center', Y: '100px' },
+            target: document.getElementById('target'),
+            visible: false,
+            buttons: [
+                {
+                    click: function () {
+                        var title = document.getElementById('discussionTitle').value;
+                        var content = document.getElementById('discussionContent').value;
+                        var category = document.getElementById('discussionCategory').value;
+                        if (!title.trim()) {
+                            alert("Please enter a title");
+                            return;
+                        }
+                        alert("Adding new discussion:\nTitle: " + title + "\nContent: " + content + "\nCategory: " + category);
+                        document.getElementById('discussionTitle').value = '';
+                        document.getElementById('discussionContent').value = '';
+                        dialogObj.hide();
+                    },
+                    buttonModel: { content: 'Add Discussion', isPrimary: true }
+                },
+                {
+                    click: function () {
+                        dialogObj.hide();
+                    },
+                    buttonModel: { content: 'Cancel' }
+                }
+            ],
+            close: function () {
+                console.log("Dialog closed");
+            },
+            // Use the 'content' property to define the dialog's inner HTML
+            content: `
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="discussionTitle">Title</label>
+                        <input type="text" id="discussionTitle" class="form-control" placeholder="Enter discussion title" />
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="discussionContent">Content</label>
+                        <textarea id="discussionContent" class="form-control" placeholder="Enter discussion content" rows="4"></textarea>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="discussionCategory">Category</label>
+                        <select id="discussionCategory" class="form-control">
+                            <option value="Introductions">Introductions</option>
+                            <option value="FAQ">FAQ</option>
+                            <option value="Off-Topic">Off-Topic</option>
+                            <option value="Feedback">Feedback</option>
+                        </select>
+                    </div>
+                `
         });
+        dialogObj.appendTo('#newDiscussionDialog');
+        window.newDiscussionDialog = dialogObj;
+        console.log("Dialog initialized programmatically");
+        document.getElementById('openDialogBtn').addEventListener('click', function () {
+            window.newDiscussionDialog.show();
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        initializeDialog();
     });
 </script>
