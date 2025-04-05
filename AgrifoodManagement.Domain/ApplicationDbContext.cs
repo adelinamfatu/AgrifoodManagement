@@ -73,7 +73,7 @@ namespace AgrifoodManagement.Domain
                 .HasMany(ft => ft.Posts)
                 .WithOne(fp => fp.Thread)
                 .HasForeignKey(fp => fp.ThreadId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Set exactly 2 decimals
             modelBuilder.Entity<Product>()

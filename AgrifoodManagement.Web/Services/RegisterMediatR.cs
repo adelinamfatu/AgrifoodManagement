@@ -1,5 +1,6 @@
 ﻿using AgrifoodManagement.Business.CommandHandlers.Account;
 using AgrifoodManagement.Business.CommandHandlers.Announcement;
+using AgrifoodManagement.Business.CommandHandlers.Forum;
 
 namespace AgrifoodManagement.Web.Services
 {
@@ -14,6 +15,9 @@ namespace AgrifoodManagement.Web.Services
 
             services.AddMediatR(cfg => cfg
                 .RegisterServicesFromAssemblyContaining<CreateProductCommandHandler>());
+
+            services.AddMediatR(cfg => cfg
+                .RegisterServicesFromAssemblyContaining<CreateForumThreadCommandHandler>());
 
             return services;
         }

@@ -1,4 +1,6 @@
 ﻿@using AgrifoodManagement.Web.Models.Forum;
+@using AgrifoodManagement.Util.ValueObjects;
+@using AgrifoodManagement.Util.Formatters;
 @using Syncfusion.EJ2.Popups
 @using Syncfusion.EJ2.Inputs
 @using Syncfusion.EJ2.DropDowns
@@ -7,16 +9,27 @@
     Layout = "~/Views/Shared/_SidebarLayout.cshtml";
 }
 
+@{
+    var filterOptions = new string[] { "Latest first", "Popular first", "Oldest first" };
+
+    var forumCategories = Enum.GetValues(typeof(ForumCategory))
+    .Cast<ForumCategory>()
+    .Select(fc => new SelectListItem
+            {
+                Text = SplitPascalCase.Format(fc.ToString()),
+                Value = fc.ToString()
+            }).ToList();
+}
+
 @model List<TopicViewModel>
 
-<div id="target" class="container">
+<div id="target" class="forum-container">
     <div class="forum-header">
         <div class="filters">
-            <select class="filter-dropdown">
-                <option>Latest first</option>
-                <option>Popular first</option>
-                <option>Oldest first</option>
-            </select>
+            <ejs-dropdownlist id="filterDropdown" 
+                dataSource="filterOptions" 
+                placeholder="Select Filter">
+            </ejs-dropdownlist>
         </div>
     </div>
 
@@ -86,8 +99,8 @@
                             }
                         </div>
                         <div class="add-comment">
-                            <textarea class="comment-input" placeholder="Add your comment..."></textarea>
-                            <button class="submit-comment-btn" onclick="submitComment(@topic.Id)">Submit</button>
+                            <ejs-textarea id="commentTextarea-@topic.Id" class="comment-input" placeholder="Add your comment..." floatLabelType="Auto" cssClass="e-outline" rows="5" cols="250"></ejs-textarea>
+                            <ejs-button id="submitCommentBtn-@topic.Id" class="submit-comment-btn" content="Submit" onclick="submitComment(@topic.Id)" isPrimary="true"></ejs-button>
                         </div>
                     </div>
                 </div>
@@ -95,42 +108,18 @@
         </div>
 
         <div class="sidebar">
-            <button id="openDialogBtn" class="new-discussion-btn-large">Start New Discussion</button>
+            <ejs-button id="openDialogBtn" class="new-discussion-btn-large" content="Start New Discussion" isPrimary="true"></ejs-button>
 
             <div class="sidebar-section">
                 <ul class="sidebar-links">
-                    <li class="sidebar-link">
-                        <span class="dot dot-yellow"></span>
-                        FAQ's
-                    </li>
-                    <li class="sidebar-link">
-                        <span class="dot dot-green"></span>
-                        Off-Topic Chatter
-                    </li>
-                    <li class="sidebar-link">
-                        <span class="dot dot-purple"></span>
-                        Feedback
-                    </li>
-                    <li class="sidebar-link">
-                        <span class="dot dot-red"></span>
-                        Member Spotlight
-                    </li>
-                    <li class="sidebar-link">
-                        <span class="dot dot-teal"></span>
-                        Introductions
-                    </li>
-                    <li class="sidebar-link">
-                        <span class="dot dot-pink"></span>
-                        Announcements
-                    </li>
-                    <li class="sidebar-link">
-                        <span class="dot dot-blue"></span>
-                        Showcase
-                    </li>
-                    <li class="sidebar-link">
-                        <span class="dot dot-gray"></span>
-                        Jobs
-                    </li>
+                    @foreach (var category in (List<SelectListItem>)forumCategories)
+                    {
+                        var categorySlug = category.Value.ToLower().Replace(" ", "-");
+                        <li class="sidebar-link">
+                            <span class="dot dot-@categorySlug"></span>
+                            @category.Text
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
@@ -253,11 +242,38 @@
                         var title = document.getElementById('discussionTitle').value;
                         var content = document.getElementById('discussionContent').value;
                         var category = document.getElementById('discussionCategory').value;
+
                         if (!title.trim()) {
                             alert("Please enter a title");
                             return;
                         }
-                        alert("Adding new discussion:\nTitle: " + title + "\nContent: " + content + "\nCategory: " + category);
+
+                        fetch('/Forum/AddForumThread', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                title: title,
+                                content: content,
+                                category: category
+                            })
+                        })
+                            .then(response => {
+                                if (response.ok) return response.json();
+                                throw new Error('Network response was not ok.');
+                            })
+                            .then(data => {
+                                if (data.success) {
+                                    alert("Discussion added successfully!");
+                                } else {
+                                    alert("Failed to add discussion.");
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                                alert("An error occurred while adding the discussion.");
+                            });
                         document.getElementById('discussionTitle').value = '';
                         document.getElementById('discussionContent').value = '';
                         dialogObj.hide();
@@ -286,12 +302,12 @@
                     </div>
                     <div class="form-group" style="margin-bottom: 15px;">
                         <label for="discussionCategory">Category</label>
-                        <select id="discussionCategory" class="form-control">
-                            <option value="Introductions">Introductions</option>
-                            <option value="FAQ">FAQ</option>
-                            <option value="Off-Topic">Off-Topic</option>
-                            <option value="Feedback">Feedback</option>
-                        </select>
+                            <select id="discussionCategory" class="form-control">
+                            @foreach (var category in (List<SelectListItem>)forumCategories)
+                            {
+                                <option value="@category.Value">@category.Text</option>
+                            }
+                            </select>
                     </div>
                 `
         });
