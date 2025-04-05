@@ -1,6 +1,267 @@
-﻿@{
+﻿@using AgrifoodManagement.Web.Models.Forum;
+
+@{
     Layout = "~/Views/Shared/_SidebarLayout.cshtml";
 }
 
-<h2>Forum Page</h2>
-<p>This is your Forum page.</p>
+@model List<TopicViewModel>
+
+<div class="container">
+    <div class="forum-header">
+        <div class="filters">
+            <select class="filter-dropdown">
+                <option>Latest first</option>
+                <option>Popular first</option>
+                <option>Oldest first</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="forum-content">
+        <div class="discussions">
+            @foreach (var topic in Model)
+            {
+                <div class="topic-card" data-topic-id="@topic.Id">
+                    <div class="topic-main">
+                        <div class="topic-author">
+                            <div class="author-avatar">
+                                <img src="@(string.IsNullOrEmpty(topic.Author.AvatarUrl) ? "/api/placeholder/40/40" : topic.Author.AvatarUrl)" alt="@topic.Author.Name avatar">
+                            </div>
+                        </div>
+                        <div class="topic-content">
+                            <div class="topic-header">
+                                <h3 class="topic-title">@topic.Title</h3>
+                            </div>
+                            @if (!string.IsNullOrEmpty(topic.Category))
+                            {
+                                <div class="category-tag tag-@topic.Category.ToLower().Replace(" ", "-")">@topic.Category</div>
+                            }
+                            <div class="topic-meta">Latest reply from @topic.LatestReplyAuthor @topic.LatestReplyTimeAgo</div>
+                            <p class="topic-text">@topic.Text</p>
+                            <div class="topic-stats">
+                                <div class="topic-commenters">
+                                    @foreach (var commenter in topic.TopCommenters.Take(4))
+                                    {
+                                        <div class="commenter-avatar">
+                                            <img src="@(string.IsNullOrEmpty(commenter.AvatarUrl) ? "/api/placeholder/24/24" : commenter.AvatarUrl)" alt="@commenter.Name">
+                                        </div>
+                                    }
+                                </div>
+                                <span class="comments-count" onclick="toggleComments(@topic.Id)">@topic.CommentsCount Comments</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comments-section" id="comments-@topic.Id">
+                        <div class="comments-list">
+                            @if (topic.Comments != null && topic.Comments.Any())
+                            {
+                                foreach (var comment in topic.Comments)
+                                {
+                                    <div class="comment">
+                                        <div class="comment-author">
+                                            <div class="author-avatar">
+                                                <img src="@(string.IsNullOrEmpty(comment.Author.AvatarUrl) ? "/api/placeholder/40/40" : comment.Author.AvatarUrl)" alt="@comment.Author.Name avatar">
+                                            </div>
+                                        </div>
+                                        <div class="comment-content">
+                                            <div class="comment-header">
+                                                <span class="comment-author-name">@comment.Author.Name</span>
+                                                <span class="comment-date">@comment.TimeAgo</span>
+                                            </div>
+                                            <p class="comment-text">@comment.Text</p>
+                                            <div class="comment-actions">
+                                                <span class="comment-action">Like</span>
+                                                <span class="comment-action">Reply</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p>No comments yet. Be the first to comment!</p>
+                            }
+                        </div>
+                        <div class="add-comment">
+                            <textarea class="comment-input" placeholder="Add your comment..."></textarea>
+                            <button class="submit-comment-btn" onclick="submitComment(@topic.Id)">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="sidebar">
+            <button class="new-discussion-btn-large">Start New Discussion</button>
+
+            <div class="sidebar-section">
+                <ul class="sidebar-links">
+                    <li class="sidebar-link">
+                        <span class="dot dot-yellow"></span>
+                        FAQ's
+                    </li>
+                    <li class="sidebar-link">
+                        <span class="dot dot-green"></span>
+                        Off-Topic Chatter
+                    </li>
+                    <li class="sidebar-link">
+                        <span class="dot dot-purple"></span>
+                        Feedback
+                    </li>
+                    <li class="sidebar-link">
+                        <span class="dot dot-red"></span>
+                        Member Spotlight
+                    </li>
+                    <li class="sidebar-link">
+                        <span class="dot dot-teal"></span>
+                        Introductions
+                    </li>
+                    <li class="sidebar-link">
+                        <span class="dot dot-pink"></span>
+                        Announcements
+                    </li>
+                    <li class="sidebar-link">
+                        <span class="dot dot-blue"></span>
+                        Showcase
+                    </li>
+                    <li class="sidebar-link">
+                        <span class="dot dot-gray"></span>
+                        Jobs
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to toggle comments visibility
+    function toggleComments(topicId) {
+        const commentsSection = document.getElementById(`comments-${topicId}`);
+        if (commentsSection.style.display === 'block') {
+            commentsSection.style.display = 'none';
+        } else {
+            // Hide all other comment sections first
+            document.querySelectorAll('.comments-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            commentsSection.style.display = 'block';
+        }
+    }
+
+    // Function to handle comment submission
+    function submitComment(topicId) {
+        const commentSection = document.getElementById(`comments-${topicId}`);
+        const commentInput = commentSection.querySelector('.comment-input');
+        const commentText = commentInput.value.trim();
+
+        if (commentText) {
+            // Use fetch API to submit the comment to the server
+            fetch('/Forum/AddComment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({
+                    topicId: topicId,
+                    commentText: commentText
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Add the new comment to the UI
+                        const commentsList = commentSection.querySelector('.comments-list');
+
+                        // Clear "no comments" message if it exists
+                        const noCommentsMsg = commentsList.querySelector('p');
+                        if (noCommentsMsg && noCommentsMsg.textContent.includes('No comments yet')) {
+                            commentsList.innerHTML = '';
+                        }
+
+                        const newComment = document.createElement('div');
+                        newComment.className = 'comment';
+
+                        newComment.innerHTML = `
+                                <div class="comment-author">
+                                    <div class="author-avatar">
+                                        <img src="${data.author.avatarUrl}" alt="${data.author.name} avatar">
+                                    </div>
+                                </div>
+                                <div class="comment-content">
+                                    <div class="comment-header">
+                                        <span class="comment-author-name">${data.author.name}</span>
+                                        <span class="comment-date">${data.timeAgo}</span>
+                                    </div>
+                                    <p class="comment-text">${commentText}</p>
+                                    <div class="comment-actions">
+                                        <span class="comment-action">Like</span>
+                                        <span class="comment-action">Reply</span>
+                                    </div>
+                                </div>
+                            `;
+
+                        commentsList.appendChild(newComment);
+                        commentInput.value = '';
+
+                        // Update comment count
+                        const topicCard = document.querySelector(`.topic-card[data-topic-id="${topicId}"]`);
+                        const commentsCountElem = topicCard.querySelector('.comments-count');
+                        const currentCount = parseInt(commentsCountElem.textContent);
+                        commentsCountElem.textContent = `${currentCount + 1} Comments`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error submitting comment:', error);
+                });
+        }
+    }
+
+    // Make topic cards clickable to toggle comments
+    document.querySelectorAll('.topic-main').forEach(topicMain => {
+        topicMain.addEventListener('click', function () {
+            const topicId = this.closest('.topic-card').dataset.topicId;
+            toggleComments(topicId);
+        });
+    });
+
+    // Prevent click on comments count from propagating to parent
+    document.querySelectorAll('.comments-count').forEach(commentsCount => {
+        commentsCount.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+    });
+
+    // Make the sidebar category links clickable
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+        link.addEventListener('click', function () {
+            // Remove active class from all links
+            document.querySelectorAll('.sidebar-link').forEach(l => {
+                l.classList.remove('active');
+            });
+
+            // Add active class to clicked link
+            this.classList.add('active');
+
+            // In a real application, you would filter topics based on the selected category
+            // For now, we'll just update the checkmark
+            document.querySelectorAll('.sidebar-link .checkmark').forEach(checkmark => {
+                checkmark.remove();
+            });
+
+            const checkmark = document.createElement('span');
+            checkmark.className = 'checkmark';
+            checkmark.textContent = '✓';
+            this.appendChild(checkmark);
+        });
+    });
+
+    // Make the new discussion buttons work
+    document.querySelectorAll('.new-discussion-btn, .new-discussion-btn-large').forEach(btn => {
+        btn.addEventListener('click', function () {
+            // In a real application, this would redirect to a new topic form or open a modal
+            alert('Create new discussion feature would go here!');
+        });
+    });
+</script>
