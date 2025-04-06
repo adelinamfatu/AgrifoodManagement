@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.Commands.Forum;
+using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models.Forum;
 using MediatR;
@@ -51,6 +52,32 @@ namespace AgrifoodManagement.Web.Controllers
                 ModelState.AddModelError("", "An error occurred while creating the forum thread.");
                 return View(viewModel);
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment([FromBody] AddCommentViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid comment data." });
+            }
+
+            var userEmailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(userEmailClaim))
+            {
+                return Json(new { success = false, message = "User email not found." });
+            }
+
+            var command = new AddCommentCommand
+            {
+                TopicId = viewModel.TopicId,
+                CommentText = viewModel.CommentText,
+                CreatedByUserEmail = userEmailClaim
+            };
+
+            CommentResultDto result = await _mediator.Send(command);
+
+            return Json(result);
         }
     }
 }

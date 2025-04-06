@@ -103,7 +103,7 @@
                         </div>
                         <div class="add-comment">
                             <ejs-textarea id="commentTextarea-@topic.Id" class="comment-input" placeholder="Add your comment..." floatLabelType="Auto" cssClass="e-outline" rows="5" cols="250"></ejs-textarea>
-                            <ejs-button id="submitCommentBtn-@topic.Id" class="submit-comment-btn" content="Submit" onclick="submitComment(@topic.Id)" isPrimary="true"></ejs-button>
+                            <ejs-button id="submitCommentBtn-@topic.Id" class="submit-comment-btn" content="Submit" onclick="submitComment('@topic.Id')" isPrimary="true"></ejs-button>
                         </div>
                     </div>
                 </div>
@@ -155,52 +155,53 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
                 },
                 body: JSON.stringify({
                     topicId: topicId,
                     commentText: commentText
                 })
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const commentsList = commentSection.querySelector('.comments-list');
-                        const noCommentsMsg = commentsList.querySelector('p');
-                        if (noCommentsMsg && noCommentsMsg.textContent.includes('No comments yet')) {
-                            commentsList.innerHTML = '';
-                        }
-                        const newComment = document.createElement('div');
-                        newComment.className = 'comment';
-                        newComment.innerHTML = `
-                            <div class="comment-author">
-                                <div class="author-avatar">
-                                    <img src="${data.author.avatarUrl}" alt="${data.author.name} avatar">
-                                </div>
-                            </div>
-                            <div class="comment-content">
-                                <div class="comment-header">
-                                    <span class="comment-author-name">${data.author.name}</span>
-                                    <span class="comment-date">${data.timeAgo}</span>
-                                </div>
-                                <p class="comment-text">${commentText}</p>
-                                <div class="comment-actions">
-                                    <span class="comment-action">Like</span>
-                                    <span class="comment-action">Reply</span>
-                                </div>
-                            </div>
-                        `;
-                        commentsList.appendChild(newComment);
-                        commentInput.value = '';
-                        const topicCard = document.querySelector(`.topic-card[data-topic-id="${topicId}"]`);
-                        const commentsCountElem = topicCard.querySelector('.comments-count');
-                        const currentCount = parseInt(commentsCountElem.textContent);
-                        commentsCountElem.textContent = `${currentCount + 1} Comments`;
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const commentsList = commentSection.querySelector('.comments-list');
+                    const noCommentsMsg = commentsList.querySelector('p');
+                    
+                    if (noCommentsMsg && noCommentsMsg.textContent.includes('No comments yet')) {
+                        commentsList.innerHTML = '';
                     }
-                })
-                .catch(error => {
-                    console.error('Error submitting comment:', error);
-                });
+                    
+                    const newComment = document.createElement('div');
+                    newComment.className = 'comment';
+                    newComment.innerHTML = `
+                        <div class="comment-author">
+                                    <div class="author-avatar">
+                                        <img src="${data.author.avatarUrl}" alt="${data.author.name} avatar">
+                                    </div>
+                                </div>
+                                <div class="comment-content">
+                                    <div class="comment-header">
+                                        <span class="comment-author-name">${data.author.name}</span>
+                                        <span class="comment-date">${data.timeAgo}</span>
+                                    </div>
+                                    <p class="comment-text">${commentText}</p>
+                                    <div class="comment-actions">
+                                        <span class="comment-action">Like</span>
+                                        <span class="comment-action">Reply</span>
+                                    </div>
+                                </div>
+                            `;
+                    commentsList.appendChild(newComment);
+                    commentInput.value = '';
+                    const topicCard = document.querySelector(`.topic-card[data-topic-id="${topicId}"]`);
+                    const commentsCountElem = topicCard.querySelector('.comments-count');
+                    const currentCount = parseInt(commentsCountElem.textContent);
+                    commentsCountElem.textContent = `${currentCount + 1} Comments`;
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting comment:', error);
+            });
         }
     }
 

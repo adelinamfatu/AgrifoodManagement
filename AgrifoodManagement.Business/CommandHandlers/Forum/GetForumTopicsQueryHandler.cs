@@ -26,6 +26,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Forum
 
             return topics.Select(t => new ForumTopicDto
             {
+                Id = t.Id,
                 Title = t.Title,
                 Text = t.Content,
                 Category = t.Category.ToString(),
