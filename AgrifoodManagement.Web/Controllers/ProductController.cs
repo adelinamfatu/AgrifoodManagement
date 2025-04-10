@@ -71,7 +71,7 @@ namespace AgrifoodManagement.Web.Controllers
                     return Ok(new
                     {
                         success = true,
-                        redirectUrl = Url.Action("Announcements", "Admin")
+                        redirectUrl = Url.Action("Announcements", "Producer")
                     });
                 }
                 else // Updating an existing product
@@ -92,7 +92,7 @@ namespace AgrifoodManagement.Web.Controllers
                     return Ok(new
                     {
                         success = true,
-                        redirectUrl = Url.Action("Announcements", "Admin")
+                        redirectUrl = Url.Action("Announcements", "Producer")
                     });
                 }
             }

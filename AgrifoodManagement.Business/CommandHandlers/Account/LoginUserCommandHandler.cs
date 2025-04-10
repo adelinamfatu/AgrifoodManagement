@@ -61,7 +61,8 @@ namespace AgrifoodManagement.Business.CommandHandlers.Account
             var loginResponse = new LoginResponseDto
             {
                 Token = tokenString,
-                Expiration = tokenDescriptor.Expires.Value
+                Expiration = tokenDescriptor.Expires.Value,
+                UserType = user.UserType
             };
 
             return Result<LoginResponseDto>.Success(loginResponse);

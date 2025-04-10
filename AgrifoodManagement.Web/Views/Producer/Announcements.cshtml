@@ -1,7 +1,7 @@
 ﻿@using AgrifoodManagement.Util.Models;
 
 @{
-    Layout = "~/Views/Shared/_SidebarLayout.cshtml";
+    Layout = "~/Views/Shared/_ProducerSidebarLayout.cshtml";
 
     var productCategoriesData = ViewBag.ProductCategories as List<CategoryNode>;
 }
@@ -155,10 +155,10 @@
 
         try {
             if (productId) {
-                window.location.href = "/Admin/Product?id=" + productId;
+                window.location.href = "/Producer/Product?id=" + productId;
                 console.log("Redirecting to product page with id:", productId);
             } else {
-                window.location.href = "/Admin/Product";
+                window.location.href = "/Producer/Product";
                 console.log("Redirecting to general product page");
             }
         } catch (error) {

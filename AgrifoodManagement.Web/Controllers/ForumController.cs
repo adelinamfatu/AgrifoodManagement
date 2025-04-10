@@ -45,7 +45,7 @@ namespace AgrifoodManagement.Web.Controllers
 
             if (isSuccess)
             {
-                return RedirectToAction("Admin/Forum");
+                return RedirectToAction("Producer/Forum");
             }
             else
             {

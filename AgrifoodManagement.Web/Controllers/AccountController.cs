@@ -43,7 +43,7 @@ namespace AgrifoodManagement.Web.Controllers
                 return Unauthorized(result.Error);
             }
 
-            // Set the token in a cookie (or handle it as needed)
+            // Set the token in a cookie
             Response.Cookies.Append("AuthToken", result.Value.Token, new CookieOptions
             {
                 HttpOnly = true,
@@ -52,9 +52,17 @@ namespace AgrifoodManagement.Web.Controllers
                 Expires = result.Value.Expiration
             });
 
-            return Redirect("/Admin/Dashboard");
+            switch (result.Value.UserType)
+            {
+                case UserType.Seller:
+                    return Redirect("/Producer/Dashboard");
+                case UserType.Buyer:
+                    return Redirect("/Consumer/Home");
+                default:
+                    return Redirect("/");
+            }
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {

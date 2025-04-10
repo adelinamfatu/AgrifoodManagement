@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace AgrifoodManagement.Web.Controllers
 {
     [Authorize]
-    public class AdminController : BaseAdminController
+    public class ProducerController : BaseProducerController
     {
-        public AdminController(IMediator mediator) : base(mediator) { }
+        public ProducerController(IMediator mediator) : base(mediator) { }
 
         /// <summary>
         /// Helper method to set the sidebar items and active item.
@@ -160,13 +160,13 @@ namespace AgrifoodManagement.Web.Controllers
         {
             return new List<SidebarViewModel>
             {
-                new SidebarViewModel { Id = "1", Name = "Dashboard", IconCss = "bi bi-speedometer2", Url = "/Admin/Dashboard", IsPro = false },
-                new SidebarViewModel { Id = "2", Name = "Stock Management", IconCss = "bi bi-box-seam", Url = "/Admin/Stocks", IsPro = false },
-                new SidebarViewModel { Id = "3", Name = "Orders & Transactions", IconCss = "bi bi-cart3", Url = "/Admin/Orders", IsPro = false },
-                new SidebarViewModel { Id = "4", Name = "Reports & Analytics", IconCss = "bi bi-graph-up", Url = "/Admin/Reports", IsPro = true },
-                new SidebarViewModel { Id = "5", Name = "Demand Forecasting", IconCss = "bi bi-calendar-check", Url = "/Admin/Forecasting", IsPro = true },
-                new SidebarViewModel { Id = "6", Name = "Announcements", IconCss = "bi bi-megaphone", Url = "/Admin/Announcements", IsPro = false },
-                new SidebarViewModel { Id = "7", Name = "Forum", IconCss = "bi bi-chat-dots", Url = "/Admin/Forum", IsPro = true },
+                new SidebarViewModel { Id = "1", Name = "Dashboard", IconCss = "bi bi-speedometer2", Url = "/Producer/Dashboard", IsPro = false },
+                new SidebarViewModel { Id = "2", Name = "Stock Management", IconCss = "bi bi-box-seam", Url = "/Producer/Stocks", IsPro = false },
+                new SidebarViewModel { Id = "3", Name = "Orders & Transactions", IconCss = "bi bi-cart3", Url = "/Producer/Orders", IsPro = false },
+                new SidebarViewModel { Id = "4", Name = "Reports & Analytics", IconCss = "bi bi-graph-up", Url = "/Producer/Reports", IsPro = true },
+                new SidebarViewModel { Id = "5", Name = "Demand Forecasting", IconCss = "bi bi-calendar-check", Url = "/Producer/Forecasting", IsPro = true },
+                new SidebarViewModel { Id = "6", Name = "Announcements", IconCss = "bi bi-megaphone", Url = "/Producer/Announcements", IsPro = false },
+                new SidebarViewModel { Id = "7", Name = "Forum", IconCss = "bi bi-chat-dots", Url = "/Producer/Forum", IsPro = true },
             };
         }
 

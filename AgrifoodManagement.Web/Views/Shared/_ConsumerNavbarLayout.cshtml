@@ -1,0 +1,41 @@
+﻿@using Syncfusion.EJ2.Navigations
+
+@{
+    Layout = "_ConsumerLayout";
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+}
+
+<div class="top-header">
+    <div class="app-title">Agri-<span>Food</span> Management</div>
+    <div class="toolbar-right-items">
+        <div class="toolbar-icon-item">
+            <i class="bi bi-heart-fill" title="Favorites"></i>
+            <div class="icon-badge">3</div>
+        </div>
+        <div class="toolbar-icon-item">
+            <i class="bi bi-cart3" title="Cart"></i>
+            <div class="icon-badge">2</div>
+        </div>
+        <div class="avatar-container">
+            <img src="/images/user-placeholder.png" alt="User Avatar" class="user-avatar" id="userAvatar">
+            <div class="user-info">
+                <div class="user-name">Ade</div>
+                <div class="user-role">Consumer</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-nav-container">
+    <div class="main-nav">
+        <a asp-controller="Consumer" asp-action="Home" class="nav-link @(currentAction == "Home" ? "active" : "")">Home</a>
+        <a asp-controller="Consumer" asp-action="Shop" class="nav-link @(currentAction == "Shop" ? "active" : "")">Shop</a>
+        <a asp-controller="Consumer" asp-action="Blogs" class="nav-link @(currentAction == "Blogs" ? "active" : "")">Blogs</a>
+        <a href="#" class="nav-link">About us</a>
+        <a href="#" class="nav-link">Contact</a>
+        <a href="#" class="nav-link">Track Order</a>
+    </div>
+</div>
+
+@RenderBody()

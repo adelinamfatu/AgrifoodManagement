@@ -7,11 +7,11 @@ using System.Security.Claims;
 
 namespace AgrifoodManagement.Web.Controllers
 {
-    public abstract class BaseAdminController : Controller
+    public abstract class BaseProducerController : Controller
     {
         protected readonly IMediator _mediator;
 
-        protected BaseAdminController(IMediator mediator)
+        protected BaseProducerController(IMediator mediator)
         {
             _mediator = mediator;
         }

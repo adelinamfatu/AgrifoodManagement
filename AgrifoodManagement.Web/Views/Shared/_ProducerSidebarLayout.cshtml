@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "_AdminLayout";
+    Layout = "_ProducerLayout";
     var sidebarItems = ViewBag.SidebarItems as List<SidebarViewModel>;
 }
 
@@ -22,7 +22,7 @@
                         <img src='@ViewBag.AvatarUrl' alt='User Avatar' class='user-avatar' id='userAvatar'>
                         <div class='user-info'>
                             <div class='user-name'>@ViewBag.FullName</div>
-                            <div class='user-role'>Admin</div>
+                            <div class='user-role'>Producer</div>
                         </div>
                         <input type='file' id='photoInput' accept='image/*' style='display:none;' />
                     </div>
