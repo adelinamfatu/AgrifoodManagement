@@ -370,6 +370,224 @@ body {
     display: block;
 }
 
+.deal-of-week {
+    background-color: #f2f9f2;
+    border-radius: 12px;
+    padding: 40px;
+    margin: 40px 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+.deal-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.countdown-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    margin-bottom: 30px;
+}
+
+.deal-content {
+    flex: 1;
+    padding-right: 20px;
+    z-index: 2;
+}
+
+    .deal-content h2 {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+.countdown-timer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.timer-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 10px 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.timer-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #eb6a58;
+}
+
+.timer-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #777;
+    text-transform: uppercase;
+}
+
+.timer-separator {
+    font-size: 26px;
+    font-weight: 700;
+    color: #eb6a58;
+}
+
+.shop-now-btn {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(76, 175, 80, 0.3);
+}
+
+.shop-now-btn:hover {
+    background-color: #3d9140;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(76, 175, 80, 0.4);
+}
+
+.deal-visuals {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    position: absolute;
+    bottom: -20px; /* Adjusted to better position elements */
+    z-index: 1;
+    opacity: 0.9; /* Slightly increased opacity */
+}
+
+.veggie-bag-drawing {
+    position: relative;
+    width: 140px; /* Made slightly larger */
+    height: 170px;
+    background-color: #09a570;
+    border-radius: 12px 12px 45px 45px; /* Smoother curves */
+    left: 60px;
+    bottom: -15px;
+    box-shadow: 0 5px 15px rgba(9, 165, 112, 0.3); /* Added shadow for depth */
+}
+
+    .veggie-bag-drawing::before {
+        content: '';
+        position: absolute;
+        width: 110px;
+        height: 25px;
+        background-color: #09a570;
+        border-radius: 12px;
+        top: -12px;
+        left: 15px;
+    }
+
+    .veggie-bag-drawing::after {
+        content: '';
+        position: absolute;
+        width: 90px;
+        height: 70px;
+        background: radial-gradient(circle, #ff6b6b 10%, #ffa500 25%, #7cba01 40%, #ffd700 55%, #ff914d 70%, #8bc34a 85%);
+        border-radius: 50%;
+        top: 20px;
+        left: 25px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); /* Added shadow for depth */
+    }
+
+.tomatoes-drawing {
+    position: relative;
+    right: 60px;
+    bottom: 25px;
+}
+
+    .tomatoes-drawing::before {
+        content: '';
+        position: absolute;
+        width: 70px;
+        height: 70px;
+        background-color: #e53935;
+        border-radius: 50%;
+        right: 0;
+        box-shadow: -20px 20px 0 -3px #e53935, 20px -20px 0 -8px #e53935, 0 5px 15px rgba(229, 57, 53, 0.3);
+        /* Added more depth to tomatoes */
+    }
+
+    .tomatoes-drawing::after {
+        content: '';
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        background-color: #4caf50;
+        border-radius: 0 12px 0 12px;
+        transform: rotate(45deg);
+        top: -12px;
+        right: 30px;
+        box-shadow: -20px 25px 0 -3px #4caf50, 20px -15px 0 -6px #4caf50, 0 3px 5px rgba(76, 175, 80, 0.2);
+        /* Improved leaf details */
+    }
+
+.weekly-deals {
+    margin: 50px 0;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    color: #333;
+    position: relative;
+}
+
+    .section-title:after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 3px;
+        background-color: #4CAF50;
+        margin-top: 8px;
+    }
+
+.pagination-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ddd;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .dot.active {
+        background-color: #4CAF50;
+    }
+
 @media (min-width: 992px) {
     .category-slider {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
