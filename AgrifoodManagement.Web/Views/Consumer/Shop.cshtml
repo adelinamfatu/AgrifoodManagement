@@ -1,6 +1,367 @@
 ﻿@{
     Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
+    ViewData["Title"] = "Bengal Shop - Products";
 }
 
-<h2>Shop Page</h2>
-<p>This is your Shop page.</p>
+<div class="container">
+    <!-- Deal of the Week Section -->
+    <section class="deal-of-week">
+        <div class="deal-content">
+            <h2>Deal of the Week</h2>
+            <div class="countdown-timer">
+                <div class="timer-unit">
+                    <span class="timer-value">06</span>
+                    <span class="timer-label">Days</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value">18</span>
+                    <span class="timer-label">Hours</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value">33</span>
+                    <span class="timer-label">Mins</span>
+                </div>
+                <div class="timer-unit">
+                    <span class="timer-value">49</span>
+                    <span class="timer-label">Sec</span>
+                </div>
+            </div>
+            <a href="#" class="shop-now-btn">Shop Now</a>
+        </div>
+        <div class="deal-images">
+            <img src="/images/vegetables-bag.png" alt="Vegetables Bag" class="deal-img-left">
+            <img src="/images/tomatoes.png" alt="Fresh Tomatoes" class="deal-img-right">
+        </div>
+    </section>
+
+    <!-- Deals of the Week Section -->
+    <section class="weekly-deals">
+        <div class="section-header">
+            <h2 class="section-title">Deals of the Week</h2>
+            <div class="pagination-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+        <div class="products-grid">
+            <!-- Product Card 1 -->
+            <div class="product-card">
+                <div class="product-badge">-20%</div>
+                <div class="product-img">
+                    <img src="/images/product1.png" alt="Organic Apples">
+                    <div class="product-actions">
+                        <button class="quick-view-btn">Quick View</button>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Organic Apples</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-empty">☆</i>
+                        </div>
+                        <span class="rating-count">(78)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="current-price">$200.00</span>
+                        <span class="original-price">$250.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 2 -->
+            <div class="product-card">
+                <div class="product-badge">-15%</div>
+                <div class="product-img">
+                    <img src="/images/product2.png" alt="Green Apples">
+                    <div class="product-actions">
+                        <button class="quick-view-btn">Quick View</button>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Green Apples</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-half">★</i>
+                        </div>
+                        <span class="rating-count">(65)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="current-price">$220.00</span>
+                        <span class="original-price">$260.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 3 -->
+            <div class="product-card">
+                <div class="product-badge">-10%</div>
+                <div class="product-img">
+                    <img src="/images/product3.png" alt="Organic Ginger">
+                    <div class="product-actions">
+                        <button class="quick-view-btn">Quick View</button>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Organic Ginger</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-half">★</i>
+                            <i class="star-empty">☆</i>
+                        </div>
+                        <span class="rating-count">(39)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="current-price">$210.00</span>
+                        <span class="original-price">$230.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 4 -->
+            <div class="product-card">
+                <div class="product-badge">-25%</div>
+                <div class="product-img">
+                    <img src="/images/product4.png" alt="Yellow Lemon">
+                    <div class="product-actions">
+                        <button class="quick-view-btn">Quick View</button>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Yellow Lemon</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-empty">☆</i>
+                        </div>
+                        <span class="rating-count">(84)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="current-price">$240.00</span>
+                        <span class="original-price">$320.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Card 5 -->
+            <div class="product-card">
+                <div class="product-badge">-10%</div>
+                <div class="product-img">
+                    <img src="/images/product5.png" alt="Dragon Fruit">
+                    <div class="product-actions">
+                        <button class="quick-view-btn">Quick View</button>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Dragon Fruit</h3>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-filled">★</i>
+                            <i class="star-half">★</i>
+                        </div>
+                        <span class="rating-count">(94)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="current-price">$260.00</span>
+                        <span class="original-price">$290.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Products Section -->
+    <section class="all-products">
+        <div class="section-header">
+            <h2 class="section-title">All Products</h2>
+        </div>
+
+        <div class="filter-container">
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label for="category-filter">Category:</label>
+                    <select id="category-filter" class="filter-select">
+                        <option value="all">All Categories</option>
+                        <option value="fruits">Fresh Fruits</option>
+                        <option value="vegetables">Fresh Vegetables</option>
+                        <option value="dairy">Dairy & Eggs</option>
+                        <option value="meat">Meat & Seafood</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="price-filter">Price Range:</label>
+                    <select id="price-filter" class="filter-select">
+                        <option value="all">All Prices</option>
+                        <option value="under-100">Under $100</option>
+                        <option value="100-200">$100 - $200</option>
+                        <option value="200-300">$200 - $300</option>
+                        <option value="over-300">Over $300</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sort-by">Sort By:</label>
+                    <select id="sort-by" class="filter-select">
+                        <option value="popularity">Popularity</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
+            </div>
+            <button class="filter-button">Apply Filters</button>
+        </div>
+
+        <div class="products-grid large-grid">
+            <!-- Content will be dynamically loaded -->
+            @for (int i = 1; i <= 12; i++)
+            {
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="/images/product@(i % 5 + 1).png" alt="Product Name">
+                        <div class="product-actions">
+                            <button class="quick-view-btn">Quick View</button>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Product Name @i</h3>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i class="star-filled">★</i>
+                                <i class="star-filled">★</i>
+                                <i class="star-filled">★</i>
+                                <i class="star-filled">★</i>
+                                <i class="star-empty">☆</i>
+                            </div>
+                            <span class="rating-count">(@(70 + i))</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">$@(180 + i * 10).00</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="pagination">
+            <a href="#" class="page-link active">1</a>
+            <a href="#" class="page-link">2</a>
+            <a href="#" class="page-link">3</a>
+            <span class="page-dots">...</span>
+            <a href="#" class="page-link">10</a>
+            <a href="#" class="page-link next">Next →</a>
+        </div>
+    </section>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Countdown Timer
+        function startCountdown() {
+            const now = new Date();
+            const endOfWeek = new Date();
+            
+            // Set end of week to next Sunday 23:59:59
+            endOfWeek.setDate(now.getDate() + (7 - now.getDay()));
+            endOfWeek.setHours(23, 59, 59, 999);
+            
+            const updateTimer = () => {
+                const currentTime = new Date();
+                const diff = endOfWeek - currentTime;
+                
+                if (diff <= 0) {
+                    // Reset countdown for next week
+                    endOfWeek.setDate(endOfWeek.getDate() + 7);
+                } else {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    
+                    document.querySelector('.timer-unit:nth-child(1) .timer-value').textContent = String(days).padStart(2, '0');
+                    document.querySelector('.timer-unit:nth-child(2) .timer-value').textContent = String(hours).padStart(2, '0');
+                    document.querySelector('.timer-unit:nth-child(3) .timer-value').textContent = String(minutes).padStart(2, '0');
+                    document.querySelector('.timer-unit:nth-child(4) .timer-value').textContent = String(seconds).padStart(2, '0');
+                }
+            };
+            
+            // Initial update
+            updateTimer();
+            
+            // Update every second
+            setInterval(updateTimer, 1000);
+        }
+        
+        startCountdown();
+        
+        // Product hover effect
+        const productCards = document.querySelectorAll('.product-card');
+        
+        productCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.querySelector('.product-actions').classList.add('show');
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.querySelector('.product-actions').classList.remove('show');
+            });
+        });
+        
+        // Pagination dots for weekly deals
+        const dots = document.querySelectorAll('.pagination-dots .dot');
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                dots.forEach(d => d.classList.remove('active'));
+                dot.classList.add('active');
+                // Here you would slide to the appropriate page
+                // Logic for changing product sets would go here
+            });
+        });
+        
+        // Filter functionality
+        const filterButton = document.querySelector('.filter-button');
+        
+        filterButton.addEventListener('click', function() {
+            const category = document.getElementById('category-filter').value;
+            const priceRange = document.getElementById('price-filter').value;
+            const sortBy = document.getElementById('sort-by').value;
+            
+            // In a real application, you would use these values to filter products
+            console.log('Filtering by:', {category, priceRange, sortBy});
+            
+            // Simulate filter effect (would be replaced with actual server request)
+            const allProducts = document.querySelectorAll('.all-products .product-card');
+            allProducts.forEach(product => {
+                product.style.opacity = '0.5';
+                
+                setTimeout(() => {
+                    product.style.opacity = '1';
+                }, 500);
+            });
+        });
+    });
+</script>

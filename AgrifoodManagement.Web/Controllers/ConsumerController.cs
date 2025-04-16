@@ -1,10 +1,12 @@
 ﻿using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Web.Mappers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgrifoodManagement.Web.Controllers
 {
+    [Authorize]
     public class ConsumerController : Controller
     {
         private readonly IMediator _mediator;
