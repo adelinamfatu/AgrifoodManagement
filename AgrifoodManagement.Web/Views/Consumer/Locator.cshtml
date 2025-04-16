@@ -2,5 +2,27 @@
     Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
 }
 
-<h2>Blogs Page</h2>
-<p>This is your Blogs page.</p>
+<div id="map" style="height: 400px; width: 100%;"></div>
+
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBv3ktn7wtxKN7yMV0NIqE2ezc8vQRvzVI&callback=initMap&libraries=marker">
+</script>
+
+<script>
+    function initMap() {
+        var mapOptions = {
+            center: { lat: 40.7128, lng: -74.0060 },
+            zoom: 12,
+            mapId: "5a515fab960b165e"
+        };
+
+        var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+        var marker = new google.maps.marker.AdvancedMarkerElement({
+            map: map,
+            position: mapOptions.center,
+            title: "Hello World!"
+        });
+    }
+</script>
+
