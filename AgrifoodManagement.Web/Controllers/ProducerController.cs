@@ -60,7 +60,7 @@ namespace AgrifoodManagement.Web.Controllers
 
             var productDtos = await _mediator.Send(new GetUserProductsQuery());
 
-            var viewModel = productDtos.Select(p => new ProductViewModel
+            var viewModel = productDtos.Select(p => new UpsertProductViewModel
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -88,7 +88,7 @@ namespace AgrifoodManagement.Web.Controllers
             SetSidebar("6");
             ViewBag.ProductCategories = productCategories;
 
-            ProductViewModel viewModel = new ProductViewModel();
+            UpsertProductViewModel viewModel = new UpsertProductViewModel();
 
             if (id.HasValue)
             {
@@ -98,7 +98,7 @@ namespace AgrifoodManagement.Web.Controllers
                     return NotFound();
                 }
 
-                viewModel = new ProductViewModel
+                viewModel = new UpsertProductViewModel
                 {
                     Id = product.Id,
                     Name = product.Name,

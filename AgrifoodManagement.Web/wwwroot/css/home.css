@@ -86,16 +86,6 @@ body {
     line-height: 1.6;
 }
 
-.shop-now-btn {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 12px 25px;
-    border-radius: 30px;
-    text-decoration: none;
-    display: inline-block;
-    font-weight: bold;
-}
-
 .hero-image {
     width: 45%;
     z-index: 1;
@@ -164,8 +154,7 @@ body {
     }
 
 .category-slider {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    display: flex;
     gap: 15px;
     padding: 10px 0;
     overflow-x: auto;
@@ -448,26 +437,6 @@ body {
     color: #eb6a58;
 }
 
-.shop-now-btn {
-    display: inline-block;
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px 28px;
-    border-radius: 50px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 3px 8px rgba(76, 175, 80, 0.3);
-}
-
-.shop-now-btn:hover {
-    background-color: #3d9140;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(76, 175, 80, 0.4);
-}
-
 .deal-visuals {
     display: flex;
     justify-content: space-between;
@@ -526,8 +495,7 @@ body {
         background-color: #e53935;
         border-radius: 50%;
         right: 0;
-        box-shadow: -20px 20px 0 -3px #e53935, 20px -20px 0 -8px #e53935, 0 5px 15px rgba(229, 57, 53, 0.3);
-        /* Added more depth to tomatoes */
+        box-shadow: -20px 20px 0 -3px #e53935, 20px -20px 0 -8px #e53935, 0 5px 15px rgba(229, 57, 53, 0.3
     }
 
     .tomatoes-drawing::after {

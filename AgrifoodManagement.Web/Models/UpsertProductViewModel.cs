@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AgrifoodManagement.Web.Models
 {
-    public class ProductViewModel
+    public class UpsertProductViewModel
     {
         public Guid Id { get; set; }
 

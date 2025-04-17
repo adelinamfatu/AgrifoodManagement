@@ -19,7 +19,7 @@ namespace AgrifoodManagement.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpsertProduct(ProductViewModel viewModel)
+        public async Task<IActionResult> UpsertProduct(UpsertProductViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
