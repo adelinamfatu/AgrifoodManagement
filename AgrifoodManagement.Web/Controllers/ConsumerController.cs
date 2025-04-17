@@ -1,4 +1,6 @@
 ﻿using AgrifoodManagement.Business.Queries.Product;
+using AgrifoodManagement.Business.Queries.Shop;
+using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Web.Mappers;
 using AgrifoodManagement.Web.Models.Shop;
 using MediatR;
@@ -71,9 +73,24 @@ namespace AgrifoodManagement.Web.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Shop()
+        public async Task<IActionResult> ShopAsync(int page = 1)
         {
-            return View();
+            const int pageSize = 12;
+            var result = await _mediator.Send(new GetProductsPerPageQuery(page, pageSize));
+
+            if (!result.IsSuccess)
+            {
+                return View("Error", result.Error);
+            }
+
+            var viewModel = new ShopViewModel
+            {
+                Products = ProductViewModelMapper.Map((List<ProductDto>)result.Value.Items),
+                CurrentPage = result.Value.CurrentPage,
+                TotalPages = result.Value.TotalPages
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Locator()

@@ -24,13 +24,6 @@ body {
     background-color: white;
 }
 
-.navigation {
-    display: flex;
-    align-items: center;
-    margin: 20px 0;
-    width: 100%;
-}
-
 .categories-dropdown {
     background-color: var(--primary-color);
     color: white;
@@ -41,12 +34,6 @@ body {
     align-items: center;
     justify-content: space-between;
     width: 200px;
-}
-
-.special-offers {
-    margin-left: auto;
-    color: orange;
-    font-weight: bold;
 }
 
 .hero {

@@ -31,7 +31,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
                     Id = p.Id,
                     Name = p.Name,
                     Description = p.Description,
-                    Price = p.Price,
+                    CurrentPrice = p.Price,
                     Quantity = p.Quantity,
                     UnitOfMeasurement = p.UnitOfMeasurement,
                     ExpirationDate = p.ExpirationDate,

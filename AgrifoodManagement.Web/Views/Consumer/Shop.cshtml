@@ -1,10 +1,13 @@
-﻿@{
+﻿@using AgrifoodManagement.Web.Models.Shop;
+
+@{
     Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
     ViewData["Title"] = "Bengal Shop - Products";
 }
 
+@model ShopViewModel
+
 <div class="container">
-    <!-- All Products Section -->
     <section class="all-products">
         <div class="section-header">
             <h2 class="section-title">All Products</h2>
@@ -46,44 +49,30 @@
         </div>
 
         <div class="products-grid large-grid">
-            <!-- Content will be dynamically loaded -->
-            @for (int i = 1; i <= 12; i++)
+            @foreach (var product in Model.Products)
             {
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="/images/product@(i % 5 + 1).png" alt="Product Name">
-                        <div class="product-actions">
-                            <button class="quick-view-btn">Quick View</button>
-                            <button class="add-to-cart-btn">Add to Cart</button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">Product Name @i</h3>
-                        <div class="product-rating">
-                            <div class="stars">
-                                <i class="star-filled">★</i>
-                                <i class="star-filled">★</i>
-                                <i class="star-filled">★</i>
-                                <i class="star-filled">★</i>
-                                <i class="star-empty">☆</i>
-                            </div>
-                            <span class="rating-count">(@(70 + i))</span>
-                        </div>
-                        <div class="product-price">
-                            <span class="current-price">$@(180 + i * 10).00</span>
-                        </div>
-                    </div>
-                </div>
+                @await Html.PartialAsync("_ProductCard", product)
             }
         </div>
 
         <div class="pagination">
-            <a href="#" class="page-link active">1</a>
-            <a href="#" class="page-link">2</a>
-            <a href="#" class="page-link">3</a>
-            <span class="page-dots">...</span>
-            <a href="#" class="page-link">10</a>
-            <a href="#" class="page-link next">Next →</a>
+            <div class="pagination">
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    if (i == Model.CurrentPage)
+                    {
+                        <span class="page-link active">@i</span>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Shop", new { page = i })" class="page-link">@i</a>
+                    }
+                }
+
+                @if (Model.CurrentPage < Model.TotalPages)
+                {
+                    <a href="@Url.Action("Shop", new { page = Model.CurrentPage + 1 })" class="page-link next">Next →</a>
+                }
         </div>
     </section>
 </div>

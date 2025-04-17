@@ -1,6 +1,7 @@
 ﻿using AgrifoodManagement.Business.Commands.Account;
 using AgrifoodManagement.Domain.Interfaces;
 using AgrifoodManagement.Util;
+using AgrifoodManagement.Util.ValueObjects;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;

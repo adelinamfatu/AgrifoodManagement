@@ -1,8 +1,8 @@
 ﻿using AgrifoodManagement.Business.Commands.Account;
 using AgrifoodManagement.Domain.Entities;
 using AgrifoodManagement.Domain.Interfaces;
-using AgrifoodManagement.Util;
 using AgrifoodManagement.Util.Models;
+using AgrifoodManagement.Util.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

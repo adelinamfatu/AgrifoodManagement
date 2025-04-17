@@ -12,7 +12,8 @@ namespace AgrifoodManagement.Util.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public decimal Price { get; set; }
+        public decimal OriginalPrice { get; set; }
+        public decimal CurrentPrice { get; set; }
         public double Quantity { get; set; }
         public MeasurementUnit? UnitOfMeasurement { get; set; }
         public DateTime ExpirationDate { get; set; }
@@ -22,6 +23,8 @@ namespace AgrifoodManagement.Util.Models
         public int InquiryCount { get; set; }
         public decimal EstimatedMarketPrice { get; set; }
         public bool IsPromoted { get; set; }
+        public decimal AverageRating { get; set; }
+        public int RatingCount { get; set; }
         public AnnouncementStatus AnnouncementStatus { get; set; }
         public List<string> PhotoUrls { get; set; }
     }

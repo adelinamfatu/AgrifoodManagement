@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AgrifoodManagement.Util
+namespace AgrifoodManagement.Util.ValueObjects
 {
     public class Result<T>
     {

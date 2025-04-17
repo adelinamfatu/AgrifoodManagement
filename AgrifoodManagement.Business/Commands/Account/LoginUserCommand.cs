@@ -1,5 +1,5 @@
-﻿using AgrifoodManagement.Util;
-using AgrifoodManagement.Util.Models;
+﻿using AgrifoodManagement.Util.Models;
+using AgrifoodManagement.Util.ValueObjects;
 using MediatR;
 
 namespace AgrifoodManagement.Business.Commands.Account
