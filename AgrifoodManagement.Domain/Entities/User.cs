@@ -38,5 +38,9 @@ namespace AgrifoodManagement.Domain.Entities
         public double? Longitude { get; set; }
 
         public ICollection<Product>? Products { get; set; }
+
+        public ICollection<Review> ReviewsWritten { get; set; }
+
+        public ICollection<Review> ReviewsReceived { get; set; }
     }
 }

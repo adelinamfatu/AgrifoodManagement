@@ -18,8 +18,10 @@ namespace AgrifoodManagement.Web.Mappers
                 ImageUrl = dto.PhotoUrls.FirstOrDefault(),
                 CurrentPrice = dto.CurrentPrice,
                 OriginalPrice = dto.OriginalPrice,
-                AverageRating = dto.AverageRating,
-                RatingCount = dto.RatingCount,
+                Quantity = dto.Quantity,
+                UnitOfMeasurement = dto.UnitOfMeasurement,
+                ExpiryDate = dto.ExpirationDate,
+                Badge = dto.DiscountPercentage > 0 ? $"{dto.DiscountPercentage}% OFF" : string.Empty
             };
         }
     }

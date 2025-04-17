@@ -20,7 +20,10 @@ namespace AgrifoodManagement.Domain.Entities
 
         public string? Description { get; set; }
 
-        public decimal Price { get; set; }
+        [Required]
+        public decimal OriginalPrice { get; set; }
+
+        public decimal? CurrentPrice { get; set; }
 
         public double Quantity { get; set; }
 

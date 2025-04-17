@@ -51,18 +51,14 @@ namespace AgrifoodManagement.Business.CommandHandlers.Shop
                 {
                     Id = p.Id,
                     Name = p.Name,
-                    Description = p.Description,
-                    CurrentPrice = p.Price,
+                    OriginalPrice = p.OriginalPrice,
+                    CurrentPrice = p.CurrentPrice ?? p.OriginalPrice,
                     Quantity = p.Quantity,
                     UnitOfMeasurement = p.UnitOfMeasurement,
                     ExpirationDate = p.ExpirationDate,
                     CategoryId = p.ProductCategoryId,
-                    CategoryName = p.ProductCategory?.Name ?? "Uncategorized",
                     ViewCount = 15,
-                    InquiryCount = 20,
-                    EstimatedMarketPrice = 50,
                     IsPromoted = p.IsPromoted,
-                    AnnouncementStatus = p.AnnouncementStatus,
                     PhotoUrls = photoUrlsDict.ContainsKey(p.Id) ? photoUrlsDict[p.Id] : new List<string>()
                 }).ToList();
 

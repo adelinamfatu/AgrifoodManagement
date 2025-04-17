@@ -25,7 +25,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
                 Id = Guid.NewGuid(),
                 Name = request.Name,
                 Description = request.Description,
-                Price = request.Price,
+                OriginalPrice = request.Price,
                 Quantity = request.Quantity,
                 UnitOfMeasurement = request.UnitOfMeasurement,
                 ExpirationDate = request.ExpirationDate,

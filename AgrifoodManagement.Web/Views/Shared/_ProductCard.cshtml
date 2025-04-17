@@ -8,41 +8,59 @@
 
     <div class="product-img">
         <img src="@Model.ImageUrl" alt="@Model.Name" />
+
         <div class="product-actions">
-            <button class="quick-view-btn">Quick View</button>
-            <button class="add-to-cart-btn">Add to Cart</button>
+            <button class="quick-view-btn">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                    <path d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z"></path>
+                    <circle cx="288" cy="256" r="64"></circle>
+                </svg>
+                Quick View
+            </button>
+
+            <button class="add-to-cart-btn">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                    <path d="M528.12 301.319l47.273-208C578.806 78.301 567.391 64 551.99 64H159.208l-9.166-44.81C147.758 8.021 137.93 0 126.529 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24h69.883l70.248 343.435C147.325 417.1 136 435.222 136 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-15.674-6.447-29.835-16.824-40h209.647C430.447 426.165 424 440.326 424 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-22.172-12.888-41.332-31.579-50.405l5.517-24.276c3.413-15.018-8.002-29.319-23.403-29.319H218.117l-6.545-32h293.145c11.206 0 20.92-7.754 23.403-18.681z"></path>
+                </svg>
+                Add to Cart
+            </button>
         </div>
     </div>
-
     <div class="product-info">
         <h3 class="product-name">@Model.Name</h3>
-        <div class="product-rating">
-            <div class="rating-stars">
-                @for (int i = 1; i <= 5; i++)
+
+        <div class="product-details">
+            <div class="product-quantity">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                    <path d="M256 336h-.02c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0C-2.06 328.75.02 320.33.02 336H0c0 44.18 57.31 80 128 80s128-35.82 128-80zM128 176l72 144H56l72-144zm511.98 160c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0-87.12 174.26-85.04 165.84-85.04 181.51H384c0 44.18 57.31 80 128 80s128-35.82 128-80h-.02zM440 320l72-144 72 144H440zm-88-16h-.02c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0C93.95 296.25 96.02 287.83 96.02 304H96c0 44.18 57.31 80 128 80s128-35.82 128-80zM256 176l72 144H184l72-144z"></path>
+                </svg>
+                <span class="quantity-value">@Model.Quantity @Model.UnitOfMeasurement</span>
+            </div>
+
+            <div class="product-price">
+                <span class="current-price">@Model.CurrentPrice.ToString("C")</span>
+                @if (Model.OriginalPrice > Model.CurrentPrice)
                 {
-                    if (i <= Math.Floor(Model.AverageRating))
-                    {
-                        <span class="star filled">★</span>
-                    }
-                    else if (i - Model.AverageRating < 1 && i - Model.AverageRating > 0)
-                    {
-                        <span class="star half-filled">★</span>
-                    }
-                    else
-                    {
-                        <span class="star empty">☆</span>
-                    }
+                    <span class="original-price">@Model.OriginalPrice.ToString("C")</span>
+                    <span class="discount-badge">-@(((Model.OriginalPrice - Model.CurrentPrice) / Model.OriginalPrice * 100).ToString("0"))%</span>
                 }
             </div>
-            <span class="rating-count">(@Model.RatingCount)</span>
         </div>
+        <div class="product-meta">
+            <div class="price-per-unit">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                    <!-- Changed to a dollar sign icon that better fits a price per unit -->
+                    <path d="M320 144c-53.02 0-96 50.14-96 112 0 61.85 42.98 112 96 112 53 0 96-50.13 96-112 0-61.86-42.98-112-96-112zm40 168c0 4.42-3.58 8-8 8h-64c-4.42 0-8-3.58-8-8v-16c0-4.42 3.58-8 8-8h16v-55.44l-.95.11c-4.01.44-7.98-2.45-8.78-6.56-1.04-5.09 2.96-9.88 8.1-10.51l24.96-2.98c.43-.02.85.01 1.28.06 5.21.68 9.07 5.46 8.4 10.68l-5.2 41.72h19.19c4.42 0 8 3.58 8 8v16zm96-168c-17.67 0-32 14.33-32 32s14.33 32 32 32 32-14.33 32-32-14.33-32-32-32zm-352 0c-17.67 0-32 14.33-32 32s14.33 32 32 32 32-14.33 32-32-14.33-32-32-32zm-32-72c0-39.7 32.3-72 72-72h205.547c16.81 0 32.43 9.08 40.64 23.84l46.72 84.2c1.83 3.28 5.24 5.32 8.93 5.32H608c8.84 0 16 7.16 16 16v16c0 8.84-7.16 16-16 16H501.833c-16.81 0-32.43-9.08-40.64-23.84l-46.72-84.2c-1.83-3.28-5.24-5.32-8.93-5.32H144c-8.84 0-16 7.16-16 16v16.48C144.91 72.63 157.9 64 173.05 64H336c8.84 0 16 7.16 16 16v16c0 8.84-7.16 16-16 16H173.05c-15.15 0-28.14-8.63-35.05-20.48V224h13.09c10.69 0 21.17 4.29 28.85 11.81l71.88 70.39c7.67 7.52 18.16 11.81 28.85 11.81h16.84c9.81 0 17.24-8.85 15.42-18.5-2.17-11.49-12.2-19.96-23.97-19.96h-29.56c-5.96 0-11.66-2.37-15.89-6.59l-26.88-26.89c-3.12-3.12-3.12-8.19 0-11.31 3.12-3.12 8.19-3.12 11.31 0l26.88 26.89c1.06 1.06 2.49 1.65 3.98 1.65h29.56c22.87 0 42.9 16.56 45.86 39.23 3.23 24.79-16.01 46.37-40.43 46.37h-16.84c-17.77 0-34.82-7.15-47.32-19.65l-71.88-70.39c-4.21-4.12-9.72-6.4-15.38-6.4H72c-4.42 0-8 3.58-8 8v16c0 4.42 3.58 8 8 8h16v24c0 4.42 3.58 8 8 8h16c4.42 0 8-3.58 8-8v-24h12.49c8.7 0 17.1 3.29 23.33 9.22l33.26 31.62c12.33 11.73 31.58 12.65 45.06 2.12 14.21-11.09 16.88-31.77 5.89-46.08l-45.33-59.44c-3.11-4.08-8.96-4.88-13.12-1.85-4.16 3.05-5.06 8.94-2.06 13.17L175.27 288c1.54 2.01 1.29 4.95-.58 6.74-1.87 1.8-4.87 1.57-6.48-.49l-33.26-31.62c-9.71-9.24-22.93-14.62-36.46-14.62H72V72z"></path>
+                </svg>
+                <span class="unit-price-value">@($"{Model.CurrentPrice:C}/{Model.UnitOfMeasurement}")</span>
+            </div>
 
-        <div class="product-price">
-            <span class="current-price">@Model.CurrentPrice.ToString("C")</span>
-            @if (Model.OriginalPrice > Model.CurrentPrice)
-            {
-                <span class="original-price">@Model.OriginalPrice.ToString("C")</span>
-            }
+            <div class="expiry-date @(Model.IsExpiringSoon ? "expiring-soon" : "")">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm61.8-104.4l-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"></path>
+                </svg>
+                <span class="expiry-value">Expires: @Model.ExpiryDate.ToString("MMM dd, yyyy")</span>
+            </div>
         </div>
     </div>
 </div>

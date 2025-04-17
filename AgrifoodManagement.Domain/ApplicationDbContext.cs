@@ -27,6 +27,8 @@ namespace AgrifoodManagement.Domain
 
         public DbSet<ForumPost> ForumPosts { get; set; }
 
+        public DbSet<Review> Reviews { get; set; }
+
         public DbSet<ExtendedProperty> ExtendedProperties { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
@@ -75,9 +77,25 @@ namespace AgrifoodManagement.Domain
                 .HasForeignKey(fp => fp.ThreadId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Reviewer)
+                .WithMany(u => u.ReviewsWritten)
+                .HasForeignKey(r => r.ReviewerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.ReviewedUser)
+                .WithMany(u => u.ReviewsReceived)
+                .HasForeignKey(r => r.ReviewedUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Set exactly 2 decimals
             modelBuilder.Entity<Product>()
-                .Property(p => p.Price)
+                .Property(p => p.OriginalPrice)
+                .HasColumnType("decimal(18, 2)");
+
+            modelBuilder.Entity<Product>()
+                .Property(p => p.CurrentPrice)
                 .HasColumnType("decimal(18, 2)");
 
             modelBuilder.Entity<Order>()

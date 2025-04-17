@@ -23,8 +23,7 @@ namespace AgrifoodManagement.Util.Models
         public int InquiryCount { get; set; }
         public decimal EstimatedMarketPrice { get; set; }
         public bool IsPromoted { get; set; }
-        public decimal AverageRating { get; set; }
-        public int RatingCount { get; set; }
+        public int DiscountPercentage {  get; set; }
         public AnnouncementStatus AnnouncementStatus { get; set; }
         public List<string> PhotoUrls { get; set; }
     }

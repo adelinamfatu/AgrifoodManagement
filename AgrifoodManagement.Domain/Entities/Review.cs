@@ -14,20 +14,25 @@ namespace AgrifoodManagement.Domain.Entities
         [Key]
         public Guid Id { get; set; }
 
+        [Range(1, 5)]
         public int Rating { get; set; }
 
         public string Comment { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public Guid ProductId { get; set; }
+        [Required]
+        public Guid ReviewedUserId { get; set; }
 
-        [ForeignKey("ProductId")]
-        public Product Product { get; set; }
+        [ForeignKey(nameof(ReviewedUserId))]
+        [InverseProperty(nameof(User.ReviewsReceived))]
+        public User ReviewedUser { get; set; }
 
-        public Guid UserId { get; set; }
+        [Required]
+        public Guid ReviewerId { get; set; }
 
-        [ForeignKey("UserId")]
+        [ForeignKey(nameof(ReviewerId))]
+        [InverseProperty(nameof(User.ReviewsWritten))]
         public User Reviewer { get; set; }
     }
 }
