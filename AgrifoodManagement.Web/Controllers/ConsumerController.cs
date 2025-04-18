@@ -79,6 +79,45 @@ namespace AgrifoodManagement.Web.Controllers
             return View("ProductDetail", viewModel);
         }
 
+        public IActionResult Basket()
+        {
+            ViewBag.BasketCount = 3;
+
+            var items = new List<BasketItemViewModel>
+            {
+                new BasketItemViewModel
+                {
+                    Id = 1,
+                    Name = "Fresh Tomatoes",
+                    ReferenceNumber = "TOM-001",
+                    ImageUrl = "/images/tomato.jpg",
+                    Color = "Red",
+                    Size = "Medium",
+                    Price = 2.50M
+                },
+                new BasketItemViewModel
+                {
+                    Id = 2,
+                    Name = "Organic Apples",
+                    ReferenceNumber = "APP-101",
+                    ImageUrl = "/images/apple.jpg",
+                    Color = "Green",
+                    Size = "Large",
+                    Price = 3.75M
+                }
+            };
+
+            var viewModel = new BasketViewModel
+            {
+                Items = items,
+                SubTotal = items.Sum(x => x.Price),
+                ShippingCost = 5.00M,
+                Total = items.Sum(x => x.Price) + 5.00M
+            };
+
+            return View(viewModel);
+        }
+
         public IActionResult Locator()
         {
             return View();

@@ -13,10 +13,10 @@
             <i class="bi bi-heart-fill" title="Favorites"></i>
             <div class="icon-badge">3</div>
         </div>
-        <div class="toolbar-icon-item">
+        <a asp-controller="Consumer" asp-action="Basket" class="toolbar-icon-item" style="position: relative;">
             <i class="bi bi-cart3" title="Cart"></i>
-            <div class="icon-badge">2</div>
-        </div>
+            <div class="icon-badge">@ViewBag.BasketCount</div>
+        </a>
         <div class="avatar-container">
             <img src="/images/avatar-placeholder.png" alt="User Avatar" class="user-avatar" id="userAvatar">
             <div class="user-info">
