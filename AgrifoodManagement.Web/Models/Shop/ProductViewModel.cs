@@ -4,9 +4,11 @@ namespace AgrifoodManagement.Web.Models.Shop
 {
     public class ProductViewModel
     {
+        public Guid Id { get; set; }
         public string Badge { get; set; }
-        public string ImageUrl { get; set; }
+        public List<string> ImageUrls { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public decimal CurrentPrice { get; set; }
         public decimal OriginalPrice { get; set; }
         public double Quantity { get; set; }

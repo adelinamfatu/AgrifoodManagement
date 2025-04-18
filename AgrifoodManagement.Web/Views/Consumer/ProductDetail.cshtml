@@ -1,0 +1,93 @@
+﻿@using AgrifoodManagement.Web.Models.Shop
+
+@{
+    Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
+    ViewData["Title"] = "Product Detail";
+}
+
+@model ProductViewModel
+
+<div class="product-detail-container">
+    <div class="product-detail-row">
+        <div class="product-detail-col-left">
+            <div class="product-detail-image-main">
+                <img id="product-mainImage" src="@(Model.ImageUrls?.FirstOrDefault() ?? "/images/no-image-placeholder.png")"
+                     class="product-detail-img-fluid" alt="@Model.Name" />
+            </div>
+            <div class="product-detail-thumbnails">
+                @if (Model.ImageUrls != null && Model.ImageUrls.Count() > 0)
+                {
+                    foreach (var url in Model.ImageUrls)
+                    {
+                        <div class="product-detail-thumbnail-item" onclick="changeProductImage('@url')">
+                            <img src="@url" class="product-detail-thumb-img" alt="Thumbnail" />
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="product-detail-thumbnail-item">
+                        <img src="/images/no-image-placeholder.png" class="product-detail-thumb-img" alt="No Image" />
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="product-detail-col-right">
+            <div class="product-detail-category">MANANA</div>
+            <h1 class="product-detail-title">@Model.Name</h1>
+
+            <div class="product-detail-rating">
+                <div class="stars">
+                    <span class="star-icon">★</span>
+                    <span class="star-rating">4.5</span>
+                    <span class="review-count">- 500 Reviews</span>
+                </div>
+            </div>
+
+            <div class="product-detail-description">
+                @Model.Description
+            </div>
+
+            <div class="product-detail-specifications">
+                <div class="spec-row">
+                    <div class="spec-box">
+                        <div class="spec-label">QUANTITY AVAILABLE</div>
+                        <div class="spec-value">500</div>
+                    </div>
+                    <div class="spec-box">
+                        <div class="spec-label">UNIT</div>
+                        <div class="spec-value">kg</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-detail-expiry">
+                <label>Expires on: <strong>Jun 30, 2025</strong></label>
+            </div>
+
+            <div class="product-detail-price-container">
+                <div class="product-detail-price">
+                    <span class="price-current">$50.00</span>
+                    <span class="price-unit">per kg</span>
+                </div>
+            </div>
+
+            <div class="product-detail-controls">
+                <div class="product-detail-quantity-selector">
+                    <ejs-numerictextbox id="quantitySelector" min="1" max="100" value="1" format="n0" step="1"></ejs-numerictextbox>
+                </div>
+
+                <div class="product-detail-buttons">
+                    <ejs-button id="addToCartBtn" cssClass="e-flat" content="ADD TO CART" isPrimary="false"></ejs-button>
+                    <ejs-button id="buyNowBtn" cssClass="e-primary" content="BUY NOW"></ejs-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function changeProductImage(src) {
+        document.getElementById('product-mainImage').src = src;
+    }
+</script>

@@ -1,5 +1,6 @@
 ﻿using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Business.Queries.Shop;
+using AgrifoodManagement.Domain.Entities;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Web.Mappers;
 using AgrifoodManagement.Web.Models.Shop;
@@ -63,6 +64,19 @@ namespace AgrifoodManagement.Web.Controllers
             };
 
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> ProductDetail(Guid id)
+        {
+            var product = await _mediator.Send(new GetProductByIdQuery { Id = id });
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = ProductViewModelMapper.MapOne(product);
+
+            return View("ProductDetail", viewModel);
         }
 
         public IActionResult Locator()

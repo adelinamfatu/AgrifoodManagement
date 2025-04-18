@@ -10,12 +10,14 @@ namespace AgrifoodManagement.Web.Mappers
             return dtos.Select(MapOne).ToList();
         }
 
-        private static ProductViewModel MapOne(ProductDto dto)
+        public static ProductViewModel MapOne(ProductDto dto)
         {
             return new ProductViewModel
             {
+                Id = dto.Id,
                 Name = dto.Name,
-                ImageUrl = dto.PhotoUrls.FirstOrDefault(),
+                Description = dto.Description,
+                ImageUrls = dto.PhotoUrls,
                 CurrentPrice = dto.CurrentPrice,
                 OriginalPrice = dto.OriginalPrice,
                 Quantity = dto.Quantity,
