@@ -21,5 +21,15 @@ namespace AgrifoodManagement.Util.Formatters
 
             return $"<span style='color: {attribute.Color};'>{attribute.SvgIcon}</span>";
         }
+
+        public static string GetCategoryColor(this ForumCategory category)
+        {
+            var memberInfo = category.GetType().GetMember(category.ToString()).FirstOrDefault();
+            var attribute = memberInfo?.GetCustomAttributes(typeof(ForumIconAttribute), false)
+                                      .Cast<ForumIconAttribute>()
+                                      .FirstOrDefault();
+
+            return attribute?.Color ?? "#ffffff";
+        }
     }
 }

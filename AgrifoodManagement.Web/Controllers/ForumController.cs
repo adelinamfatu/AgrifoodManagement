@@ -24,13 +24,13 @@ namespace AgrifoodManagement.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(viewModel);
+                return Json(new { success = false, message = "Invalid data" });
             }
 
             var userEmailClaim = User.FindFirst(ClaimTypes.Email)?.Value;
             if (!Enum.TryParse<ForumCategory>(viewModel.Category, true, out var categoryEnum))
             {
-                return BadRequest("Invalid category.");
+                return Json(new { success = false, message = "Invalid category." });
             }
 
             var command = new CreateForumThreadCommand
@@ -45,12 +45,11 @@ namespace AgrifoodManagement.Web.Controllers
 
             if (isSuccess)
             {
-                return RedirectToAction("Producer/Forum");
+                return Json(new { success = true });
             }
             else
             {
-                ModelState.AddModelError("", "An error occurred while creating the forum thread.");
-                return View(viewModel);
+                return Json(new { success = false, message = "A problem occurred while creating the thread." });
             }
         }
 

@@ -23,6 +23,26 @@
 
 @model List<TopicViewModel>
 
+<div class="message-container">
+    <ejs-message id="msg_success"
+                 content="Your thread will be posted shortly"
+                 severity="Success"
+                 visible=false>
+    </ejs-message>
+
+    <ejs-message id="msg_warning"
+                 content="Network issue. Please try again."
+                 severity="Warning"
+                 visible=false>
+    </ejs-message>
+
+    <ejs-message id="msg_error"
+                 content="An error occurred while submitting your discussion"
+                 severity="Error"
+                 visible=false>
+    </ejs-message>
+</div>
+
 <div id="target" class="forum-container">
     <div class="forum-header">
         <div class="filters">
@@ -37,7 +57,9 @@
         <div class="discussions">
             @foreach (var topic in Model)
             {
-                <div class="topic-card" data-topic-id="@topic.Id">
+                <div class="topic-card" 
+                    data-topic-id="@topic.Id"
+                     data-category="@topic.Category">
                     <div class="topic-main">
                         <div class="topic-author">
                             <div class="author-avatar">
@@ -50,7 +72,7 @@
                             </div>
                             @if (topic.Category != null)
                             {
-                                <div class="category-tag tag-@topic.Category">@topic.Category.GetDisplayName()</div>
+                                <div class="category-tag tag-@topic.Category" style="color: @topic.Category.GetCategoryColor()">@topic.Category.GetDisplayName()</div>
                             }
                             @if (topic.CommentsCount > 0)
                             {
@@ -114,9 +136,15 @@
 
             <div class="sidebar-section">
                 <ul class="sidebar-links">
+                    <li class="sidebar-link active" data-category="All">
+                        <i class="fas fa-list"></i>
+                        <span>All Categories</span>
+                    </li>
+
                     @foreach (var forumCategory in Enum.GetValues(typeof(ForumCategory)).Cast<ForumCategory>())
                     {
-                        <li class="sidebar-link @(forumCategory == ForumCategory.GeneralDiscussion ? "active" : "")">
+                        <li class="sidebar-link"
+                            data-category="@forumCategory">
                             @Html.Raw(forumCategory.GetIcon())
                             <span>@forumCategory.GetDisplayName()</span>
                         </li>
@@ -214,17 +242,19 @@
     });
     document.querySelectorAll('.sidebar-link').forEach(link => {
         link.addEventListener('click', function () {
-            document.querySelectorAll('.sidebar-link').forEach(l => {
-                l.classList.remove('active');
-            });
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
             this.classList.add('active');
-            document.querySelectorAll('.sidebar-link .checkmark').forEach(checkmark => {
-                checkmark.remove();
+
+            const selectedCat = this.getAttribute('data-category');
+
+            document.querySelectorAll('.topic-card').forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                if (selectedCat === 'All' || cardCat === selectedCat) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
             });
-            const checkmark = document.createElement('span');
-            checkmark.className = 'checkmark';
-            checkmark.textContent = '✓';
-            this.appendChild(checkmark);
         });
     });
 
@@ -250,29 +280,19 @@
 
                         fetch('/Forum/AddForumThread', {
                             method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                title: title,
-                                content: content,
-                                category: category
-                            })
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ title, content, category })
                         })
-                            .then(response => {
-                                if (response.ok) return response.json();
-                                throw new Error('Network response was not ok.');
-                            })
+                            .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
-                                    alert("Discussion added successfully!");
+                                    showMessage('msg_success');
                                 } else {
-                                    alert("Failed to add discussion.");
+                                    showMessage('msg_error');
                                 }
                             })
-                            .catch(error => {
-                                console.error("Error:", error);
-                                alert("An error occurred while adding the discussion.");
+                            .catch(err => {
+                                showMessage('msg_warning');
                             });
                         document.getElementById('discussionTitle').value = '';
                         document.getElementById('discussionContent').value = '';
@@ -317,17 +337,23 @@
         });
     }
 
+    function showMessage(id, duration = 3000) {
+        const msgInstance = document.getElementById(id).ej2_instances[0];
+
+        if (msgInstance) {
+            msgInstance.element.style.display = 'block';
+
+            setTimeout(() => {
+                msgInstance.element.style.display = 'none';
+            }, duration);
+        }
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         initializeDialog();
 
-        // Make General Discussion active by default
-        const generalDiscussionLink = document.querySelector('.sidebar-link:first-child');
-        if (generalDiscussionLink) {
-            generalDiscussionLink.classList.add('active');
-            const checkmark = document.createElement('span');
-            checkmark.className = 'checkmark';
-            checkmark.textContent = '✓';
-            generalDiscussionLink.appendChild(checkmark);
-        }
+        msg_success = document.getElementById('msg_success').ej2_instances[0];
+        msg_warning = document.getElementById('msg_warning').ej2_instances[0];
+        msg_error = document.getElementById('msg_error').ej2_instances[0];
     });
 </script>

@@ -596,3 +596,11 @@ textarea.form-control {
             width: 100%;
         }
 }
+
+.message-container {
+    margin: 10px 0;
+}
+
+.e-message {
+    margin: 10px 0;
+}
