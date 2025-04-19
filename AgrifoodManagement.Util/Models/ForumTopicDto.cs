@@ -17,6 +17,7 @@ namespace AgrifoodManagement.Util.Models
         public string LatestReplyAuthor { get; set; }
         public DateTime? LatestReplyTime { get; set; }
         public int CommentsCount { get; set; }
+        public DateTime CreatedAt { get; set; }
         public List<ForumUserDto> TopCommenters { get; set; } = new();
         public List<ForumCommentDto> Comments { get; set; } = new();
     }

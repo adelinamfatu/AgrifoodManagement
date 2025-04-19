@@ -8,11 +8,8 @@ namespace AgrifoodManagement.Util.ValueObjects
 {
     public enum AnnouncementStatus
     {
-        Draft,
-        Scheduled,
         Published,
         Expired,
-        Canceled,
         Archived
     }
 }

@@ -55,7 +55,7 @@ namespace AgrifoodManagement.Web.Controllers
         public async Task<IActionResult> AnnouncementsAsync()
         {
             var productCategories = await _mediator.Send(new GetChildCategoriesQuery());
-            SetSidebar("7");
+            SetSidebar("6");
             ViewBag.ProductCategories = productCategories;
 
             var productDtos = await _mediator.Send(new GetUserProductsQuery());
@@ -65,7 +65,7 @@ namespace AgrifoodManagement.Web.Controllers
                 Id = p.Id,
                 Name = p.Name,
                 Description = p.Description,
-                Price = p.OriginalPrice,
+                Price = p.CurrentPrice,
                 Quantity = p.Quantity,
                 UnitOfMeasurement = p.UnitOfMeasurement,
                 ExpirationDate = p.ExpirationDate,
@@ -127,6 +127,7 @@ namespace AgrifoodManagement.Web.Controllers
                 Id = dto.Id,
                 Title = dto.Title,
                 Text = dto.Text,
+                CreatedAt = dto.CreatedAt,
                 Category = dto.Category,
                 Author = new UserViewModel
                 {

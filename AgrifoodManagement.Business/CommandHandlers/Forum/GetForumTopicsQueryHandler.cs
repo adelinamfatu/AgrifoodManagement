@@ -30,6 +30,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Forum
                 Title = t.Title,
                 Text = t.Content,
                 Category = t.Category,
+                CreatedAt = t.CreatedAt,
                 Author = MapUser(t.Author),
                 LatestReplyAuthor = t.Posts
                     .OrderByDescending(p => p.PostedAt)

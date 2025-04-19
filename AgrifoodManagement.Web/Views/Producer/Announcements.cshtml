@@ -4,6 +4,8 @@
     Layout = "~/Views/Shared/_ProducerSidebarLayout.cshtml";
 
     var productCategoriesData = ViewBag.ProductCategories as List<CategoryNode>;
+
+    var sortOptions = new[] { "Expiration Date", "Price: High to Low", "Price: Low to High", "Quantity" };
 }
 
 @model List<UpsertProductViewModel>
@@ -11,10 +13,11 @@
 <div class="announcement-container">
     <div class="search-filter-row">
         <div class="search-area">
-            <input type="text" class="search-input" placeholder="Search your listings..." />
-            <button class="search-button">
-                <i class="fa fa-search"></i>
-            </button>
+            <i class="fa fa-search search-icon"></i>
+            <ejs-textbox id="searchBox"
+                placeholder="Search your listings..."
+                floatLabelType="Auto">
+            </ejs-textbox>
         </div>
 
         <div class="filter-options">
@@ -23,7 +26,7 @@
                               placeholder="Select a product category"
                               index="0"
                               popupHeight="220px"
-                              change="valueChange">
+                              change="categoryValueChange">
                 <e-dropdownlist-fields text="Category" value="Id"></e-dropdownlist-fields>
             </ejs-dropdownlist>
 
@@ -33,27 +36,22 @@
 
     <ejs-chiplist id="chip-default">
         <e-chips>
-            <e-chip text="Active" cssClass="e-primary" enabled="true"></e-chip>
-            <e-chip text="Expiring Soon" cssClass="e-warning" enabled="true"></e-chip>
-            <e-chip text="High Demand" cssClass="e-success" enabled="true"></e-chip>
-            <e-chip text="Low Stock" cssClass="e-danger" enabled="true"></e-chip>
-            <e-chip text="Archived" cssClass="e-secondary" enabled="true"></e-chip>
+            <e-chip text="Active" cssClass="e-primary" enabled="true" value="active"></e-chip>
+            <e-chip text="Expiring Soon" cssClass="e-warning" enabled="true" value="expiring"></e-chip>
+            <e-chip text="Low Stock" cssClass="e-danger" enabled="true" value="lowStock"></e-chip>
+            <e-chip text="Archived" cssClass="e-secondary" enabled="true" value="archived"></e-chip>
         </e-chips>
     </ejs-chiplist>
 
     <div class="results-header">
-        <p>Showing @Model.Count active listings</p>
+        <p id="listingCount">Showing @Model.Count active listings</p>
 
         <div class="view-options">
             <div class="sort-dropdown">
-                <span>Sort by: </span>
-                <select>
-                    <option>Expiration Date</option>
-                    <option>Price: High to Low</option>
-                    <option>Price: Low to High</option>
-                    <option>Quantity</option>
-                    <option>Demand Forecast</option>
-                </select>
+                <ejs-dropdownlist id="sortDropdown"
+                                  dataSource="@sortOptions"
+                                  placeholder="Sort by">
+                </ejs-dropdownlist>
             </div>
         </div>
     </div>
@@ -61,7 +59,12 @@
     <div class="products-container">
         @foreach (var product in Model)
         {
-            <div class="product-card">
+            <div class="product-card"
+                 data-expiration="@product.ExpirationDate.ToString("o")"
+                 data-category-id="@product.Category"
+                 data-price="@product.Price"
+                 data-status="@product.AnnouncementStatus"
+                 data-quantity="@product.Quantity">
                 <div class="product-header">
                     @if (product.PhotoUrls != null && product.PhotoUrls.Count > 0)
                     {
@@ -146,20 +149,124 @@
 </div>
 
 <script>
-    function valueChange(args) {
-        console.log("Selected value: ", args.value);
+    document.addEventListener("DOMContentLoaded", function () {
+        // Search by name and/or description
+        var searchElem = document.getElementById("searchBox");
+        if (searchElem && searchElem.ej2_instances && searchElem.ej2_instances[0]) {
+            var searchTb = searchElem.ej2_instances[0];
+            searchTb.change = function (args) {
+                var term = (args.value || "").trim().toLowerCase();
+                document.querySelectorAll(".product-card").forEach(function (card) {
+                    var name = card.querySelector(".product-name").textContent.toLowerCase();
+                    var desc = card.querySelector(".product-description").textContent.toLowerCase();
+                    card.style.display = (!term || name.includes(term) || desc.includes(term))
+                        ? "" : "none";
+                });
+            };
+
+            updateActiveListingsCount();
+        }
+
+        //Sort dropdown
+        var sortDd = document
+            .getElementById("sortDropdown")
+            .ej2_instances[0];
+
+        sortDd.change = function (e) {
+            var sel = e.itemData.value;
+            var container = document.querySelector(".products-container");
+            var cards = Array.from(container.querySelectorAll(".product-card"));
+            var sorted;
+
+            switch (sel) {
+                case "Expiration Date":
+                    sorted = cards.sort(function (a, b) {
+                        return new Date(a.dataset.expiration)
+                            - new Date(b.dataset.expiration);
+                    });
+                    break;
+                case "Price: High to Low":
+                    sorted = cards.sort(function (a, b) {
+                        return parseFloat(b.dataset.price)
+                            - parseFloat(a.dataset.price);
+                    });
+                    break;
+                case "Price: Low to High":
+                    sorted = cards.sort(function (a, b) {
+                        return parseFloat(a.dataset.price)
+                            - parseFloat(b.dataset.price);
+                    });
+                    break;
+                case "Quantity":
+                    sorted = cards.sort(function (a, b) {
+                        return parseInt(b.dataset.quantity)
+                            - parseInt(a.dataset.quantity);
+                    });
+                    break;
+                default:
+                    sorted = cards;
+            }
+
+            container.innerHTML = "";
+            sorted.forEach(function (card) {
+                container.appendChild(card);
+            });
+        };
+
+        // Chip filter
+        var chips = document.querySelectorAll('#chip-default .e-chip');
+        chips.forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                var status = chip.getAttribute('data-value');
+
+                document.querySelectorAll(".product-card").forEach(function (card) {
+                    var productStatus = card.getAttribute("data-status").toLowerCase();
+                    var expirationDate = new Date(card.dataset.expiration);
+                    var stockQuantity = parseInt(card.dataset.quantity);
+
+                    if (status === 'active' && productStatus === 'published') {
+                        card.style.display = "";
+                    } else if (status === 'expiring' && (expirationDate - new Date()) < 14 * 24 * 60 * 60 * 1000) {
+                        card.style.display = "";
+                    } else if (status === 'lowStock' && stockQuantity < 21) {
+                        card.style.display = "";
+                    } else if (status === 'archived' && (productStatus === 'archived'
+                                                            || productStatus === 'expired')) {
+                        card.style.display = "";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+
+                updateActiveListingsCount();
+            });
+        });
+    });
+
+    // Update active listings count
+    function updateActiveListingsCount() {
+        var visibleProducts = document.querySelectorAll(".product-card:not([style*='display: none'])");
+        document.getElementById("listingCount").innerText = "Showing " + visibleProducts.length + " listings";
+    }
+
+    function categoryValueChange(args) {
+        var selectedCategoryId = args.value?.toString();
+
+        document.querySelectorAll(".product-card").forEach(function (card) {
+            var cardCategoryId = card.getAttribute("data-category-id")?.toString();
+            card.style.display = (!selectedCategoryId || cardCategoryId === selectedCategoryId)
+                ? "" : "none";
+        });
+
+        updateActiveListingsCount();
     }
 
     function navigateToProductPage(productId) {
-        console.log("navigateToProductPage called with productId:", productId);
-
         try {
             if (productId) {
                 window.location.href = "/Producer/Product?id=" + productId;
-                console.log("Redirecting to product page with id:", productId);
             } else {
                 window.location.href = "/Producer/Product";
-                console.log("Redirecting to general product page");
             }
         } catch (error) {
             console.error("Error during navigation:", error);
@@ -167,30 +274,6 @@
     }
 
     function promoteProduct(productId) {
-        fetch(`/api/products/${productId}/promote`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const promoteBtn = event.target.closest('.promote-btn');
-                    const productCard = promoteBtn.closest('.product-card');
-
-                    const promotedBadge = document.createElement('div');
-                    promotedBadge.className = 'promoted-badge';
-                    promotedBadge.innerHTML = '<i class="fa fa-star"></i> Promoted';
-
-                    const statusBadge = productCard.querySelector('.status-badge');
-                    statusBadge.parentNode.insertBefore(promotedBadge, statusBadge.nextSibling);
-
-                    promoteBtn.remove();
-                }
-            })
-            .catch(error => {
-                console.error('Error promoting product:', error);
-            });
+        // Handle promote logic
     }
 </script>

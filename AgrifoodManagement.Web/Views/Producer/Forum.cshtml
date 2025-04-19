@@ -58,8 +58,10 @@
             @foreach (var topic in Model)
             {
                 <div class="topic-card" 
-                    data-topic-id="@topic.Id"
-                     data-category="@topic.Category">
+                     data-topic-id="@topic.Id"
+                     data-category="@topic.Category"
+                     data-date="@topic.CreatedAt.ToString("o")"
+                     data-comments="@topic.CommentsCount">
                     <div class="topic-main">
                         <div class="topic-author">
                             <div class="author-avatar">
@@ -355,5 +357,32 @@
         msg_success = document.getElementById('msg_success').ej2_instances[0];
         msg_warning = document.getElementById('msg_warning').ej2_instances[0];
         msg_error = document.getElementById('msg_error').ej2_instances[0];
+
+        // Sort topics based on the dropdown
+        var filterDropdown = document.getElementById("filterDropdown").ej2_instances[0];
+        filterDropdown.change = function (e) {
+            const selected = e.itemData.value;
+            const topicsContainer = document.querySelector(".discussions");
+            const topicCards = Array.from(topicsContainer.querySelectorAll(".topic-card"));
+
+            let sortedCards = topicCards;
+
+            if (selected === "Latest first") {
+                sortedCards = topicCards.sort((a, b) =>
+                    new Date(b.dataset.date) - new Date(a.dataset.date)
+                );
+            } else if (selected === "Oldest first") {
+                sortedCards = topicCards.sort((a, b) =>
+                    new Date(a.dataset.date) - new Date(b.dataset.date)
+                );
+            } else if (selected === "Popular first") {
+                sortedCards = topicCards.sort((a, b) =>
+                    parseInt(b.dataset.comments) - parseInt(a.dataset.comments)
+                );
+            }
+
+            topicsContainer.innerHTML = '';
+            sortedCards.forEach(card => topicsContainer.appendChild(card));
+        };
     });
 </script>

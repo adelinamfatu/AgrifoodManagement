@@ -14,8 +14,6 @@
 
 .search-area {
     display: flex;
-    background: #f5f5f5;
-    border-radius: 25px;
     overflow: hidden;
     width: 300px;
 }

@@ -12,6 +12,7 @@ namespace AgrifoodManagement.Web.Models.Forum
         public string LatestReplyAuthor { get; set; }
         public string LatestReplyTimeAgo { get; set; }
         public int CommentsCount { get; set; }
+        public DateTime CreatedAt { get; set; }
         public List<UserViewModel> TopCommenters { get; set; }
         public List<CommentViewModel> Comments { get; set; }
     }
