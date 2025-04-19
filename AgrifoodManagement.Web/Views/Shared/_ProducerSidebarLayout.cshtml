@@ -1,6 +1,9 @@
 ﻿@{
     Layout = "_ProducerLayout";
     var sidebarItems = ViewBag.SidebarItems as List<SidebarViewModel>;
+
+    var antiforgery = Context.RequestServices.GetService<Microsoft.AspNetCore.Antiforgery.IAntiforgery>();
+    var tokenSet = antiforgery.GetAndStoreTokens(Context);
 }
 
 <div class="layout-container">
@@ -8,7 +11,7 @@
         <ejs-toolbar id="toolbar">
             <e-toolbar-items>
                 <e-toolbar-item prefixIcon="bi bi-list" cssClass="menu-button" id="menu-toggle"></e-toolbar-item>
-                <e-toolbar-item text="Agri-Food Management" cssClass="app-title"></e-toolbar-item>
+                <e-toolbar-item text="Harvestica" cssClass="app-title"></e-toolbar-item>
                 <e-toolbar-item template="<div class='toolbar-right-items'>
                     <div class='notification-item'>
                         <div class='notification-badge'></div>
@@ -26,6 +29,16 @@
                         </div>
                         <input type='file' id='photoInput' accept='image/*' style='display:none;' />
                     </div>
+                    <form action='/Account/Logout'
+                          method='post'
+                          class='logout-form'
+                          id='logoutForm'
+                          style='margin-left:8px;'>
+                        <input type='hidden' name='__RequestVerificationToken' value='@tokenSet.RequestToken' />
+                        <button type='button' id='logoutBtn' class='logout-button' title='Logout'>
+                            <i class='bi bi-box-arrow-right'></i> Logout
+                        </button>
+                    </form>
                 </div>" cssClass="toolbar-right">
                 </e-toolbar-item>
             </e-toolbar-items>
@@ -59,7 +72,7 @@
                                 <i class="bi bi-gem"></i>
                             </div>
                             <h3>Upgrade to PRO</h3>
-                            <p>Improve your development process and start doing more with Agri-Food Management PRO!</p>
+                            <p>Improve your development process and start doing more with Harvestica PRO!</p>
                             <button class="upgrade-button" onclick="window.location.href='/Subscription/Upgrade'">
                                 Upgrade to PRO
                             </button>
@@ -75,6 +88,8 @@
         </div>
     </div>
 </div>
+
+<div id="logoutConfirmDialog"></div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -122,6 +137,48 @@
                         alert('An error occurred during upload. Please try again later.');
                     });
             }
+        });
+
+        var dialogObj = new ej.popups.Dialog({
+            header: 'Confirm Logout',
+            content: '<div class="logout-question-container">' +
+                '<div class="logout-question-text">Are you sure you want to logout?</div>' +
+                '</div>',
+            showCloseIcon: false,
+            width: '350px',
+            isModal: true,
+            visible: false,
+            target: document.body,
+            cssClass: 'logout-dialog rounded-dialog',
+            buttons: [
+                {
+                    click: function () {
+                        dialogObj.hide();
+                    },
+                    buttonModel: {
+                        content: 'NO',
+                        isPrimary: false,
+                        cssClass: 'e-flat no-btn'
+                    }
+                },
+                {
+                    click: function () {
+                        document.getElementById('logoutForm').submit();
+                    },
+                    buttonModel: {
+                        content: 'YES',
+                        isPrimary: true,
+                        cssClass: 'e-flat yes-btn'
+                    }
+                }
+            ],
+            position: { X: 'center', Y: 'center' }
+        });
+
+        dialogObj.appendTo('#logoutConfirmDialog');
+
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            dialogObj.show();
         });
     });
 

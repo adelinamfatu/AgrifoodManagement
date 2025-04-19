@@ -10,12 +10,10 @@ namespace AgrifoodManagement.Web.Controllers
     public class AccountController : Controller
     {
         private readonly IMediator _mediator;
-        private readonly IConfiguration _configuration;
 
-        public AccountController(IMediator mediator, IConfiguration configuration)
+        public AccountController(IMediator mediator)
         {
             _mediator = mediator;
-            _configuration = configuration;
         }
 
         [HttpGet]

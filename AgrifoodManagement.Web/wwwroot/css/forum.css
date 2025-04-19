@@ -238,7 +238,7 @@
 }
 
 .comment-input {
-    width: 100%;
+    max-width: 100%;
     padding: 10px;
     border: 1px solid #e1e4e8;
     border-radius: 5px;
@@ -270,33 +270,106 @@
     padding: 15px;
 }
 
+.sidebar-section {
+    margin-top: 20px;
+}
+
 .sidebar-links {
-    list-style: none;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .sidebar-link {
     display: flex;
     align-items: center;
-    padding: 8px 0;
-    color: #586069;
-    font-size: 14px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    margin-bottom: 2px;
 }
 
-    .sidebar-link .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        margin-right: 10px;
+    .sidebar-link:hover {
+        background-color: rgba(53, 53, 53, 0.05);
     }
 
     .sidebar-link.active {
-        color: #24292e;
+        background-color: #f0fff5;
         font-weight: 500;
+    }
+
+    .sidebar-link span {
+        margin-left: 12px;
+        font-size: 0.95rem;
+        color: #333;
+    }
+
+    .sidebar-link i {
+        width: 24px;
+        text-align: center;
+        font-size: 16px;
+        transition: transform 0.2s ease;
+    }
+
+    .sidebar-link:hover i {
+        transform: scale(1.1);
     }
 
     .sidebar-link .checkmark {
         margin-left: auto;
-        color: #39A0ED;
+        color: #2ecc71;
+        font-weight: bold;
+    }
+
+    .icon-GeneralDiscussion, .sidebar-link:nth-child(1) svg {
+        color: #4a6da7;
+    }
+
+    .icon-CropManagement, .sidebar-link:nth-child(2) svg {
+        color: #2ecc71;
+    }
+
+    .icon-Harvesting, .sidebar-link:nth-child(3) svg {
+        color: #e67e22;
+    }
+
+    .icon-StockManagement, .sidebar-link:nth-child(4) svg {
+        color: #3498db;
+    }
+
+    .icon-MarketTrends, .sidebar-link:nth-child(5) svg {
+        color: #9b59b6;
+    }
+
+    .icon-EquipmentAndTechnology, .sidebar-link:nth-child(6) svg {
+        color: #34495e;
+    }
+
+    .icon-Sustainability, .sidebar-link:nth-child(7) svg {
+        color: #27ae60;
+    }
+
+    .icon-Networking, .sidebar-link:nth-child(8) svg {
+        color: #e74c3c;
+    }
+
+    .icon-LegalAndRegulatory, .sidebar-link:nth-child(9) svg {
+        color: #f39c12;
+    }
+
+    .icon-FarmingEvents, .sidebar-link:nth-child(10) svg {
+        color: #8e44ad;
+    }
+
+    .icon-ProductPricing, .sidebar-link:nth-child(11) svg {
+        color: #16a085;
+    }
+
+    .icon-FeedbackAndSuggestions, .sidebar-link:nth-child(12) svg {
+        color: #d35400;
     }
 
 .new-discussion-btn-large {

@@ -1,11 +1,13 @@
-﻿namespace AgrifoodManagement.Web.Models.Forum
+﻿using AgrifoodManagement.Util.ValueObjects;
+
+namespace AgrifoodManagement.Web.Models.Forum
 {
     public class TopicViewModel
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
-        public string Category { get; set; }
+        public ForumCategory Category { get; set; }
         public UserViewModel Author { get; set; }
         public string LatestReplyAuthor { get; set; }
         public string LatestReplyTimeAgo { get; set; }

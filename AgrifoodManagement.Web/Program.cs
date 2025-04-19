@@ -39,6 +39,32 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.Use(async (context, next) =>
+{
+    var path = context.Request.Path;
+
+    if (path == "/" || path == "/Home" || path == "/Home/Index")
+    {
+        if (context.User.Identity?.IsAuthenticated ?? false)
+        {
+            var userType = context.User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
+
+            if (userType == "Seller")
+            {
+                context.Response.Redirect("/Producer/Dashboard");
+                return;
+            }
+            else if (userType == "Buyer")
+            {
+                context.Response.Redirect("/Consumer/Home");
+                return;
+            }
+        }
+    }
+
+    await next();
+});
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

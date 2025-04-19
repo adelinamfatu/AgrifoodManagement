@@ -29,7 +29,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Forum
                 Id = t.Id,
                 Title = t.Title,
                 Text = t.Content,
-                Category = t.Category.ToString(),
+                Category = t.Category,
                 Author = MapUser(t.Author),
                 LatestReplyAuthor = t.Posts
                     .OrderByDescending(p => p.PostedAt)
@@ -44,7 +44,9 @@ namespace AgrifoodManagement.Business.CommandHandlers.Forum
                     .Take(4)
                     .Select(g => MapUser(g.Key))
                     .ToList(),
-                Comments = t.Posts.Select(p => new ForumCommentDto
+                Comments = t.Posts
+                .OrderByDescending(p => p.PostedAt)
+                .Select(p => new ForumCommentDto
                 {
                     Author = MapUser(p.User),
                     Text = p.Message,
@@ -57,7 +59,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Forum
         {
             return new ForumUserDto
             {
-                Name = user.FirstName + user.LastName,
+                Name = user.FirstName + " " + user.LastName,
                 AvatarUrl = user.Avatar ?? "/images/avatar-placeholder.png"
             };
         }

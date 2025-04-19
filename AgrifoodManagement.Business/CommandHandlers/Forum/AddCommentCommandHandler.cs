@@ -55,7 +55,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Forum
                 {
                     Success = true,
                     AuthorName = $"{user.FirstName} {user.LastName}",
-                    AvatarUrl = user.Avatar,
+                    AvatarUrl = user.Avatar ?? "/images/avatar-placeholder.png",
                     TimeAgo = "Just now"
                 };
             }

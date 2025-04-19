@@ -301,3 +301,83 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     font-weight: 500;
     font-size: 0.9rem;
 }
+
+.logout-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: transparent;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .logout-button:hover {
+        background-color: #f8f9fa;
+    }
+
+    .logout-button i {
+        font-size: 16px;
+    }
+
+.e-dialog.logout-dialog .e-dlg-header {
+    font-size: 18px;
+    font-weight: 500;
+    padding: 15px 20px 5px;
+}
+
+.e-dialog.logout-dialog .e-dlg-content {
+    padding: 10px 20px 20px;
+}
+
+.logout-question-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 0 15px;
+}
+
+.logout-question-text {
+    font-size: 16px;
+    color: #333;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.e-dialog.logout-dialog .e-footer-content {
+    padding: 0 20px 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.e-dialog.logout-dialog .e-btn {
+    min-width: 80px;
+    font-weight: 500;
+}
+
+    .e-dialog.logout-dialog .e-btn.e-flat.no-btn {
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        color: #333;
+    }
+
+    .e-dialog.logout-dialog .e-btn.e-flat.yes-btn {
+        background-color: #dc3545;
+        border: 1px solid #dc3545;
+        color: white;
+    }
+
+.e-dialog.rounded-dialog {
+    border-radius: 8px;
+}
+
+    .e-dialog.rounded-dialog .e-dlg-header,
+    .e-dialog.rounded-dialog .e-dlg-content,
+    .e-dialog.rounded-dialog .e-footer-content {
+        border-radius: 8px;
+    }

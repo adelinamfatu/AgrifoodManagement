@@ -15,10 +15,10 @@
     var forumCategories = Enum.GetValues(typeof(ForumCategory))
         .Cast<ForumCategory>()
         .Select(fc => new SelectListItem
-            {
-                Text = SplitPascalCase.Format(fc.ToString()),
-                Value = fc.ToString()
-            }).ToList();
+                {
+                    Text = SplitPascalCase.Format(fc.ToString()),
+                    Value = fc.ToString()
+                }).ToList();
 }
 
 @model List<TopicViewModel>
@@ -26,9 +26,9 @@
 <div id="target" class="forum-container">
     <div class="forum-header">
         <div class="filters">
-            <ejs-dropdownlist id="filterDropdown" 
-                dataSource="filterOptions" 
-                placeholder="Select Filter">
+            <ejs-dropdownlist id="filterDropdown"
+                              dataSource="filterOptions"
+                              placeholder="Select Filter">
             </ejs-dropdownlist>
         </div>
     </div>
@@ -48,9 +48,9 @@
                             <div class="topic-header">
                                 <h3 class="topic-title">@topic.Title</h3>
                             </div>
-                            @if (!string.IsNullOrEmpty(topic.Category))
+                            @if (topic.Category != null)
                             {
-                                <div class="category-tag tag-@topic.Category.ToLower().Replace(" ", "-")">@topic.Category</div>
+                                <div class="category-tag tag-@topic.Category">@topic.Category.GetDisplayName()</div>
                             }
                             @if (topic.CommentsCount > 0)
                             {
@@ -88,10 +88,6 @@
                                                 <span class="comment-date">@comment.TimeAgo</span>
                                             </div>
                                             <p class="comment-text">@comment.Text</p>
-                                            <div class="comment-actions">
-                                                <span class="comment-action">Like</span>
-                                                <span class="comment-action">Reply</span>
-                                            </div>
                                         </div>
                                     </div>
                                 }
@@ -102,7 +98,10 @@
                             }
                         </div>
                         <div class="add-comment">
-                            <ejs-textarea id="commentTextarea-@topic.Id" class="comment-input" placeholder="Add your comment..." floatLabelType="Auto" cssClass="e-outline" rows="5" cols="250"></ejs-textarea>
+                            <ejs-textarea id="commentTextarea-@topic.Id"
+                                          class="comment-input" placeholder="Add your comment..."
+                                          floatLabelType="Auto" cssClass="e-outline" rows="5" cols="250"
+                                          resizeMode="Vertical"></ejs-textarea>
                             <ejs-button id="submitCommentBtn-@topic.Id" class="submit-comment-btn" content="Submit" onclick="submitComment('@topic.Id')" isPrimary="true"></ejs-button>
                         </div>
                     </div>
@@ -115,12 +114,11 @@
 
             <div class="sidebar-section">
                 <ul class="sidebar-links">
-                    @foreach (var category in (List<SelectListItem>)forumCategories)
+                    @foreach (var forumCategory in Enum.GetValues(typeof(ForumCategory)).Cast<ForumCategory>())
                     {
-                        var categorySlug = category.Value.ToLower().Replace(" ", "-");
-                        <li class="sidebar-link">
-                            <span class="dot dot-@categorySlug"></span>
-                            @category.Text
+                        <li class="sidebar-link @(forumCategory == ForumCategory.GeneralDiscussion ? "active" : "")">
+                            @Html.Raw(forumCategory.GetIcon())
+                            <span>@forumCategory.GetDisplayName()</span>
                         </li>
                     }
                 </ul>
@@ -161,47 +159,45 @@
                     commentText: commentText
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const commentsList = commentSection.querySelector('.comments-list');
-                    const noCommentsMsg = commentsList.querySelector('p');
-                    
-                    if (noCommentsMsg && noCommentsMsg.textContent.includes('No comments yet')) {
-                        commentsList.innerHTML = '';
-                    }
-                    
-                    const newComment = document.createElement('div');
-                    newComment.className = 'comment';
-                    newComment.innerHTML = `
-                        <div class="comment-author">
-                                    <div class="author-avatar">
-                                        <img src="${data.author.avatarUrl}" alt="${data.author.name} avatar">
-                                    </div>
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const commentsList = commentSection.querySelector('.comments-list');
+                        const noCommentsMsg = commentsList.querySelector('p');
+
+                        if (noCommentsMsg && noCommentsMsg.textContent.includes('No comments yet')) {
+                            commentsList.innerHTML = '';
+                        }
+                        const avatarUrl = data.avatarUrl && data.avatarUrl.trim() !== '' ? data.avatarUrl : '/api/placeholder/40/40'; // Fallback image
+                        console.log(avatarUrl);
+
+                        const newComment = document.createElement('div');
+                        newComment.className = 'comment';
+                        newComment.innerHTML = `
+                            <div class="comment-author">
+                                <div class="author-avatar">
+                                    <img src="${data.avatarUrl && data.avatarUrl.trim() !== '' ? data.avatarUrl : '/api/placeholder/40/40'}" alt="${data.authorName ? data.authorName : 'Unknown'} avatar">
+                                </div>
                                 </div>
                                 <div class="comment-content">
                                     <div class="comment-header">
-                                        <span class="comment-author-name">${data.author.name}</span>
+                                        <span class="comment-author-name">${data.authorName ? data.authorName : 'Unknown'}</span>
                                         <span class="comment-date">${data.timeAgo}</span>
                                     </div>
                                     <p class="comment-text">${commentText}</p>
-                                    <div class="comment-actions">
-                                        <span class="comment-action">Like</span>
-                                        <span class="comment-action">Reply</span>
-                                    </div>
                                 </div>
-                            `;
-                    commentsList.appendChild(newComment);
-                    commentInput.value = '';
-                    const topicCard = document.querySelector(`.topic-card[data-topic-id="${topicId}"]`);
-                    const commentsCountElem = topicCard.querySelector('.comments-count');
-                    const currentCount = parseInt(commentsCountElem.textContent);
-                    commentsCountElem.textContent = `${currentCount + 1} Comments`;
-                }
-            })
-            .catch(error => {
-                console.error('Error submitting comment:', error);
-            });
+                                `;
+                        commentsList.appendChild(newComment);
+                        commentInput.value = '';
+                        const topicCard = document.querySelector(`.topic-card[data-topic-id="${topicId}"]`);
+                        const commentsCountElem = topicCard.querySelector('.comments-count');
+                        const currentCount = parseInt(commentsCountElem.textContent);
+                        commentsCountElem.textContent = `${currentCount + 1} Comments`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error submitting comment:', error);
+                });
         }
     }
 
@@ -294,30 +290,28 @@
             close: function () {
                 console.log("Dialog closed");
             },
-            // Use the 'content' property to define the dialog's inner HTML
             content: `
-                    <div class="form-group" style="margin-bottom: 15px;">
-                        <label for="discussionTitle">Title</label>
-                        <input type="text" id="discussionTitle" class="form-control" placeholder="Enter discussion title" />
-                    </div>
-                    <div class="form-group" style="margin-bottom: 15px;">
-                        <label for="discussionContent">Content</label>
-                        <textarea id="discussionContent" class="form-control" placeholder="Enter discussion content" rows="4"></textarea>
-                    </div>
-                    <div class="form-group" style="margin-bottom: 15px;">
-                        <label for="discussionCategory">Category</label>
-                            <select id="discussionCategory" class="form-control">
-                            @foreach (var category in (List<SelectListItem>)forumCategories)
-                            {
-                                <option value="@category.Value">@category.Text</option>
-                            }
-                            </select>
-                    </div>
-                `
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="discussionTitle">Title</label>
+                            <input type="text" id="discussionTitle" class="form-control" placeholder="Enter discussion title" />
+                        </div>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="discussionContent">Content</label>
+                            <textarea id="discussionContent" class="form-control" placeholder="Enter discussion content" rows="4"></textarea>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="discussionCategory">Category</label>
+                                <select id="discussionCategory" class="form-control">
+                                @foreach (var category in (List<SelectListItem>)forumCategories)
+                                {
+                                        <option value="@category.Value">@category.Text</option>
+                                }
+                                </select>
+                        </div>
+                    `
         });
         dialogObj.appendTo('#newDiscussionDialog');
         window.newDiscussionDialog = dialogObj;
-        console.log("Dialog initialized programmatically");
         document.getElementById('openDialogBtn').addEventListener('click', function () {
             window.newDiscussionDialog.show();
         });
@@ -325,5 +319,15 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         initializeDialog();
+
+        // Make General Discussion active by default
+        const generalDiscussionLink = document.querySelector('.sidebar-link:first-child');
+        if (generalDiscussionLink) {
+            generalDiscussionLink.classList.add('active');
+            const checkmark = document.createElement('span');
+            checkmark.className = 'checkmark';
+            checkmark.textContent = '✓';
+            generalDiscussionLink.appendChild(checkmark);
+        }
     });
 </script>
