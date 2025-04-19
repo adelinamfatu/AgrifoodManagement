@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AgrifoodManagement.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Seller")]
     public class ProducerController : BaseProducerController
     {
         public ProducerController(IMediator mediator) : base(mediator) { }
@@ -22,7 +22,7 @@ namespace AgrifoodManagement.Web.Controllers
             ViewBag.ActiveItemId = activeItemId;
         }
 
-        public async Task<IActionResult> DashboardAsync()
+        public IActionResult Dashboard()
         {
             SetSidebar("1");
             return View();

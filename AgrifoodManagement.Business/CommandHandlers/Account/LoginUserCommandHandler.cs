@@ -47,7 +47,8 @@ namespace AgrifoodManagement.Business.CommandHandlers.Account
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Email, user.Email)
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim("Role", user.UserType.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 Issuer = _configuration["Jwt:Issuer"],

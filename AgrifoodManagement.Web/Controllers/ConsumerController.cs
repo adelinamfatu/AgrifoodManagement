@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AgrifoodManagement.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Buyer")]
     public class ConsumerController : Controller
     {
         private readonly IMediator _mediator;

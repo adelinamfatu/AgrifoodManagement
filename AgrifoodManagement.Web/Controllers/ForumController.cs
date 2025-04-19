@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace AgrifoodManagement.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Seller")]
     public class ForumController : Controller
     {
         private readonly IMediator _mediator;

@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace AgrifoodManagement.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Seller")]
     public class ProductController : Controller
     {
         private readonly IMediator _mediator;

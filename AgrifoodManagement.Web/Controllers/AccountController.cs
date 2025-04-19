@@ -1,13 +1,9 @@
 ﻿using AgrifoodManagement.Business.Commands.Account;
 using AgrifoodManagement.Util.ValueObjects;
-using AgrifoodManagement.Web.Models;
-using Azure.Core;
+using AgrifoodManagement.Web.Models.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace AgrifoodManagement.Web.Controllers
 {
@@ -71,7 +67,7 @@ namespace AgrifoodManagement.Web.Controllers
                 return View("Index", model);
             }
 
-            var command = new RegisterUserCommand
+            var registerCommand = new RegisterUserCommand
             {
                 Email = model.Email,
                 Password = model.Password,
@@ -81,15 +77,46 @@ namespace AgrifoodManagement.Web.Controllers
                 PhoneNumber = model.PhoneNumber
             };
 
-            var result = await _mediator.Send(command);
+            var registerResult = await _mediator.Send(registerCommand);
 
-            if (!result.IsSuccess)
+            if (!registerResult.IsSuccess)
             {
-                ModelState.AddModelError("", result.Error);
+                ModelState.AddModelError("", registerResult.Error);
                 return View("Index", model);
             }
 
-            return RedirectToAction("Login");
+            // Automatically log in the user after successful registration
+            var loginCommand = new LoginUserCommand
+            {
+                Email = model.Email,
+                Password = model.Password
+            };
+
+            var loginResult = await _mediator.Send(loginCommand);
+
+            if (!loginResult.IsSuccess)
+            {
+                return Unauthorized(loginResult.Error);
+            }
+
+            // Set the JWT token as a secure cookie
+            Response.Cookies.Append("AuthToken", loginResult.Value.Token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = loginResult.Value.Expiration
+            });
+
+            switch (loginResult.Value.UserType)
+            {
+                case UserType.Seller:
+                    return Redirect("/Producer/Dashboard");
+                case UserType.Buyer:
+                    return Redirect("/Consumer/Home");
+                default:
+                    return Redirect("/");
+            }
         }
 
         [HttpPost]
@@ -128,6 +155,20 @@ namespace AgrifoodManagement.Web.Controllers
             {
                 return Json(new { success = false, message = "An error occurred while processing your request." });
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Logout()
+        {
+            // Remove the AuthToken cookie
+            if (Request.Cookies.ContainsKey("AuthToken"))
+            {
+                Response.Cookies.Delete("AuthToken");
+            }
+
+            // Redirect back to login
+            return RedirectToAction("Auth", "Account");
         }
     }
 }

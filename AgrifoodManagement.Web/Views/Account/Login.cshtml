@@ -1,6 +1,6 @@
-﻿@using AgrifoodManagement.Web.Models
-@using AgrifoodManagement.Web.Views.Account.Resources
+﻿@using AgrifoodManagement.Web.Views.Account.Resources;
 @using Syncfusion.EJ2.SplitButtons;
+@using AgrifoodManagement.Web.Models.Auth;
 
 @{
     ProgressButtonSpinSettings spinCenter = new ProgressButtonSpinSettings() { Position = SpinPosition.Center };
@@ -18,17 +18,21 @@
                 <ejs-textbox id="loginEmail" name="Email" cssClass="e-outline" placeholder="@LoginResources.EmailPlaceholder"
                              floatLabelType="Auto" asp-for="Email"></ejs-textbox>
             </div>
+
             <div class="input-box">
                 <i class="fas fa-lock"></i>
                 <ejs-textbox id="loginPassword" name="Password" cssClass="e-outline" placeholder="@LoginResources.PasswordPlaceholder"
                              floatLabelType="Auto" type="password" asp-for="Password"></ejs-textbox>
             </div>
+
             <div class="text"><a href="#" class="main-color">@LoginResources.ForgetPasswordButton</a></div>
+            
             <div class="input-box">
                 <ejs-progressbutton id="loginBtn" content=@LoginResources.LoginButton enableProgress="true" spinSettings="spinCenter" animationSettings="slideRight"
-                                    cssClass="e-outline e-success" type="submit"
+                                    cssClass="e-hide-spinner e-progress-top" type="submit"
                                     style="width: 100%; height: 3rem; font-size: 1rem;"></ejs-progressbutton>
             </div>
+
             <div class="text sign-up-text">
                 @LoginResources.NoAccountButton<label for="flip" class="main-color">@LoginResources.SignupButton</label>
             </div>

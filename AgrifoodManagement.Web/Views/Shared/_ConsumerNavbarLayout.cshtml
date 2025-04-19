@@ -1,11 +1,9 @@
 ﻿@using Syncfusion.EJ2.Navigations
-
 @{
     Layout = "_ConsumerLayout";
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
 }
-
 <div class="top-header">
     <div class="app-title">Agri-<span>Food</span> Management</div>
     <div class="toolbar-right-items">
@@ -24,9 +22,19 @@
                 <div class="user-role">Consumer</div>
             </div>
         </div>
+        <form asp-controller="Account"
+              asp-action="Logout"
+              method="post"
+              class="logout-form"
+              id="logoutForm"
+              style="margin-left:8px;">
+            @Html.AntiForgeryToken()
+            <button type="button" id="logoutBtn" class="logout-button" title="Logout">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </button>
+        </form>
     </div>
 </div>
-
 <div class="main-nav-container">
     <div class="main-nav">
         <a asp-controller="Consumer" asp-action="Home" class="nav-link @(currentAction == "Home" ? "active" : "")">Home</a>
@@ -38,4 +46,54 @@
     </div>
 </div>
 
+<div id="logoutConfirmDialog"></div>
+
 @RenderBody()
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var dialogObj = new ej.popups.Dialog({
+                header: 'Confirm Logout',
+                content: '<div class="logout-question-container">' +
+                    '<div class="logout-question-text">Are you sure you want to logout?</div>' +
+                    '</div>',
+                showCloseIcon: false,
+                width: '350px',
+                isModal: true,
+                visible: false,
+                target: document.body,
+                cssClass: 'logout-dialog rounded-dialog',
+                buttons: [
+                    {
+                        click: function () {
+                            dialogObj.hide();
+                        },
+                        buttonModel: {
+                            content: 'NO',
+                            isPrimary: false,
+                            cssClass: 'e-flat no-btn'
+                        }
+                    },
+                    {
+                        click: function () {
+                            document.getElementById('logoutForm').submit();
+                        },
+                        buttonModel: {
+                            content: 'YES',
+                            isPrimary: true,
+                            cssClass: 'e-flat yes-btn'
+                        }
+                    }
+                ],
+                position: { X: 'center', Y: 'center' }
+            });
+
+            dialogObj.appendTo('#logoutConfirmDialog');
+
+            document.getElementById('logoutBtn').addEventListener('click', function () {
+                dialogObj.show();
+            });
+        });
+    </script>
+}

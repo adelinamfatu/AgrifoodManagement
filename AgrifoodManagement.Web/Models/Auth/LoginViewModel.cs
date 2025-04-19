@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AgrifoodManagement.Web.Models
+namespace AgrifoodManagement.Web.Models.Auth
 {
     public class LoginViewModel
     {
