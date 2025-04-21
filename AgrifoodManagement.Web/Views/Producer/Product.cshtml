@@ -9,12 +9,6 @@
 
     var productCategoriesData = ViewBag.ProductCategories as List<CategoryNode>;
 
-    var discountTypesData = new[] {
-        "Choose New Year Discount",
-        "Seasonal Discount",
-        "Clearance Sale"
-    };
-
     var unitsData = Enum.GetValues(typeof(MeasurementUnit))
                         .Cast<MeasurementUnit>()
                         .Select(g => g.ToString())
@@ -62,7 +56,17 @@
                 </div>
 
                 <div class="form-section">
-                    <h2>Pricing And Stock</h2>
+                    <h2>Pricing, Stock & Logistics</h2>
+                    @{
+                        var isInEditMode = Model.Id != Guid.Empty;
+                    }
+
+                    @if (isInEditMode)
+                    {
+                        <div class="form-note" style="margin-top:8px;">
+                            <small>Quantity and Price can only be adjusted through the Stock Management page.</small>
+                        </div>
+                    }
                     <div class="form-group inline-input form-row">
                         <div class="col">
                             <label for="Price" title="Base Pricing">
@@ -71,7 +75,7 @@
                             <div class="input-group">
                                 <ejs-textbox id="Price" name="Price" value="@Model.Price" cssClass="e-outline"
                                              placeholder="Price" floatLabelType="Auto" type="number"
-                                             step="0.01" required="true">
+                                             step="0.01" required="true" readonly="@isInEditMode">
                                 </ejs-textbox>
                             </div>
                         </div>
@@ -81,64 +85,27 @@
                                 <i class="fa fa-warehouse"></i>
                             </label>
                             <ejs-textbox id="Quantity" name="Quantity" value="@Model.Quantity" cssClass="e-outline"
-                                         placeholder="Stock" floatLabelType="Auto" type="number" required="true">
+                                         placeholder="Stock" floatLabelType="Auto" type="number" required="true" readonly="@isInEditMode">
                             </ejs-textbox>
                         </div>
                     </div>
 
                     <div class="form-group inline-input form-row">
                         <div class="col">
-                            <label for="DiscountType" title="Discount Type">
-                                <i class="fa fa-tag"></i>
-                            </label>
-                            <div class="input-group">
-                                <ejs-dropdownlist id="DiscountType" name="DiscountType"
-                                        dataSource="@discountTypesData"
-                                        placeholder="Select discount type"
-                                        index="0"
-                                        popupHeight="220px">
-                                    <e-dropdownlist-fields text="this" value="this"></e-dropdownlist-fields>
-                                </ejs-dropdownlist>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <label for="Discount" title="Discount">
-                                <i class="fa fa-percentage"></i>
-                            </label>
-                            <div class="input-group">
-                                <ejs-textbox id="Discount" name="Discount" cssClass="e-outline"
-                                             placeholder="Discount" floatLabelType="Auto" type="number" min="0" max="100">
-                                </ejs-textbox>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h2>Additional Information</h2>
-                    <div class="form-group inline-input form-row">
-                        <div class="col">
-                            <label for="UnitOfMeasurement" title="Unit of Measurement">
-                                <i class="fa fa-ruler"></i>
-                            </label>
+                            <label for="UnitOfMeasurement"><i class="fa fa-ruler"></i></label>
                             <ejs-dropdownlist id="UnitOfMeasurement" name="UnitOfMeasurement"
                                               dataSource="@unitsData"
                                               value="@(Model.UnitOfMeasurement.HasValue ? Model.UnitOfMeasurement.Value.ToString() : null)"
-                                              placeholder="Select unit of measurement"
-                                              index="0"
+                                              placeholder="Select unit"
                                               popupHeight="220px">
-                                <e-dropdownlist-fields text="Unit" value="Id"></e-dropdownlist-fields>
+                                <e-dropdownlist-fields text="this" value="this"></e-dropdownlist-fields>
                             </ejs-dropdownlist>
                         </div>
-
                         <div class="col">
-                            <label for="ExpirationDate" title="Expiration Date">
-                                <i class="fa fa-calendar-alt"></i>
-                            </label>
+                            <label for="ExpirationDate"><i class="fa fa-calendar-alt"></i></label>
                             <ejs-datepicker id="ExpirationDate" name="ExpirationDate"
                                             value="@Model.ExpirationDate"
-                                            placeholder="Choose a Date" floatLabelType="Auto">
+                                            placeholder="Expiration Date" floatLabelType="Auto">
                             </ejs-datepicker>
                         </div>
                     </div>
@@ -186,7 +153,7 @@
                         </label>
                         <ejs-dropdowntree id="Category" name="Category"
                                           popupHeight="220px"
-                                          value="@(Model.Category.HasValue ? Model.Category.Value.ToString() : "")"
+                                          value="@(Model.Category.HasValue ? new object[]{ Model.Category.Value.ToString() } : null)"
                                           placeholder="Select a product category"
                                           changeOnBlur="false">
                             <e-dropdowntree-fields dataSource="@productCategoriesData"
@@ -206,6 +173,21 @@
 
 <script>
     var thumbnailFiles = [null, null, null];
+
+    // 
+    document.addEventListener('DOMContentLoaded', function () {
+        @if (Model.PhotoUrls != null)
+        {
+            for (int i = 0; i < Model.PhotoUrls.Count && i < 3; i++)
+            {
+                <text>
+                        thumbnailFiles[@i] = { dataURL: '@Model.PhotoUrls[i]', rawFile: null, uid: null };
+                    document.getElementById("thumbnail@((i + 1))Img").src = "@Model.PhotoUrls[i]";
+                    document.querySelector(".thumbnail-upload:nth-child(@(i + 1)) .remove-btn").style.display = 'flex';
+                </text>
+            }
+        }
+    });
 
     function onFileSelect(args) {
         for (let i = 0; i < args.filesData.length; i++) {
@@ -309,9 +291,13 @@
             let uniqueFiles = new Set();
 
             for (let i = 0; i < thumbnailFiles.length; i++) {
-                if (thumbnailFiles[i] !== null && !uniqueFiles.has(thumbnailFiles[i].rawFile.name)) {
-                    uniqueFiles.add(thumbnailFiles[i].rawFile.name);
-                    formData.append("Photos", thumbnailFiles[i].rawFile);
+                const entry = thumbnailFiles[i];
+                if (entry && entry.rawFile) {
+                    const file = entry.rawFile;
+                    if (!uniqueFiles.has(file.name)) {
+                        uniqueFiles.add(file.name);
+                        formData.append("Photos", file);
+                    }
                 }
             }
 

@@ -78,18 +78,29 @@ namespace AgrifoodManagement.Web.Controllers
                 }
                 else // Updating an existing product
                 {
-                    //var command = new UpdateProductCommand
-                    //{
-                    //    Id = viewModel.Id,
-                    //    Name = viewModel.Name,
-                    //    Description = viewModel.Description,
-                    //    Price = viewModel.Price,
-                    //    Quantity = viewModel.Quantity,
-                    //    UnitOfMeasurement = viewModel.UnitOfMeasurement,
-                    //    ExpirationDate = viewModel.ExpirationDate,
-                    //    ProductCategoryId = viewModel.Category
-                    //};
-                    //await _mediator.Send(command);
+                    var command = new UpdateProductCommand
+                    {
+                        Id = viewModel.Id,
+                        Name = viewModel.Name,
+                        Description = viewModel.Description,
+                        UnitOfMeasurement = viewModel.UnitOfMeasurement,
+                        ExpirationDate = viewModel.ExpirationDate,
+                        ProductCategoryId = (int)viewModel.Category
+                    };
+                    await _mediator.Send(command);
+
+                    if (uploadedPhotos.Any())
+                    {
+                        await _mediator.Send(new DeleteProductPhotosCommand { ProductId = viewModel.Id });
+                        
+                        var photoCmd = new UploadProductPhotoCommand
+                        {
+                            ProductId = viewModel.Id,
+                            Photos = uploadedPhotos,
+                            Folder = PhotoFolder.Products
+                        };
+                        await _mediator.Send(photoCmd);
+                    }
 
                     return Ok(new
                     {

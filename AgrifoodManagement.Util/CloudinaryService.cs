@@ -44,5 +44,23 @@ namespace AgrifoodManagement.Util
                 return uploadResult.SecureUrl.ToString();
             }
         }
+
+        public async Task<bool> DeletePhotoAsync(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+                return false;
+
+            // Extract public ID by trimming domain and file extension
+            var uri = new Uri(url);
+            var segments = uri.AbsolutePath.Trim('/').Split('/');
+            var publicId = Path.ChangeExtension(string.Join('/', segments), null);
+
+            var deletionParams = new DeletionParams(publicId)
+            {
+                ResourceType = ResourceType.Image
+            };
+            var result = await _cloudinary.DestroyAsync(deletionParams);
+            return result.Result == "ok";
+        }
     }
 }
