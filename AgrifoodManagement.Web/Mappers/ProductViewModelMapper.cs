@@ -17,6 +17,7 @@ namespace AgrifoodManagement.Web.Mappers
                 Id = dto.Id,
                 Name = dto.Name,
                 Description = dto.Description,
+                CategoryName = dto.CategoryName, 
                 ImageUrls = dto.PhotoUrls,
                 CurrentPrice = dto.CurrentPrice,
                 OriginalPrice = dto.OriginalPrice,

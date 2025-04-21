@@ -1,6 +1,131 @@
-﻿@{
+﻿@using AgrifoodManagement.Web.Models.Shop;
+
+@{
     Layout = "~/Views/Shared/_ProducerSidebarLayout.cshtml";
 }
 
-<h2>Stock Page</h2>
-<p>This is your Stock page.</p>
+@model IEnumerable<ProductViewModel>
+
+<h3>Product Stock Table</h3>
+
+<ejs-toast id="toastObj" created="onToastCreated">
+    <e-toast-position X="Right" />
+</ejs-toast>
+
+<ejs-grid id="ProductGrid"
+          dataSource="@(Model)"
+          allowPaging="true"
+          toolbar="@(new List<string> { "Edit", "Update", "Cancel" })"
+          actionComplete="onActionComplete"
+          beginEdit="onBeginEdit">
+    <e-grid-editSettings 
+        allowEditing="true" 
+        allowAdding="false" 
+        allowDeleting="false" 
+        mode="Normal" />
+
+    <e-grid-columns>
+        <e-grid-column field="Id" 
+            isPrimaryKey="true" 
+            visible="false"></e-grid-column>
+
+        <e-grid-column field="Name"
+                       headerText="Product Name"
+                       allowEditing="false"
+                       width="150"></e-grid-column>
+
+        <e-grid-column field="Description"
+                       headerText="Description"
+                       allowEditing="false"
+                       width="200">
+        </e-grid-column>
+
+        <e-grid-column field="Quantity"
+                       headerText="Quantity"
+                       allowEditing="true"
+                       editType="numericedit"
+                       textAlign="Right"
+                       validationRules="@(new { required=true, min=0})"
+                       width="100">
+        </e-grid-column>
+
+        <e-grid-column field="CurrentPrice"
+                       headerText="Price (lei)"
+                       allowEditing="true"
+                       format="C2"
+                       editType="numericedit"
+                       textAlign="Right"
+                       validationRules="@(new { required=true, min=0 })"
+                       width="100">
+        </e-grid-column>
+
+        <e-grid-column field="UnitOfMeasurementText"
+                       headerText="Unit of Measurement"
+                       allowEditing="false"
+                       width="150">
+        </e-grid-column>
+
+        <e-grid-column field="CategoryName"
+                       headerText="Category"
+                       allowEditing="false"
+                       width="150">
+        </e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+
+<script>
+    var toastObj;
+    let originalRowData = null;
+
+    function onToastCreated() {
+        toastObj = this;
+    }
+
+    function onBeginEdit(args) {
+        originalRowData = { ...args.rowData }; // Shallow copy of the row data
+    }
+
+    function onActionComplete(args) {
+        if (args.requestType === 'save') {
+            const updatedProduct = args.data;
+
+            fetch('@Url.Action("UpdateStock", "Product")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedProduct)
+            })
+                .then(async resp => {
+                    const text = await resp.text();
+                    const payload = text ? JSON.parse(text) : {};
+                    if (!resp.ok) throw payload;
+
+                    toastObj.show({
+                        title: 'Success',
+                        content: payload.message,
+                        cssClass: 'e-toast-success', 
+                        icon: 'e-success toast-icons'
+                    });
+                })
+                .catch(err => {
+                    toastObj.show({
+                        title: err.toastType === 'warning' ? 'Warning' : 'Error',
+                        content: err.message || 'An unexpected error occurred.',
+                        cssClass: err.toastType === 'warning'
+                            ? 'e-toast-warning'
+                            : 'e-toast-danger',
+                        icon: err.toastType === 'warning'
+                            ? 'e-warning toast-icons'
+                            : 'e-error toast-icons'
+                    });
+
+                    // Restore original values manually
+                    const rowIndex = grid.getRowIndexByPrimaryKey(originalRowData.Id);
+                    grid.updateRow(rowIndex, originalRowData);
+
+                    args.cancel = true;
+                });
+        }
+    }
+</script>

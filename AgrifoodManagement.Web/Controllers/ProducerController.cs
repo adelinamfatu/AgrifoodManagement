@@ -1,5 +1,6 @@
 ﻿using AgrifoodManagement.Business.Queries.Forum;
 using AgrifoodManagement.Business.Queries.Product;
+using AgrifoodManagement.Web.Mappers;
 using AgrifoodManagement.Web.Models;
 using AgrifoodManagement.Web.Models.Forum;
 using MediatR;
@@ -28,10 +29,14 @@ namespace AgrifoodManagement.Web.Controllers
             return View();
         }
 
-        public IActionResult Stocks()
+        public async Task<IActionResult> StocksAsync()
         {
             SetSidebar("2");
-            return View();
+
+            var products = await _mediator.Send(new GetProductStocksQuery());
+            var stocks = ProductViewModelMapper.Map(products);
+
+            return View(stocks);
         }
 
         public IActionResult Orders()

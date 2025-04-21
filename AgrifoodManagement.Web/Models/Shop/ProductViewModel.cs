@@ -12,7 +12,9 @@ namespace AgrifoodManagement.Web.Models.Shop
         public decimal CurrentPrice { get; set; }
         public decimal OriginalPrice { get; set; }
         public double Quantity { get; set; }
+        public string CategoryName { get; set; }
         public MeasurementUnit? UnitOfMeasurement { get; set; }
+        public string UnitOfMeasurementText => UnitOfMeasurement.ToString();
         public DateTime ExpiryDate { get; set; }
         public bool IsExpiringSoon => ExpiryDate.Subtract(DateTime.Now).TotalDays <= 3;
     }

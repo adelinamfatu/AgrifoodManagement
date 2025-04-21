@@ -1,9 +1,11 @@
 ﻿using AgrifoodManagement.Business.Commands.Product;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models;
+using AgrifoodManagement.Web.Models.Shop;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace AgrifoodManagement.Web.Controllers
@@ -99,6 +101,51 @@ namespace AgrifoodManagement.Web.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { error = "An error occurred while processing your request." });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateStock([FromBody] ProductViewModel model)
+        {
+            var command = new UpdateProductStockCommand
+            {
+                Id = model.Id,
+                Quantity = model.Quantity,
+                CurrentPrice = model.CurrentPrice
+            };
+
+            try
+            {
+                await _mediator.Send(command);
+                return Ok(new
+                {
+                    message = "Stock updated successfully.",
+                    toastType = "success"
+                });
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(new
+                {
+                    message = ex.Message,
+                    toastType = "warning"
+                });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new
+                {
+                    message = ex.Message,
+                    toastType = "error"
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new
+                {
+                    message = "An unexpected error occurred.",
+                    toastType = "error"
+                });
             }
         }
     }
