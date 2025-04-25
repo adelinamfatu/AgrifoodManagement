@@ -124,8 +124,8 @@
                                     <div class="subcategory-img">
                                         <img src="@(string.IsNullOrEmpty(sub.ImageUrl) ? mainCategory.ImageUrl : sub.ImageUrl)" alt="@sub.Category" />
                                     </div>
-                                    <span>@sub.Category</span>
-                                    <div class="subcategory-tooltip">@(sub.Description ?? "Explore " + sub.Category + " products")</div>
+                                    <span class="subcategory-name">@sub.Category</span>
+                                    <p class="subcategory-description">@(sub.Description ?? "Explore " + sub.Category + " products")</p>
                                 </a>
                             }
                         }
@@ -134,7 +134,7 @@
                             <p class="no-subcategories">No subcategories available</p>
                         }
                     </div>
-                    <a href="/Products/Category/@mainCategory.Id" class="view-all-link">View All Products</a>
+                    <a href="/Consumer/Shop" class="view-all-link">View All Products</a>
                 </div>
             }
         </div>

@@ -39,8 +39,8 @@
             <div class="product-detail-rating">
                 <div class="stars">
                     <span class="star-icon">★</span>
-                    <span class="star-rating">4.5</span>
-                    <span class="review-count">- 500 Reviews</span>
+                    <span class="star-rating">@Model.Rating</span>
+                    <span class="review-count">- @Model.ReviewCount</span>
                 </div>
             </div>
 
@@ -52,29 +52,29 @@
                 <div class="spec-row">
                     <div class="spec-box">
                         <div class="spec-label">QUANTITY AVAILABLE</div>
-                        <div class="spec-value">500</div>
+                        <div class="spec-value">@Model.Quantity</div>
                     </div>
                     <div class="spec-box">
                         <div class="spec-label">UNIT</div>
-                        <div class="spec-value">kg</div>
+                        <div class="spec-value">@Model.UnitOfMeasurementText</div>
                     </div>
                 </div>
             </div>
 
             <div class="product-detail-expiry">
-                <label>Expires on: <strong>Jun 30, 2025</strong></label>
+                <label>Expires on: <strong>@Model.ExpiryDate</strong></label>
             </div>
 
             <div class="product-detail-price-container">
                 <div class="product-detail-price">
-                    <span class="price-current">$50.00</span>
-                    <span class="price-unit">per kg</span>
+                    <span class="price-current">@Model.CurrentPrice lei</span>
+                    <span class="price-unit">per @Model.UnitOfMeasurementText</span>
                 </div>
             </div>
 
             <div class="product-detail-controls">
                 <div class="product-detail-quantity-selector">
-                    <ejs-numerictextbox id="quantitySelector" min="1" max="100" value="1" format="n0" step="1"></ejs-numerictextbox>
+                    <ejs-numerictextbox id="quantitySelector" min="1" max="@Model.Quantity" value="1" format="n0" step="1"></ejs-numerictextbox>
                 </div>
 
                 <div class="product-detail-buttons">

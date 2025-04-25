@@ -16,6 +16,8 @@ namespace AgrifoodManagement.Web.Models.Shop
         public MeasurementUnit? UnitOfMeasurement { get; set; }
         public string UnitOfMeasurementText => UnitOfMeasurement.ToString();
         public DateTime ExpiryDate { get; set; }
+        public decimal Rating { get; set; }
+        public int ReviewCount { get; set; }
         public bool IsExpiringSoon => ExpiryDate.Subtract(DateTime.Now).TotalDays <= 3;
     }
 }
