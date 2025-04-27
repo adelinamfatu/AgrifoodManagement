@@ -14,6 +14,7 @@
                 <img id="product-mainImage" src="@(Model.ImageUrls?.FirstOrDefault() ?? "/images/no-image-placeholder.png")"
                      class="product-detail-img-fluid" alt="@Model.Name" />
             </div>
+
             <div class="product-detail-thumbnails">
                 @if (Model.ImageUrls != null && Model.ImageUrls.Count() > 0)
                 {
@@ -32,10 +33,10 @@
                 }
             </div>
         </div>
-        <div class="product-detail-col-right">
-            <div class="product-detail-category">MANANA</div>
-            <h1 class="product-detail-title">@Model.Name</h1>
 
+        <div class="product-detail-col-right">
+            <div class="product-detail-category text-center">@Model.CategoryName</div>
+            <h1 class="product-detail-title text-center">@Model.Name</h1>
             <div class="product-detail-rating">
                 <div class="stars">
                     <span class="star-icon">★</span>
@@ -61,8 +62,8 @@
                 </div>
             </div>
 
-            <div class="product-detail-expiry">
-                <label>Expires on: <strong>@Model.ExpiryDate</strong></label>
+            <div class="product-detail-expiry text-center">
+                <label>Expires on: <strong>@(Model.ExpiryDate != null ? Model.ExpiryDate.ToString("MM/dd/yyyy") : "")</strong></label>
             </div>
 
             <div class="product-detail-price-container">
@@ -74,20 +75,68 @@
 
             <div class="product-detail-controls">
                 <div class="product-detail-quantity-selector">
-                    <ejs-numerictextbox id="quantitySelector" min="1" max="@Model.Quantity" value="1" format="n0" step="1"></ejs-numerictextbox>
+                    <label for="quantitySelector" class="quantity-label">Quantity:</label>
+                    <ejs-numerictextbox id="quantitySelector" min="1" max="@Model.Quantity" value="1" format="n0" step="1" cssClass="quantity-input-large"></ejs-numerictextbox>
                 </div>
 
                 <div class="product-detail-buttons">
-                    <ejs-button id="addToCartBtn" cssClass="e-flat" content="ADD TO CART" isPrimary="false"></ejs-button>
-                    <ejs-button id="buyNowBtn" cssClass="e-primary" content="BUY NOW"></ejs-button>
+                    <ejs-button id="addToCartBtn" cssClass="e-flat btn-custom" content="ADD TO CART" isPrimary="false" onclick="addToCart()"></ejs-button>
+                    <ejs-button id="buyNowBtn" cssClass="e-primary btn-custom" content="BUY NOW"></ejs-button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<ejs-toast id="cartToast" created="onCartToastCreated">
+    <e-toast-position X="Right" Y="Top"></e-toast-position>
+</ejs-toast>
+
 <script>
+    let cartToastObj;
+
+    function onCartToastCreated() {
+        cartToastObj = this;
+    }
+
+    function showCartToast({ title, content, type = 'success' }) {
+        cartToastObj.show({
+            title: title,
+            content: content,
+            cssClass: `e-toast-${type}`,
+            icon: `e-${type} toast-icons`
+        });
+    }
+
     function changeProductImage(src) {
         document.getElementById('product-mainImage').src = src;
+    }
+
+    function addToCart() {
+        const quantity = parseInt(document.getElementById("quantitySelector").ej2_instances[0].value);
+        const productId = "@Model.Id";
+
+        fetch("/Cart/AddProduct", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ productId, quantity })
+        })
+            .then(response => response.json())
+            .then(data => {
+                showCartToast({
+                    title: 'Added to Cart',
+                    content: data.message || 'Product added successfully!',
+                    type: 'success'
+                });
+            })
+            .catch(err => {
+                showCartToast({
+                    title: 'Error',
+                    content: 'Something went wrong while adding to cart.',
+                    type: 'danger'
+                });
+            });
     }
 </script>

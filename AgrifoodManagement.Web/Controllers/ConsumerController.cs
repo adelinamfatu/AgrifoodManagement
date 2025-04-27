@@ -1,4 +1,5 @@
-﻿using AgrifoodManagement.Business.Queries.Product;
+﻿using AgrifoodManagement.Business.Commands.Order;
+using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Business.Queries.Shop;
 using AgrifoodManagement.Domain.Entities;
 using AgrifoodManagement.Util.Models;
@@ -7,6 +8,7 @@ using AgrifoodManagement.Web.Models.Shop;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AgrifoodManagement.Web.Controllers
 {
@@ -79,41 +81,17 @@ namespace AgrifoodManagement.Web.Controllers
             return View("ProductDetail", viewModel);
         }
 
-        public IActionResult Basket()
+        public async Task<IActionResult> BasketAsync()
         {
-            ViewBag.BasketCount = 3;
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+                return Unauthorized();
 
-            var items = new List<BasketItemViewModel>
-            {
-                new BasketItemViewModel
-                {
-                    Id = 1,
-                    Name = "Fresh Tomatoes",
-                    ReferenceNumber = "TOM-001",
-                    ImageUrl = "/images/tomato.jpg",
-                    Color = "Red",
-                    Size = "Medium",
-                    Price = 2.50M
-                },
-                new BasketItemViewModel
-                {
-                    Id = 2,
-                    Name = "Organic Apples",
-                    ReferenceNumber = "APP-101",
-                    ImageUrl = "/images/apple.jpg",
-                    Color = "Green",
-                    Size = "Large",
-                    Price = 3.75M
-                }
-            };
+            var cartDto = await _mediator.Send(new GetCartByEmailQuery { BuyerEmail = email });
 
-            var viewModel = new BasketViewModel
-            {
-                Items = items,
-                SubTotal = items.Sum(x => x.Price),
-                ShippingCost = 5.00M,
-                Total = items.Sum(x => x.Price) + 5.00M
-            };
+            var viewModel = BasketViewModelMapper.Map(cartDto);
+
+            ViewBag.BasketCount = viewModel.Items.Sum(x => x.QuantityOrdered);
 
             return View(viewModel);
         }

@@ -10,13 +10,14 @@
 <div class="basket-container">
     <h2 class="basket-title">Your Shopping Basket</h2>
 
-    @if (Model.Items.Count == 0)
+    @if (!Model.Items.Any())
     {
-        <div class="text-center py-5 my-5">
+        <div class="text-center py-5">
             <i class="fas fa-shopping-basket fa-4x text-muted mb-3"></i>
             <h4 class="text-muted">Your basket is empty</h4>
-            <p class="mb-4">Looks like you haven't added any products to your basket yet.</p>
-            <a href="@Url.Action("Products", "Shop")" class="btn btn-primary px-4 py-2">Start Shopping</a>
+            <a href="@Url.Action("Shop", "Consumer")" class="btn btn-primary mt-3">
+                Start Shopping
+            </a>
         </div>
     }
     else
@@ -26,17 +27,49 @@
                 <div class="card shadow-sm mb-4">
                     <div class="card-body p-0">
                         <ejs-grid id="BasketGrid" dataSource="@Model.Items"
-                                  allowSorting="true"
                                   allowPaging="true"
-                                  pageSettings="new Syncfusion.EJ2.Grids.GridPageSettings { PageSize = 5 }"
+                                  allowSorting="true"
                                   height="auto">
+                            <e-grid-editSettings allowEditing="true"
+                                                 allowDeleting="true"
+                                                 mode="Normal" />
+
                             <e-grid-columns>
-                                <e-grid-column headerText="Product" width="300" template="#productTemplate"></e-grid-column>
-                                <e-grid-column field="ReferenceNumber" headerText="Reference" width="120" textAlign="Center"></e-grid-column>
-                                <e-grid-column field="Color" headerText="Color" width="100" textAlign="Center"></e-grid-column>
-                                <e-grid-column field="Size" headerText="Size" width="100" textAlign="Center"></e-grid-column>
-                                <e-grid-column field="Price" headerText="Price" format="C2" width="100" textAlign="Right" type="number"></e-grid-column>
-                                <e-grid-column headerText="Actions" width="100" template="#actionTemplate" textAlign="Center"></e-grid-column>
+                                <e-grid-column field="Id"
+                                               isPrimaryKey="true"
+                                               visible="false"></e-grid-column>
+
+                                <e-grid-column field="ImageUrl"
+                                               headerText="Image"
+                                               width="120"
+                                               textAlign="Center"
+                                               template='<img src="${ImageUrl}" alt="${Name}" style="width:60px;height:60px;object-fit:cover;" class="rounded" />'>
+                                </e-grid-column>
+
+                                <e-grid-column field="Name"
+                                               headerText="Product"
+                                               width="200"
+                                               textAlign="Center" />
+
+                                <e-grid-column field="Category"
+                                               headerText="Category"
+                                               width="120"
+                                               textAlign="Center">
+                                </e-grid-column>
+
+                                <e-grid-column field="QuantityOrdered"
+                                               headerText="Qty"
+                                               width="100"
+                                               textAlign="Center"
+                                               allowEditing="true"
+                                               editType="numericedit">
+                                </e-grid-column>
+
+                                <e-grid-column field="Price"
+                                               headerText="Price Details (lei)"
+                                               width="200"
+                                               textAlign="Right">
+                                </e-grid-column>
                             </e-grid-columns>
                         </ejs-grid>
                     </div>
@@ -46,41 +79,25 @@
             <div class="col-lg-4">
                 <div class="order-summary">
                     <div class="summary-row">
-                        <span class="summary-label">Total products:</span>
-                        <span class="summary-value text-end">@Model.SubTotal.ToString("C2")</span>
+                        <span class="summary-label">Subtotal:</span>
+                        <span class="summary-value">@Model.SubTotal.ToString("C2")</span>
                     </div>
                     <div class="summary-row">
-                        <span class="summary-label">Estimated shipping costs:</span>
-                        <span class="summary-value text-end">@Model.ShippingCost.ToString("C2")</span>
+                        <span class="summary-label">Shipping:</span>
+                        <span class="summary-value">@Model.ShippingCost.ToString("C2")</span>
                     </div>
                     <div class="summary-row total-row">
                         <span class="summary-label fw-bold">Total:</span>
-                        <span class="summary-value text-end fw-bold">@Model.Total.ToString("C2")</span>
+                        <span class="summary-value fw-bold">@Model.Total.ToString("C2")</span>
                     </div>
                     <div class="order-summary-actions d-flex justify-content-between mt-4">
-                        <ejs-button id="continueShoppingBtn" cssClass="e-outline" content="CONTINUE SHOPPING" isPrimary="false" onclick="window.location.href='@Url.Action("Products", "Shop")'"></ejs-button>
-                        <ejs-button id="checkoutBtn" cssClass="e-outline" content="PROCEED TO CHECKOUT" isPrimary="false" onclick="window.location.href='@Url.Action("Checkout", "Order")'"></ejs-button>
+                        <ejs-button id="continueShoppingBtn" cssClass="e-outline" content="CONTINUE SHOPPING"
+                                    onclick="window.location='@Url.Action("Shop","Consumer")'"></ejs-button>
+                        <ejs-button id="checkoutBtn" cssClass="e-primary" content="CHECKOUT"
+                                    onclick="window.location='@Url.Action("Checkout","Order")'"></ejs-button>
                     </div>
                 </div>
             </div>
         </div>
     }
 </div>
-
-<script id="productTemplate" type="text/x-template">
-    <div class="d-flex align-items-center">
-        <div class="me-3">
-            <img src="${ImageUrl}" alt="${Name}" class="product-image rounded" />
-        </div>
-        <div>
-            <div class="product-name">${Name}</div>
-            <small class="product-quantity text-muted">${Quantity} item(s)</small>
-        </div>
-    </div>
-</script>
-
-<script id="actionTemplate" type="text/x-template">
-    <a href="/Basket/RemoveFromBasket?id=${Id}" class="btn btn-sm btn-outline-danger" title="Remove item">
-        <i class="fas fa-trash-alt"></i>
-    </a>
-</script>

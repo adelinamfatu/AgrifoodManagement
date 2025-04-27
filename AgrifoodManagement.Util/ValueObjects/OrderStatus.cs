@@ -8,11 +8,11 @@ namespace AgrifoodManagement.Util.ValueObjects
 {
     public enum OrderStatus
     {
+        InCart,
         Pending,
-        Confirmed,
         Procesing,
         Shipped,
-        Delivered,
-        Canceled
+        Canceled,
+        Completed
     }
 }

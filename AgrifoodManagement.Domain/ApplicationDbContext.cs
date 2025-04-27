@@ -29,6 +29,8 @@ namespace AgrifoodManagement.Domain
 
         public DbSet<Review> Reviews { get; set; }
 
+        public DbSet<WishlistItem> WishlistItems { get; set; }
+
         public DbSet<ExtendedProperty> ExtendedProperties { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
@@ -112,6 +114,11 @@ namespace AgrifoodManagement.Domain
 
             modelBuilder.Entity<ForumPost>()
                 .HasIndex(fp => fp.PostedAt);
+
+            // Unicity
+            modelBuilder.Entity<WishlistItem>()
+                .HasIndex(w => new { w.UserId, w.ProductId })
+                .IsUnique();
         }
     }
 }

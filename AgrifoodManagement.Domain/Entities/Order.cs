@@ -15,7 +15,6 @@ namespace AgrifoodManagement.Domain.Entities
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public DateTime? OrderedAt { get; set; }
 
         [Required]
@@ -28,5 +27,6 @@ namespace AgrifoodManagement.Domain.Entities
         public Guid BuyerId { get; set; }
 
         public virtual User? Buyer { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }
