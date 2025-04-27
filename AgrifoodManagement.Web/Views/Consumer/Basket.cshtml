@@ -25,13 +25,18 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="card shadow-sm mb-4">
-                    <div class="card-body p-0">
-                        <ejs-grid id="BasketGrid" dataSource="@Model.Items"
+                    <div class="card-body">
+                        <ejs-grid id="BasketGrid" 
+                                  dataSource="@Model.Items"
                                   allowPaging="true"
                                   allowSorting="true"
-                                  height="auto">
-                            <e-grid-editSettings allowEditing="true"
+                                  beginEdit="onBeginEdit"
+                                  actionComplete="onCartActionComplete"
+                                  toolbar="@(new List<string>() { "Edit", "Delete", "Update", "Cancel" })">
+                            <e-grid-editSettings allowAdding="false"
                                                  allowDeleting="true"
+                                                 allowEditing="true"
+                                                 showDeleteConfirmDialog="true"
                                                  mode="Normal" />
 
                             <e-grid-columns>
@@ -43,31 +48,36 @@
                                                headerText="Image"
                                                width="120"
                                                textAlign="Center"
+                                               allowEditing="false"
                                                template='<img src="${ImageUrl}" alt="${Name}" style="width:60px;height:60px;object-fit:cover;" class="rounded" />'>
                                 </e-grid-column>
 
                                 <e-grid-column field="Name"
                                                headerText="Product"
                                                width="200"
+                                               allowEditing="false"
                                                textAlign="Center" />
 
                                 <e-grid-column field="Category"
                                                headerText="Category"
                                                width="120"
+                                               allowEditing="false"
                                                textAlign="Center">
                                 </e-grid-column>
 
                                 <e-grid-column field="QuantityOrdered"
-                                               headerText="Qty"
+                                               headerText="Quantity"
                                                width="100"
                                                textAlign="Center"
                                                allowEditing="true"
+                                               validationRules="@(new { required=true, min=0 })"
                                                editType="numericedit">
                                 </e-grid-column>
 
-                                <e-grid-column field="Price"
+                                <e-grid-column field="PricePerUnit"
                                                headerText="Price Details (lei)"
                                                width="200"
+                                               allowEditing="false"
                                                textAlign="Right">
                                 </e-grid-column>
                             </e-grid-columns>
@@ -101,3 +111,77 @@
         </div>
     }
 </div>
+
+<ejs-toast id="cartErrorToast" created="onCartToastCreated">
+    <e-toast-position X="Right" Y="Top"></e-toast-position>
+</ejs-toast>
+
+<script>
+    let cartErrorToast;
+
+    function onCartToastCreated() {
+        cartErrorToast = document.getElementById('cartErrorToast').ej2_instances[0];
+    }
+
+    function showCartError(content) {
+        cartErrorToast.show({
+            title: 'Error',
+            content,
+            cssClass: 'e-toast-danger',
+            icon: 'e-error toast-icons'
+        });
+    }
+
+    async function onCartActionComplete(args) {
+        const grid = document.getElementById('BasketGrid').ej2_instances[0];
+
+        if (args.requestType === 'save') {
+            const { Id: orderDetailId, QuantityOrdered: NewQuantity } = args.data;
+
+            if (NewQuantity === 0) {
+                const resp = await fetch(`/Cart/RemoveItem/${orderDetailId}`, { method: 'DELETE' });
+                const { message } = await resp.json();
+                if (!resp.ok) {
+                    showCartError(message);
+                    return;
+                }
+                grid.deleteRecord('Id', { Id: orderDetailId });
+                return;
+            }
+
+            const command = { OrderDetailId: orderDetailId, NewQuantity };
+            const resp2 = await fetch('/Cart/UpdateQuantity', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(command)
+            });
+            const json2 = await resp2.json();
+            if (!resp2.ok) {
+                showCartError(json2.message);
+            }
+            return;
+        }
+
+        if (args.requestType === 'delete') {
+            const orderDetailId = args.data.Id;
+            const resp = await fetch(`/Cart/RemoveItem/${orderDetailId}`, { method: 'DELETE' });
+            const { message } = await resp.json();
+            if (!resp.ok) {
+                showCartError(message);
+            }
+        }
+    }
+
+    function onBeginEdit(args) {
+        if (args.columnName === 'QuantityOrdered') {
+            var input = args.form.querySelector('input[name="QuantityOrdered"]');
+            if (!input) return;
+
+            var numeric = input.ej2_instances && input.ej2_instances[0];
+            if (!numeric) return;
+
+            numeric.max = args.rowData.MaxQuantity;
+            numeric.dataBind();
+        }
+    }
+</script>

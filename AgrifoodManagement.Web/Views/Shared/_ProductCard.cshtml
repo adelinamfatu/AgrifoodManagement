@@ -9,6 +9,13 @@
     <div class="product-img" 
         style="background-image:url('@Model.ImageUrls.FirstOrDefault()');">
 
+        <ejs-fab id="favorite-btn-@Model.Id"
+                 iconCss="fas fa-heart" 
+                 cssClass="favorite-fab"
+                 isPrimary="false"
+                 target=".product-img">
+        </ejs-fab>
+
         <div class="product-actions">
             <a asp-controller="Consumer"
                asp-action="ProductDetail"

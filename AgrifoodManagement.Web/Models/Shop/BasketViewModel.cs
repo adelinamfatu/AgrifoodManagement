@@ -14,8 +14,8 @@
         public string Name { get; set; } = "";
         public string ImageUrl { get; set; } = "";
         public decimal PricePerUnit { get; set; }
-        public decimal Price { get; set; }
         public int QuantityOrdered { get; set; }
+        public int MaxQuantity { get; set; }
         public string Category { get; set; } = "";
     }
 }

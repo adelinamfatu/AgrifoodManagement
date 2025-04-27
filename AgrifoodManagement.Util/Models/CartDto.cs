@@ -23,5 +23,6 @@ namespace AgrifoodManagement.Util.Models
         public string ImageUrl { get; init; } = "";
         public decimal UnitPrice { get; init; }
         public int QuantityOrdered { get; init; }
+        public double MaxQuantity { get; init; }
     }
 }

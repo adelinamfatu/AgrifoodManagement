@@ -1,8 +1,29 @@
 ﻿@using AgrifoodManagement.Web.Models.Shop;
+@using AgrifoodManagement.Util.ValueObjects;
 
 @{
     Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
-    ViewData["Title"] = "Bengal Shop - Products";
+    ViewData["Title"] = "Shop";
+
+    var unitOfMeasurementData = Enum.GetValues(typeof(MeasurementUnit))
+        .Cast<MeasurementUnit>()
+        .Select(e => new { text = e.ToString(), value = e.ToString().ToLower() })
+        .ToArray();
+
+    var priceData = new[] {
+        new { text = "All Prices", value = "all" },
+        new { text = "Under 15 lei", value = "under-15" },
+        new { text = "15 - 25 lei", value = "15-25" },
+        new { text = "25 - 45 lei", value = "25-45" },
+        new { text = "Over 45 lei", value = "over-45" }
+    };
+
+    var sortData = new[] {
+        new { text = "Popularity", value = "popularity" },
+        new { text = "Price: Low to High", value = "price-low" },
+        new { text = "Price: High to Low", value = "price-high" },
+        new { text = "Newest First", value = "newest" }
+    };
 }
 
 @model ShopViewModel
@@ -16,36 +37,31 @@
         <div class="filter-container">
             <div class="filter-section">
                 <div class="filter-group">
-                    <label for="category-filter">Category:</label>
-                    <select id="category-filter" class="filter-select">
-                        <option value="all">All Categories</option>
-                        <option value="fruits">Fresh Fruits</option>
-                        <option value="vegetables">Fresh Vegetables</option>
-                        <option value="dairy">Dairy & Eggs</option>
-                        <option value="meat">Meat & Seafood</option>
-                    </select>
+                    <ejs-dropdownlist id="unit-filter"
+                                      dataSource='@unitOfMeasurementData'
+                                      placeholder="Select Unit">
+                        <e-dropdownlist-fields text="text" value="value"></e-dropdownlist-fields>
+                    </ejs-dropdownlist>
                 </div>
                 <div class="filter-group">
-                    <label for="price-filter">Price Range:</label>
-                    <select id="price-filter" class="filter-select">
-                        <option value="all">All Prices</option>
-                        <option value="under-100">Under $100</option>
-                        <option value="100-200">$100 - $200</option>
-                        <option value="200-300">$200 - $300</option>
-                        <option value="over-300">Over $300</option>
-                    </select>
+                    <ejs-dropdownlist id="price-filter"
+                                      dataSource='@priceData'
+                                      placeholder="Select price range">
+                        <e-dropdownlist-fields text="text" value="value"></e-dropdownlist-fields>
+                    </ejs-dropdownlist>
                 </div>
                 <div class="filter-group">
-                    <label for="sort-by">Sort By:</label>
-                    <select id="sort-by" class="filter-select">
-                        <option value="popularity">Popularity</option>
-                        <option value="price-low">Price: Low to High</option>
-                        <option value="price-high">Price: High to Low</option>
-                        <option value="newest">Newest First</option>
-                    </select>
+                    <ejs-dropdownlist id="sort-by"
+                                      dataSource='@sortData'
+                                      placeholder="Sort by">
+                        <e-dropdownlist-fields text="text" value="value"></e-dropdownlist-fields>
+                    </ejs-dropdownlist>
                 </div>
             </div>
-            <button class="filter-button">Apply Filters</button>
+            <ejs-button id="filter-button"
+                        content="Apply Filters"
+                        isPrimary="true">
+            </ejs-button>
         </div>
 
         <div class="products-grid large-grid">
@@ -98,34 +114,38 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        const productCards = document.querySelectorAll('.product-card');
+        const filterButton = document.getElementById('filter-button');
         
+        if (filterButton) {
+            filterButton.addEventListener('click', function () {
+                const unitOfMeasurement = document.getElementById('unit-filter').ej2_instances[0]?.value;
+                const priceRange = document.getElementById('price-filter').ej2_instances[0]?.value;
+                const sortBy = document.getElementById('sort-by').ej2_instances[0]?.value;
+
+                if (unitOfMeasurement && priceRange && sortBy) {
+                    const allProducts = document.querySelectorAll('.all-products .product-card');
+                    allProducts.forEach(product => {
+                        product.style.opacity = '0.5';
+
+                        setTimeout(() => {
+                            product.style.opacity = '1';
+                        }, 500);
+                    });
+                } else {
+                    console.error('One of the dropdown values is missing!');
+                }
+            });
+        }
+
+        const productCards = document.querySelectorAll('.product-card');
+
         productCards.forEach(card => {
-            card.addEventListener('mouseenter', function() {
+            card.addEventListener('mouseenter', function () {
                 this.querySelector('.product-actions').classList.add('show');
             });
-            
-            card.addEventListener('mouseleave', function() {
+
+            card.addEventListener('mouseleave', function () {
                 this.querySelector('.product-actions').classList.remove('show');
-            });
-        });
-        
-        const filterButton = document.querySelector('.filter-button');
-        
-        filterButton.addEventListener('click', function() {
-            const category = document.getElementById('category-filter').value;
-            const priceRange = document.getElementById('price-filter').value;
-            const sortBy = document.getElementById('sort-by').value;
-            
-            console.log('Filtering by:', {category, priceRange, sortBy});
-            
-            const allProducts = document.querySelectorAll('.all-products .product-card');
-            allProducts.forEach(product => {
-                product.style.opacity = '0.5';
-                
-                setTimeout(() => {
-                    product.style.opacity = '1';
-                }, 500);
             });
         });
     });

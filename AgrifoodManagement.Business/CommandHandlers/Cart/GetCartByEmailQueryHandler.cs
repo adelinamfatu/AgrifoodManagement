@@ -53,6 +53,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
                     CategoryName = d.Product.ProductCategory!.Name,
                     UnitPrice = d.UnitPrice,
                     QuantityOrdered = d.Quantity,
+                    MaxQuantity = d.Product.Quantity,
                     ImageUrl = photoUrlDict.TryGetValue(d.ProductId, out var url)
                         ? url
                         : "/images/no-image-placeholder.png"

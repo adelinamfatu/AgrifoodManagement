@@ -29,7 +29,7 @@ namespace AgrifoodManagement.Web.Mappers
                 ImageUrl = i.ImageUrl,
                 PricePerUnit = i.UnitPrice,
                 QuantityOrdered = i.QuantityOrdered,
-                Price = i.QuantityOrdered * i.UnitPrice,
+                MaxQuantity = (int)i.MaxQuantity,
                 Category = i.CategoryName
             };
         }
