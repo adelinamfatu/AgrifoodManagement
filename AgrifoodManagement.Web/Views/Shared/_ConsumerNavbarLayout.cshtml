@@ -4,6 +4,7 @@
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
 }
+
 <div class="top-header">
     <div class="app-title">Har<span>ves</span>tica</div>
     <div class="toolbar-right-items">
@@ -11,17 +12,20 @@
             <i class="bi bi-heart-fill" title="Favorites"></i>
             <div class="icon-badge">3</div>
         </div>
+
         <a asp-controller="Consumer" asp-action="Basket" class="toolbar-icon-item" style="position: relative;">
             <i class="bi bi-cart3" title="Cart"></i>
-            <div class="icon-badge">@ViewBag.BasketCount</div>
+            @await Component.InvokeAsync("NotificationBadge", new { badgeFor = "Cart" })
         </a>
+
         <div class="avatar-container">
-            <img src="/images/avatar-placeholder.png" alt="User Avatar" class="user-avatar" id="userAvatar">
+            <img src="@ViewBag.AvatarUrl" alt="User Avatar" class="user-avatar" id="userAvatar">
             <div class="user-info">
-                <div class="user-name">Ade</div>
+                <div class="user-name">@ViewBag.FullName</div>
                 <div class="user-role">Consumer</div>
             </div>
         </div>
+
         <form asp-controller="Account"
               asp-action="Logout"
               method="post"
@@ -35,6 +39,7 @@
         </form>
     </div>
 </div>
+
 <div class="main-nav-container">
     <div class="main-nav">
         <a asp-controller="Consumer" asp-action="Home" class="nav-link @(currentAction == "Home" ? "active" : "")">Home</a>

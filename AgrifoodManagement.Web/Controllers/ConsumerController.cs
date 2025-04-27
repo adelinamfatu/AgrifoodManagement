@@ -1,7 +1,6 @@
 ﻿using AgrifoodManagement.Business.Commands.Order;
 using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Business.Queries.Shop;
-using AgrifoodManagement.Domain.Entities;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Web.Mappers;
 using AgrifoodManagement.Web.Models.Shop;
@@ -13,14 +12,9 @@ using System.Security.Claims;
 namespace AgrifoodManagement.Web.Controllers
 {
     [Authorize(Roles = "Buyer")]
-    public class ConsumerController : Controller
+    public class ConsumerController : BaseUserController
     {
-        private readonly IMediator _mediator;
-
-        public ConsumerController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        public ConsumerController(IMediator mediator) : base(mediator) { }
 
         public async Task<IActionResult> HomeAsync()
         {

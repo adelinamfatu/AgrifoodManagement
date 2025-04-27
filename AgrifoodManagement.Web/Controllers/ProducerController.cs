@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AgrifoodManagement.Web.Controllers
 {
     [Authorize(Roles = "Seller")]
-    public class ProducerController : BaseProducerController
+    public class ProducerController : BaseUserController
     {
         public ProducerController(IMediator mediator) : base(mediator) { }
 
