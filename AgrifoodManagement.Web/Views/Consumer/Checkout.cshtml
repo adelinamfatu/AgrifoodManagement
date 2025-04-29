@@ -1,0 +1,196 @@
+﻿@using AgrifoodManagement.Web.Models.Shop;
+
+@{
+    Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
+    ViewData["Title"] = "Checkout";
+}
+
+@model CheckoutViewModel
+
+<div class="checkout-container">
+    <div class="checkout-content">
+        <div class="checkout-header">
+            <a href="@Url.Action("Shop", "Cart")" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Back to cart
+            </a>
+            <h1 class="page-title">Checkout</h1>
+            <p class="page-description">A checkout is a counter where you pay for things you are buying</p>
+        </div>
+
+        <form asp-controller="Checkout" asp-action="ProcessCheckout" method="post">
+            <div class="checkout-section">
+                <h2 class="section-title">1. Contact information</h2>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="input-icon-wrapper">
+                            <ejs-textbox id="firstName" name="FirstName" placeholder="First name" floatLabelType="Auto" value="@Model.FirstName" cssClass="e-outlined form-control"></ejs-textbox>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-icon-wrapper">
+                            <ejs-textbox id="lastName" name="LastName" placeholder="Last name" floatLabelType="Auto" value="@Model.LastName" cssClass="e-outlined form-control"></ejs-textbox>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group phone-group">
+                        <ejs-dropdownlist id="countryCode" name="CountryCode"
+                                          dataSource="@(new[]{ new { Text = "+46 (Sweden)", Value = "+46" }, new { Text = "+1 (USA/Canada)", Value = "+1" }, new { Text = "+44 (UK)", Value = "+44" } })"
+                                          placeholder="Country Code"
+                                          floatLabelType="Auto"
+                                          value="@Model.CountryCode"
+                                          cssClass="form-control">
+                            <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+                        </ejs-dropdownlist>
+
+                        <ejs-maskedtextbox id="phoneNumber" name="PhoneNumber"
+                                           mask="000 000 000"
+                                           placeholder="Phone number"
+                                           floatLabelType="Auto"
+                                           value="@Model.PhoneNumber"
+                                           cssClass="form-control"></ejs-maskedtextbox>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-icon-wrapper">
+                            <ejs-textbox id="email" name="Email" type="Email" placeholder="Email address" floatLabelType="Auto" value="@Model.Email" cssClass="form-control"></ejs-textbox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkout-section">
+                <h2 class="section-title">2. Delivery method</h2>
+
+                <div class="delivery-options">
+                    <label class="delivery-option">
+                        <input type="radio" name="DeliveryMethod" value="SameDay" checked />
+                        <div class="delivery-option-content selected">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span>Same-day</span>
+                        </div>
+                    </label>
+
+                    <label class="delivery-option">
+                        <input type="radio" name="DeliveryMethod" value="Express" />
+                        <div class="delivery-option-content">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="1" y="3" width="15" height="13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <polygon points="16 8 20 8 23 11 23 16 20 16 20 13 16 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <circle cx="5.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="2" />
+                                <circle cx="18.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            <span>Express</span>
+                        </div>
+                    </label>
+
+                    <label class="delivery-option">
+                        <input type="radio" name="DeliveryMethod" value="Normal" />
+                        <div class="delivery-option-content">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span>Normal</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="postal-code-container">
+                    <div class="postal-code-wrapper">
+                        <svg class="location-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <input asp-for="PostalCode" class="postal-code-input" placeholder="Postal code" value="05488" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkout-section">
+                <h2 class="section-title">3. Payment method</h2>
+
+                <div class="payment-options">
+                    <label class="payment-option">
+                        <input type="radio" name="PaymentMethod" value="DPay" />
+                        <div class="payment-option-content">
+                            <span class="payment-logo">DPay</span>
+                        </div>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="PaymentMethod" value="IPay" checked />
+                        <div class="payment-option-content selected">
+                            <span class="payment-logo">iPay</span>
+                        </div>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="PaymentMethod" value="GPay" />
+                        <div class="payment-option-content">
+                            <span class="payment-logo">GPay</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="order-summary">
+        <div class="card-preview">
+            <div class="card-design">
+                <div class="card-chip"></div>
+                <div class="card-contactless"></div>
+                <div class="card-details">
+                    <div class="card-exp">Exp: 04 / 27</div>
+                    <div class="card-number">•••• 5478</div>
+                    <div class="card-name">Mr. Fredrik Ivarsson</div>
+                </div>
+            </div>
+            <div class="manage-cards">
+                <span>Manage Cards</span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="order-details">
+            <h2 class="order-title">36 items</h2>
+
+            <div class="order-costs">
+                <div class="cost-row">
+                    <span class="cost-label">Subtotal</span>
+                    <span class="cost-value">€ 519.00</span>
+                </div>
+
+                <div class="cost-row">
+                    <span class="cost-label">Discount</span>
+                    <span class="cost-value discount">-€ 30.00 (5%)</span>
+                </div>
+
+                <div class="cost-row">
+                    <span class="cost-label">Delivery Service</span>
+                    <span class="cost-value">+€ 10.00</span>
+                </div>
+
+                <div class="cost-row total">
+                    <span class="cost-label">Total</span>
+                    <span class="cost-value total-value">€ 499.00</span>
+                </div>
+            </div>
+
+            <button type="submit" class="pay-button">
+                Pay →
+            </button>
+        </div>
+    </div>
+</div>
