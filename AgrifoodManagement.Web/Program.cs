@@ -5,7 +5,12 @@ using AgrifoodManagement.Util;
 using AgrifoodManagement.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
+using Stripe.Terminal;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Syncfusion.Licensing;
+using AgrifoodManagement.Web.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +26,11 @@ builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddSingleton<CloudinaryService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddHttpClient<CartController>();
+
+// Stripe
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 var app = builder.Build();
 

@@ -1,0 +1,162 @@
+﻿[
+  {
+    "Text": "+1 – United States",
+    "Value": 1
+  },
+  {
+    "Text": "+44 – United Kingdom",
+    "Value": 2
+  },
+  {
+    "Text": "+91 – India",
+    "Value": 3
+  },
+  {
+    "Text": "+81 – Japan",
+    "Value": 4
+  },
+  {
+    "Text": "+49 – Germany",
+    "Value": 5
+  },
+  {
+    "Text": "+61 – Australia",
+    "Value": 6
+  },
+  {
+    "Text": "+33 – France",
+    "Value": 7
+  },
+  {
+    "Text": "+39 – Italy",
+    "Value": 8
+  },
+  {
+    "Text": "+86 – China",
+    "Value": 9
+  },
+  {
+    "Text": "+7 – Russia",
+    "Value": 10
+  },
+  {
+    "Text": "+34 – Spain",
+    "Value": 11
+  },
+  {
+    "Text": "+55 – Brazil",
+    "Value": 12
+  },
+  {
+    "Text": "+27 – South Africa",
+    "Value": 13
+  },
+  {
+    "Text": "+46 – Sweden",
+    "Value": 14
+  },
+  {
+    "Text": "+31 – Netherlands",
+    "Value": 15
+  },
+  {
+    "Text": "+41 – Switzerland",
+    "Value": 16
+  },
+  {
+    "Text": "+351 – Portugal",
+    "Value": 17
+  },
+  {
+    "Text": "+48 – Poland",
+    "Value": 18
+  },
+  {
+    "Text": "+90 – Turkey",
+    "Value": 19
+  },
+  {
+    "Text": "+234 – Nigeria",
+    "Value": 20
+  },
+  {
+    "Text": "+82 – South Korea",
+    "Value": 21
+  },
+  {
+    "Text": "+66 – Thailand",
+    "Value": 22
+  },
+  {
+    "Text": "+64 – New Zealand",
+    "Value": 23
+  },
+  {
+    "Text": "+20 – Egypt",
+    "Value": 24
+  },
+  {
+    "Text": "+420 – Czech Republic",
+    "Value": 25
+  },
+  {
+    "Text": "+43 – Austria",
+    "Value": 26
+  },
+  {
+    "Text": "+380 – Ukraine",
+    "Value": 27
+  },
+  {
+    "Text": "+60 – Malaysia",
+    "Value": 28
+  },
+  {
+    "Text": "+63 – Philippines",
+    "Value": 29
+  },
+  {
+    "Text": "+62 – Indonesia",
+    "Value": 30
+  },
+  {
+    "Text": "+358 – Finland",
+    "Value": 31
+  },
+  {
+    "Text": "+65 – Singapore",
+    "Value": 32
+  },
+  {
+    "Text": "+52 – Mexico",
+    "Value": 33
+  },
+  {
+    "Text": "+1 – Canada",
+    "Value": 34
+  },
+  {
+    "Text": "+92 – Pakistan",
+    "Value": 35
+  },
+  {
+    "Text": "+36 – Hungary",
+    "Value": 36
+  },
+  {
+    "Text": "+45 – Denmark",
+    "Value": 37
+  },
+  {
+    "Text": "+47 – Norway",
+    "Value": 38
+  },
+  {
+    "Text": "+32 – Belgium",
+    "Value": 39
+  },
+  {
+    "Text": "+353 – Ireland",
+    "Value": 40
+  }
+]

@@ -10,42 +10,40 @@
 <div class="checkout-container">
     <div class="checkout-content">
         <div class="checkout-header">
-            <a href="@Url.Action("Shop", "Cart")" class="back-link">
+            <a href="@Url.Action("Basket", "Consumer")" class="back-link">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
                 Back to cart
             </a>
             <h1 class="page-title">Checkout</h1>
-            <p class="page-description">A checkout is a counter where you pay for things you are buying</p>
+            <p class="page-description">Complete your purchase of fresh, locally-grown produce directly from farmers in your area</p>
         </div>
 
-        <form asp-controller="Checkout" asp-action="ProcessCheckout" method="post">
+        <div class="checkout-form">
             <div class="checkout-section">
                 <h2 class="section-title">1. Contact information</h2>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <div class="input-icon-wrapper">
-                            <ejs-textbox id="firstName" name="FirstName" placeholder="First name" floatLabelType="Auto" value="@Model.FirstName" cssClass="e-outlined form-control"></ejs-textbox>
-                        </div>
+                        <ejs-textbox id="firstName" name="FirstName" placeholder="First name" cssClass="e-outline" floatLabelType="Auto" value="@Model.FirstName"></ejs-textbox>
                     </div>
 
                     <div class="form-group">
-                        <div class="input-icon-wrapper">
-                            <ejs-textbox id="lastName" name="LastName" placeholder="Last name" floatLabelType="Auto" value="@Model.LastName" cssClass="e-outlined form-control"></ejs-textbox>
-                        </div>
+                        <ejs-textbox id="lastName" name="LastName" placeholder="Last name" cssClass="e-outline" floatLabelType="Auto" value="@Model.LastName"></ejs-textbox>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group phone-group">
-                        <ejs-dropdownlist id="countryCode" name="CountryCode"
-                                          dataSource="@(new[]{ new { Text = "+46 (Sweden)", Value = "+46" }, new { Text = "+1 (USA/Canada)", Value = "+1" }, new { Text = "+44 (UK)", Value = "+44" } })"
+                        <ejs-dropdownlist id="countryCode"
+                                          cssClass="e-outline"
+                                          name="CountryCode"
                                           placeholder="Country Code"
                                           floatLabelType="Auto"
-                                          value="@Model.CountryCode"
-                                          cssClass="form-control">
+                                          dataSource="@(ViewBag.CountryCodes)"
+                                          popupHeight="300px"
+                                          popupWidth="240px">
                             <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
                         </ejs-dropdownlist>
 
@@ -53,14 +51,12 @@
                                            mask="000 000 000"
                                            placeholder="Phone number"
                                            floatLabelType="Auto"
-                                           value="@Model.PhoneNumber"
-                                           cssClass="form-control"></ejs-maskedtextbox>
+                                           cssClass="e-outline"
+                                           value="@Model.PhoneNumber"></ejs-maskedtextbox>
                     </div>
 
                     <div class="form-group">
-                        <div class="input-icon-wrapper">
-                            <ejs-textbox id="email" name="Email" type="Email" placeholder="Email address" floatLabelType="Auto" value="@Model.Email" cssClass="form-control"></ejs-textbox>
-                        </div>
+                        <ejs-textbox id="email" name="Email" type="Email" placeholder="Email address" cssClass="e-outline" floatLabelType="Auto" value="@Model.Email"></ejs-textbox>
                     </div>
                 </div>
             </div>
@@ -141,7 +137,19 @@
                     </label>
                 </div>
             </div>
-        </form>
+
+            <div class="checkout-section">
+                <h2 class="section-title">4. Discount code</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <ejs-textbox id="discountCode" name="DiscountCode" placeholder="Enter discount code" cssClass="e-outline" floatLabelType="Auto"></ejs-textbox>
+                    </div>
+                    <div class="form-group" style="max-width: 150px;">
+                        <ejs-button id="applyDiscountBtn" cssClass="e-outline" content="Apply" button-type="Button"></ejs-button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="order-summary">
@@ -150,47 +158,134 @@
                 <div class="card-chip"></div>
                 <div class="card-contactless"></div>
                 <div class="card-details">
-                    <div class="card-exp">Exp: 04 / 27</div>
-                    <div class="card-number">•••• 5478</div>
-                    <div class="card-name">Mr. Fredrik Ivarsson</div>
+                    <div class="card-exp">Exp: 12 / 99</div>
+                    <div class="card-number">•••• 1234</div>
+                    <div class="card-name">Mr. ABC</div>
                 </div>
-            </div>
-            <div class="manage-cards">
-                <span>Manage Cards</span>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
             </div>
         </div>
 
         <div class="order-details">
-            <h2 class="order-title">36 items</h2>
+            <h2 class="order-title">@Model.ItemCount items</h2>
 
             <div class="order-costs">
                 <div class="cost-row">
                     <span class="cost-label">Subtotal</span>
-                    <span class="cost-value">€ 519.00</span>
+                    <span class="cost-value">@Model.Subtotal.ToString("F2") lei</span>
                 </div>
 
-                <div class="cost-row">
-                    <span class="cost-label">Discount</span>
-                    <span class="cost-value discount">-€ 30.00 (5%)</span>
-                </div>
+                <div id="discount-row"></div>
 
                 <div class="cost-row">
                     <span class="cost-label">Delivery Service</span>
-                    <span class="cost-value">+€ 10.00</span>
+                    <span class="cost-value">+@Model.DeliveryFee.ToString("F2") lei</span>
                 </div>
 
                 <div class="cost-row total">
                     <span class="cost-label">Total</span>
-                    <span class="cost-value total-value">€ 499.00</span>
+                    <span class="cost-value total-value">@Model.TotalAmount.ToString("F2") lei</span>
                 </div>
             </div>
 
-            <button type="submit" class="pay-button">
+            <button id="payBtn" class="pay-button">
                 Pay →
             </button>
         </div>
     </div>
 </div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('applyDiscountBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const code = document.getElementById('discountCode').value.trim();
+            if (!code) { return alert('Please enter a discount code.'); }
+
+            const getCost = label => {
+                const row = [...document.querySelectorAll('.cost-row')]
+                    .find(r => r.querySelector('.cost-label').textContent.trim() === label);
+                return parseFloat(row.querySelector('.cost-value').textContent);
+            };
+            const subtotal = getCost('Subtotal');
+            const deliveryFee = getCost('Delivery Service');
+
+            const resp = await fetch('@Url.Action("ApplyDiscount", "Cart")', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code, subtotal, deliveryFee })
+            });
+            if (!resp.ok) {
+                return alert('Failed to apply discount.');
+            }
+            const data = await resp.json();
+
+            const costsContainer = document.querySelector('.order-costs');
+            let discountRow = costsContainer.querySelector('.cost-row.discount');
+
+            if (data.discount > 0) {
+                document.getElementById('discount-row').innerHTML = `
+                    <div class="cost-row discount">
+                      <span class="cost-label">Discount</span>
+                      <span class="cost-value discount">
+                        -${data.discount.toFixed(2)} lei (${data.discountPercentage}%)
+                      </span>
+                    </div>`;
+            } else {
+                document.getElementById('discount-row').innerHTML = '';
+            }
+
+            const totalRow = [...costsContainer.querySelectorAll('.cost-row')]
+                .find(r => r.classList.contains('total'));
+            totalRow.querySelector('.cost-value').textContent = `${data.TotalAmount.toFixed(2)} lei`;
+        });
+
+        const deliveryOptions = document.querySelectorAll('.delivery-option input[type="radio"]');
+
+        deliveryOptions.forEach(radio => {
+            radio.addEventListener('change', function () {
+                document.querySelectorAll('.delivery-option-content').forEach(content => {
+                    content.classList.remove('selected');
+                });
+
+                if (this.checked) {
+                    this.parentElement.querySelector('.delivery-option-content').classList.add('selected');
+                }
+            });
+        });
+
+        const paymentOptions = document.querySelectorAll('.payment-option input[type="radio"]');
+
+        paymentOptions.forEach(radio => {
+            radio.addEventListener('change', function () {
+                document.querySelectorAll('.payment-option-content').forEach(content => {
+                    content.classList.remove('selected');
+                });
+
+                if (this.checked) {
+                    this.parentElement.querySelector('.payment-option-content').classList.add('selected');
+                }
+            });
+        });
+    });
+
+    document.getElementById('payBtn').addEventListener('click', async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(document.querySelector('form'));
+        const response = await fetch('@Url.Action("CreateCheckoutSession", "Cart")', {
+            method: 'POST',
+            body: formData
+        });
+        const { sessionId, publishableKey } = await response.json();
+
+        const stripe = Stripe(publishableKey);
+
+        const { error } = await stripe.redirectToCheckout({ sessionId });
+        if (error) {
+            console.error(error);
+            alert(error.message);
+        }
+    });
+</script>

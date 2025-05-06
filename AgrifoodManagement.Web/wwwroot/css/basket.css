@@ -10,13 +10,17 @@
     padding: 30px;
     margin: 30px auto;
     max-width: 1200px;
+    position: relative;
+}
+
+.header-container {
+    margin-bottom: 30px;
 }
 
 .basket-title {
     font-weight: 500;
     color: #333;
     letter-spacing: 0.5px;
-    margin-bottom: 30px;
     font-size: 1.8rem;
 }
 
@@ -24,6 +28,7 @@
     width: 60px;
     height: 60px;
     object-fit: cover;
+    display: inline-block;
 }
 
 .product-name {
@@ -50,11 +55,23 @@
         font-weight: 600;
         color: #555;
         font-size: 0.85rem;
+        text-align: center !important;
     }
 
     .e-grid .e-rowcell {
         padding: 15px 8px;
         border-bottom: 1px solid #f0f0f0;
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+
+    .e-grid .e-columnheader {
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .e-grid .e-columncell {
+        display: table-cell;
+        vertical-align: middle;
     }
 
 .e-pager {
@@ -63,14 +80,22 @@
     border-radius: 0 0 4px 4px;
 }
 
+.e-grid .e-headercell, .e-grid .e-rowcell {
+    width: auto !important;
+    min-width: 120px !important;
+}
+
 .order-summary {
     margin-top: 20px;
     padding-top: 20px;
+    float: right;
+    width: 100%;
+    text-align: right;
 }
 
 .summary-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin-bottom: 10px;
     color: #333;
     font-size: 0.9rem;
@@ -78,10 +103,12 @@
 
 .summary-label {
     font-weight: normal;
+    margin-right: 15px;
 }
 
 .summary-value {
     text-align: right;
+    white-space: nowrap;
 }
 
 .total-row {
@@ -91,15 +118,23 @@
     font-size: 1.1rem;
 }
 
-.order-summary-actions {
-    margin-top: 25px;
+.buttons-container-new {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
 }
 
-    .order-summary-actions .e-btn {
-        text-transform: uppercase;
-        font-size: 0.7rem;
-        letter-spacing: 0.5px;
-    }
+.continue-shopping-container-new {
+    flex: 1;
+}
+
+.checkout-container-new {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
 
 #continueShoppingBtn, #checkoutBtn {
     min-width: 160px;
@@ -122,12 +157,22 @@
         margin: 15px;
     }
 
-    .order-summary-actions {
-        flex-direction: column;
-        gap: 10px;
+    .order-summary {
+        width: 100%;
+        margin-top: 30px;
     }
 
-    #continueShoppingBtn, #checkoutBtn {
+    .buttons-container-new {
+        flex-direction: column;
         width: 100%;
+    }
+
+    .continue-shopping-container-new,
+    .checkout-container-new {
+        flex: 0 0 auto;
+    }
+    
+    .buttons-container-new {
+        flex-direction: column-reverse;
     }
 }

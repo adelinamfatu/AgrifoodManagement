@@ -8,7 +8,9 @@
 @model BasketViewModel
 
 <div class="basket-container">
-    <h2 class="basket-title">Your Shopping Basket</h2>
+    <div class="header-container">
+        <h2 class="basket-title">Your Shopping Basket</h2>
+    </div>
 
     @if (!Model.Items.Any())
     {
@@ -26,7 +28,7 @@
             <div class="col-lg-8">
                 <div class="card shadow-sm mb-4">
                     <div class="card-body">
-                        <ejs-grid id="BasketGrid" 
+                        <ejs-grid id="BasketGrid"
                                   dataSource="@Model.Items"
                                   allowPaging="true"
                                   allowSorting="true"
@@ -40,45 +42,19 @@
                                                  mode="Normal" />
 
                             <e-grid-columns>
-                                <e-grid-column field="Id"
-                                               isPrimaryKey="true"
-                                               visible="false"></e-grid-column>
-
-                                <e-grid-column field="ImageUrl"
-                                               headerText="Image"
-                                               width="120"
-                                               textAlign="Center"
+                                <e-grid-column field="Id" isPrimaryKey="true" visible="false"></e-grid-column>
+                                <e-grid-column field="ImageUrl" headerText="Image" width="120" textAlign="Center"
                                                allowEditing="false"
-                                               template='<img src="${ImageUrl}" alt="${Name}" style="width:60px;height:60px;object-fit:cover;" class="rounded" />'>
+                                               template='<div class="text-center"><img src="${ImageUrl}" alt="${Name}" class="product-image rounded" /></div>'>
                                 </e-grid-column>
-
-                                <e-grid-column field="Name"
-                                               headerText="Product"
-                                               width="200"
-                                               allowEditing="false"
-                                               textAlign="Center" />
-
-                                <e-grid-column field="Category"
-                                               headerText="Category"
-                                               width="120"
-                                               allowEditing="false"
-                                               textAlign="Center">
-                                </e-grid-column>
-
-                                <e-grid-column field="QuantityOrdered"
-                                               headerText="Quantity"
-                                               width="100"
-                                               textAlign="Center"
-                                               allowEditing="true"
-                                               validationRules="@(new { required=true, min=0 })"
+                                <e-grid-column field="Name" headerText="Product" width="120" allowEditing="false" textAlign="Center" />
+                                <e-grid-column field="Category" headerText="Category" width="120" allowEditing="false" textAlign="Center" />
+                                <e-grid-column field="QuantityOrdered" headerText="Quantity" width="120" textAlign="Center"
+                                               allowEditing="true" validationRules="@(new { required=true, min=0 })"
                                                editType="numericedit">
                                 </e-grid-column>
-
-                                <e-grid-column field="PricePerUnit"
-                                               headerText="Price Details (lei)"
-                                               width="200"
-                                               allowEditing="false"
-                                               textAlign="Right">
+                                <e-grid-column field="PricePerUnit" headerText="Price Details (lei)" width="120"
+                                               allowEditing="false" textAlign="Center">
                                 </e-grid-column>
                             </e-grid-columns>
                         </ejs-grid>
@@ -86,30 +62,41 @@
                 </div>
             </div>
 
-            <div class="col-lg-4">
-                <div class="order-summary">
-                    <div class="summary-row">
-                        <span class="summary-label">Subtotal:</span>
-                        <span class="summary-value">@Model.SubTotal.ToString("C2")</span>
+            <div class="col-12">
+                <div class="checkout-container-new">
+                    <div>
+                        <div class="order-summary" style="margin-top: 10px;">
+                            <div class="summary-row">
+                                <span class="summary-label">Subtotal:</span>
+                                <span class="summary-value">@Model.SubTotal.ToString("N2") lei</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Shipping:</span>
+                                <span class="summary-value">@Model.ShippingCost.ToString("N2") lei</span>
+                            </div>
+                            <div class="summary-row total-row">
+                                <span class="summary-label fw-bold">Total:</span>
+                                <span class="summary-value fw-bold">@Model.Total.ToString("N2") lei</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="summary-row">
-                        <span class="summary-label">Shipping:</span>
-                        <span class="summary-value">@Model.ShippingCost.ToString("C2")</span>
-                    </div>
-                    <div class="summary-row total-row">
-                        <span class="summary-label fw-bold">Total:</span>
-                        <span class="summary-value fw-bold">@Model.Total.ToString("C2")</span>
-                    </div>
-                    <div class="order-summary-actions d-flex justify-content-between mt-4">
+                </div>
+            </div>
+
+                <div class="buttons-container-new mb-4" style="width:100%;">
+                    <div class="continue-shopping-container-new">
                         <ejs-button id="continueShoppingBtn" cssClass="e-outline" content="CONTINUE SHOPPING"
                                     onclick="window.location='@Url.Action("Shop","Consumer")'"></ejs-button>
+                    </div>
+                    <div class="checkout-container-new">
                         <ejs-button id="checkoutBtn" cssClass="e-primary" content="CHECKOUT"
                                     onclick="window.location='@Url.Action("Checkout","Cart")'"></ejs-button>
                     </div>
                 </div>
             </div>
-        </div>
+        
     }
+
 </div>
 
 <ejs-toast id="cartErrorToast" created="onCartToastCreated">
