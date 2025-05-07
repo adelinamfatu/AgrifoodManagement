@@ -24,20 +24,15 @@ namespace AgrifoodManagement.Web.Models.Shop
         [Required(ErrorMessage = "Postal code is required")]
         public string PostalCode { get; set; }
 
-        public string DeliveryMethod { get; set; } = "SameDay";
-
+        public string DeliveryMethod { get; set; } = "Normal";
         public string PaymentMethod { get; set; } = "IPay";
 
         public int ItemCount { get; set; }
         public decimal Subtotal { get; set; }
         public decimal Discount { get; set; }
+        public string DiscountCode { get; set; }
         public int DiscountPercentage { get; set; }
         public decimal DeliveryFee { get; set; }
-        public decimal TotalAmount { get; set; }
-
-        // Selected Card Information (for display)
-        public string CardNumber { get; set; }
-        public string CardExpiryDate { get; set; }
-        public string CardholderName { get; set; }
+        public decimal TotalAmount => Subtotal + DeliveryFee - Discount;
     }
 }

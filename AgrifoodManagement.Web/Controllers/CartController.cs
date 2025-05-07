@@ -1,11 +1,13 @@
 ﻿using AgrifoodManagement.Business.Commands.Order;
 using AgrifoodManagement.Util.Models;
+using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models.Shop;
 using AgrifoodManagement.Web.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Stripe;
 using Stripe.Checkout;
 using System.Security.Claims;
 using System.Text.Json;
@@ -69,52 +71,95 @@ namespace AgrifoodManagement.Web.Controllers
             return Ok(new { message = "Quantity updated" });
         }
 
-        public async Task<IActionResult> Checkout()
+        [HttpGet]
+        public async Task<IActionResult> Checkout(string selectedDelivery = "Normal", string discountCode = "")
         {
-            var deliveryMethod = "SameDay";
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+                return Unauthorized();
 
-            decimal deliveryFee = deliveryMethod switch
-            {
-                "SameDay" => 10.00m,
-                "Express" => 20.00m,
-                "Normal" => 5.00m,
-                _ => 5.00m
-            };
+            var cartDto = await _mediator.Send(new GetCartByEmailQuery { BuyerEmail = email });
+
+            var deliveryMethod = selectedDelivery ?? "Normal";
+            var deliveryFee = DeliveryFeeMap.Options.TryGetValue(deliveryMethod, out var option)
+                    ? option.Fee
+                    : 0m;
 
             decimal discount = 0m;
             int discountPercentage = 0;
 
+            if (!string.IsNullOrEmpty(discountCode) && discountCode.Equals("SAVE10", StringComparison.OrdinalIgnoreCase))
+            {
+                discountPercentage = 10;
+                discount = cartDto.SubTotal * 0.10m;
+            }
+
             var vm = new CheckoutViewModel
             {
-                // 1. Contact
                 FirstName = "John",
                 LastName = "Doe",
-                Email = "john.doe@example.com",
+                Email = email,
                 CountryCode = "+46",
                 PhoneNumber = "0701234567",
 
-                // 2. Delivery
                 PostalCode = "12345",
                 DeliveryMethod = deliveryMethod,
 
-                // 3. Payment
-                PaymentMethod = "IPay",
-                CardNumber = "•••• 5478",
-                CardExpiryDate = "04/27",
-                CardholderName = "John Doe",
-
-                // 4. Order summary
-                ItemCount = 3,
-                Subtotal = 120.00m,
+                ItemCount = cartDto.Items.Sum(i => i.QuantityOrdered),
+                Subtotal = cartDto.SubTotal,
                 Discount = discount,
                 DiscountPercentage = discountPercentage,
-                DeliveryFee = 5.00m,
-                TotalAmount = 115.00m
+                DeliveryFee = deliveryFee
             };
 
             ViewBag.CountryCodes = await GetCountryCodesAsync();
 
             return View("~/Views/Consumer/Checkout.cshtml", vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCheckoutSession([FromBody] CheckoutViewModel model)
+        {
+            StripeConfiguration.ApiKey = _stripeSettings.Value.SecretKey;
+
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid checkout data");
+
+            var domain = HttpContext.Request.Scheme + "://" + HttpContext.Request.Host.Value;
+
+            var options = new SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string> { "card" },
+                LineItems = new List<SessionLineItemOptions>
+                {
+                    new SessionLineItemOptions
+                    {
+                        PriceData = new SessionLineItemPriceDataOptions
+                        {
+                            UnitAmountDecimal = (long)(model.TotalAmount * 100),
+                            Currency = "ron",
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = "Agrifood Order",
+                                Description = $"{model.ItemCount} items - Delivery: {model.DeliveryMethod}"
+                            },
+                        },
+                        Quantity = 1
+                    }
+                },
+                Mode = "payment",
+                SuccessUrl = domain + "/Cart/Success?session_id={CHECKOUT_SESSION_ID}",
+                CancelUrl = domain + "/Cart/Cancel"
+            };
+
+            var service = new SessionService();
+            var session = await service.CreateAsync(options);
+
+            return Json(new
+            {
+                sessionId = session.Id,
+                publishableKey = _stripeSettings.Value.PublishableKey
+            });
         }
 
         private async Task<List<object>> GetCountryCodesAsync()
@@ -155,55 +200,5 @@ namespace AgrifoodManagement.Web.Controllers
                     .ToList();
             }
         }
-
-        [HttpPost]
-        public IActionResult ApplyDiscount([FromBody] DiscountRequest dto)
-        {
-            var valid = dto.Code?.ToUpper() == "SAVE10";
-            var pct = valid ? 10 : 0;
-            var discount = dto.Subtotal * pct / 100m;
-            var total = dto.Subtotal + dto.DeliveryFee - discount;
-
-            return Json(new
-            {
-                Discount = discount,
-                DiscountPercentage = pct,
-                TotalAmount = total
-            });
-        }
-
-        //[HttpPost]
-        //public async Task<IActionResult> CreateCheckoutSession([FromForm] CheckoutViewModel model)
-        //{
-        //    var domain = $"{Request.Scheme}://{Request.Host}";
-
-        //    var options = new SessionCreateOptions
-        //    {
-        //        PaymentMethodTypes = new List<string> { "card" },
-        //        LineItems = model.Items.Select(item => new SessionLineItemOptions
-        //        {
-        //            PriceData = new SessionLineItemPriceDataOptions
-        //            {
-        //                UnitAmountDecimal = item.UnitPrice * 100, // in cents
-        //                Currency = "eur",
-        //                ProductData = new SessionLineItemPriceDataProductDataOptions
-        //                {
-        //                    Name = item.ProductName,
-        //                },
-        //            },
-        //            Quantity = item.Quantity,
-        //        }).ToList(),
-        //        Mode = "payment",
-        //        SuccessUrl = domain + Url.Action("Success", "Checkout"),
-        //        CancelUrl = domain + Url.Action("Cancel", "Checkout"),
-        //        CustomerEmail = model.Email
-        //    };
-
-        //    var service = new SessionService();
-        //    Session session = await service.CreateAsync(options);
-
-        //    Return the session ID to the client
-        //    return Json(new { sessionId = session.Id, publishableKey = _stripeSettings.Value.PublishableKey });
-        //}
     }
 }

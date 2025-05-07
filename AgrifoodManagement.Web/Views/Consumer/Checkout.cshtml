@@ -1,4 +1,6 @@
 ﻿@using AgrifoodManagement.Web.Models.Shop;
+@using AgrifoodManagement.Util.ValueObjects;
+@using System.Text.Json;
 
 @{
     Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
@@ -65,39 +67,18 @@
                 <h2 class="section-title">2. Delivery method</h2>
 
                 <div class="delivery-options">
-                    <label class="delivery-option">
-                        <input type="radio" name="DeliveryMethod" value="SameDay" checked />
-                        <div class="delivery-option-content selected">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <span>Same-day</span>
-                        </div>
-                    </label>
-
-                    <label class="delivery-option">
-                        <input type="radio" name="DeliveryMethod" value="Express" />
-                        <div class="delivery-option-content">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="1" y="3" width="15" height="13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                <polygon points="16 8 20 8 23 11 23 16 20 16 20 13 16 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                <circle cx="5.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="2" />
-                                <circle cx="18.5" cy="18.5" r="2.5" stroke="currentColor" stroke-width="2" />
-                            </svg>
-                            <span>Express</span>
-                        </div>
-                    </label>
-
-                    <label class="delivery-option">
-                        <input type="radio" name="DeliveryMethod" value="Normal" />
-                        <div class="delivery-option-content">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                <polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <span>Normal</span>
-                        </div>
-                    </label>
+                    @foreach (var method in DeliveryFeeMap.Options.Keys)
+                    {
+                        var option = DeliveryFeeMap.Options[method];
+                        var isChecked = Model.DeliveryMethod == method ? "checked" : "";
+                        <label class="delivery-option">
+                            <input type="radio" name="selectedDelivery" value="@method" @isChecked />
+                            <div class="delivery-option-content @(isChecked != "" ? "selected" : "")">
+                                @Html.Raw(option.SvgIcon)
+                                <span>@method</span>
+                            </div>
+                        </label>
+                    }
                 </div>
 
                 <div class="postal-code-container">
@@ -174,7 +155,15 @@
                     <span class="cost-value">@Model.Subtotal.ToString("F2") lei</span>
                 </div>
 
-                <div id="discount-row"></div>
+                @if (Model.Discount > 0)
+                {
+                    <div class="cost-row discount" id="discount-row">
+                        <span class="cost-label">Discount</span>
+                        <span class="cost-value discount">
+                            -@Model.Discount.ToString("F2") lei (@Model.DiscountPercentage%)
+                        </span>
+                    </div>
+                }
 
                 <div class="cost-row">
                     <span class="cost-label">Delivery Service</span>
@@ -196,52 +185,40 @@
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
+    const deliveryFees = @Html.Raw(JsonSerializer.Serialize(DeliveryFeeMap.Options.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Fee)));
+
+    let currentDiscount = 0;
+
     document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('applyDiscountBtn').addEventListener('click', async (e) => {
+        document.getElementById('applyDiscountBtn').addEventListener('click', function (e) {
             e.preventDefault();
 
-            const code = document.getElementById('discountCode').value.trim();
-            if (!code) { return alert('Please enter a discount code.'); }
+            const discountCode = document.getElementById('discountCode')?.value?.trim() || "";
+            const selectedDelivery = document.querySelector('input[name="selectedDelivery"]:checked')?.value || "Normal";
 
-            const getCost = label => {
-                const row = [...document.querySelectorAll('.cost-row')]
-                    .find(r => r.querySelector('.cost-label').textContent.trim() === label);
-                return parseFloat(row.querySelector('.cost-value').textContent);
-            };
-            const subtotal = getCost('Subtotal');
-            const deliveryFee = getCost('Delivery Service');
-
-            const resp = await fetch('@Url.Action("ApplyDiscount", "Cart")', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code, subtotal, deliveryFee })
-            });
-            if (!resp.ok) {
-                return alert('Failed to apply discount.');
-            }
-            const data = await resp.json();
-
-            const costsContainer = document.querySelector('.order-costs');
-            let discountRow = costsContainer.querySelector('.cost-row.discount');
-
-            if (data.discount > 0) {
-                document.getElementById('discount-row').innerHTML = `
-                    <div class="cost-row discount">
-                      <span class="cost-label">Discount</span>
-                      <span class="cost-value discount">
-                        -${data.discount.toFixed(2)} lei (${data.discountPercentage}%)
-                      </span>
-                    </div>`;
-            } else {
-                document.getElementById('discount-row').innerHTML = '';
-            }
-
-            const totalRow = [...costsContainer.querySelectorAll('.cost-row')]
-                .find(r => r.classList.contains('total'));
-            totalRow.querySelector('.cost-value').textContent = `${data.TotalAmount.toFixed(2)} lei`;
+            const url = `@Url.Action("Checkout", "Cart")?selectedDelivery=${selectedDelivery}&discountCode=${encodeURIComponent(discountCode)}`;
+            window.location.href = url;
         });
 
         const deliveryOptions = document.querySelectorAll('.delivery-option input[type="radio"]');
+
+        function updateDeliveryFee(deliveryMethod) {
+            const deliveryFee = deliveryFees[deliveryMethod] || 0;
+            const subtotal = parseFloat(document.querySelector('.cost-row .cost-value').textContent);
+
+            // Update delivery fee
+            const deliveryRow = [...document.querySelectorAll('.cost-row')]
+                .find(r => r.querySelector('.cost-label').textContent.trim() === 'Delivery Service');
+            deliveryRow.querySelector('.cost-value').textContent = `+${deliveryFee.toFixed(2)} lei`;
+
+            // Update total
+            const discount = currentDiscount || 0;
+            const total = subtotal + deliveryFee - discount;
+
+            const totalRow = [...document.querySelectorAll('.cost-row')]
+                .find(r => r.classList.contains('total'));
+            totalRow.querySelector('.cost-value').textContent = `${total.toFixed(2)} lei`;
+        }
 
         deliveryOptions.forEach(radio => {
             radio.addEventListener('change', function () {
@@ -251,6 +228,7 @@
 
                 if (this.checked) {
                     this.parentElement.querySelector('.delivery-option-content').classList.add('selected');
+                    updateDeliveryFee(this.value);
                 }
             });
         });
@@ -273,16 +251,54 @@
     document.getElementById('payBtn').addEventListener('click', async function (e) {
         e.preventDefault();
 
-        const formData = new FormData(document.querySelector('form'));
+        const firstName = document.getElementById('firstName')?.value?.trim();
+        const lastName = document.getElementById('lastName')?.value?.trim();
+        const email = document.getElementById('email')?.value?.trim();
+        const phoneNumber = document.getElementById('phoneNumber')?.value?.trim();
+        const countryCode = document.getElementById('countryCode')?.ej2_instances?.[0]?.value ?? "+46";
+        const postalCode = document.querySelector('input[name="PostalCode"]')?.value?.trim();
+
+        const deliveryMethod = document.querySelector('input[name="selectedDelivery"]:checked')?.value || "Normal";
+        const paymentMethod = document.querySelector('input[name="PaymentMethod"]:checked')?.value || "IPay";
+        const discountCode = document.getElementById('discountCode')?.value?.trim() || "";
+
+        const subtotal = parseFloat(document.querySelector('.cost-row .cost-value').textContent);
+        const deliveryFeeText = document.querySelector('.cost-row:nth-child(3) .cost-value').textContent;
+        const deliveryFee = parseFloat(deliveryFeeText.replace('+', '').replace(' lei', ''));
+        const totalText = document.querySelector('.cost-row.total .cost-value').textContent;
+        const totalAmount = parseFloat(totalText.replace(' lei', ''));
+
         const response = await fetch('@Url.Action("CreateCheckoutSession", "Cart")', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                firstName,
+                lastName,
+                email,
+                phoneNumber,
+                countryCode,
+                postalCode,
+                deliveryMethod,
+                paymentMethod,
+                discountCode,
+                subtotal,
+                deliveryFee,
+                totalAmount
+            })
         });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Checkout session failed:", errorText);
+            alert("Something went wrong: " + errorText);
+            return;
+        }
+
         const { sessionId, publishableKey } = await response.json();
 
         const stripe = Stripe(publishableKey);
-
         const { error } = await stripe.redirectToCheckout({ sessionId });
+
         if (error) {
             console.error(error);
             alert(error.message);
