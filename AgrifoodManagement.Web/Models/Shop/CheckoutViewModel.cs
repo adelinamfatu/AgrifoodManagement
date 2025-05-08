@@ -4,12 +4,11 @@ namespace AgrifoodManagement.Web.Models.Shop
 {
     public class CheckoutViewModel
     {
-        // Contact Information
-        [Required(ErrorMessage = "First name is required")]
-        public string FirstName { get; set; }
+        public Guid OrderId { get; set; }
 
-        [Required(ErrorMessage = "Last name is required")]
-        public string LastName { get; set; }
+        // Contact Information
+        [Required(ErrorMessage = "Address is required")]
+        public string Address { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email address")]

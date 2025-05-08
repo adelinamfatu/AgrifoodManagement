@@ -28,11 +28,16 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <ejs-textbox id="firstName" name="FirstName" placeholder="First name" cssClass="e-outline" floatLabelType="Auto" value="@Model.FirstName"></ejs-textbox>
+                        <ejs-textbox id="address" name="Address" placeholder="Full address" cssClass="e-outline" floatLabelType="Auto" value="@Model.Address"></ejs-textbox>
                     </div>
 
                     <div class="form-group">
-                        <ejs-textbox id="lastName" name="LastName" placeholder="Last name" cssClass="e-outline" floatLabelType="Auto" value="@Model.LastName"></ejs-textbox>
+                        <ejs-maskedtextbox id="postalCode" name="PostalCode"
+                                           mask="00000"
+                                           placeholder="Postal code"
+                                           floatLabelType="Auto"
+                                           cssClass="e-outline"
+                                           value="@Model.PostalCode"></ejs-maskedtextbox>
                     </div>
                 </div>
 
@@ -80,40 +85,33 @@
                         </label>
                     }
                 </div>
-
-                <div class="postal-code-container">
-                    <div class="postal-code-wrapper">
-                        <svg class="location-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        <input asp-for="PostalCode" class="postal-code-input" placeholder="Postal code" value="05488" />
-                    </div>
-                </div>
             </div>
 
             <div class="checkout-section">
                 <h2 class="section-title">3. Payment method</h2>
 
                 <div class="payment-options">
-                    <label class="payment-option">
-                        <input type="radio" name="PaymentMethod" value="DPay" />
+                    <label class="payment-option disabled">
+                        <input type="radio" name="PaymentMethod" value="Visa" disabled />
                         <div class="payment-option-content">
-                            <span class="payment-logo">DPay</span>
+                            <img src="/images/visa.png" alt="Visa" class="payment-logo" />
+                            <span>Visa <small class="text-muted">(Not available yet)</small></span>
+                        </div>
+                    </label>
+
+                    <label class="payment-option disabled">
+                        <input type="radio" name="PaymentMethod" value="Mastercard" disabled />
+                        <div class="payment-option-content">
+                            <img src="/images/mastercard.png" alt="Mastercard" class="payment-logo" />
+                            <span>Mastercard <small class="text-muted">(Not available yet)</small></span>
                         </div>
                     </label>
 
                     <label class="payment-option">
-                        <input type="radio" name="PaymentMethod" value="IPay" checked />
+                        <input type="radio" name="PaymentMethod" value="Stripe" checked />
                         <div class="payment-option-content selected">
-                            <span class="payment-logo">iPay</span>
-                        </div>
-                    </label>
-
-                    <label class="payment-option">
-                        <input type="radio" name="PaymentMethod" value="GPay" />
-                        <div class="payment-option-content">
-                            <span class="payment-logo">GPay</span>
+                            <img src="/images/stripe.png" alt="Stripe" class="payment-logo" />
+                            <span>Stripe</span>
                         </div>
                     </label>
                 </div>
@@ -123,7 +121,7 @@
                 <h2 class="section-title">4. Discount code</h2>
                 <div class="form-row">
                     <div class="form-group">
-                        <ejs-textbox id="discountCode" name="DiscountCode" placeholder="Enter discount code" cssClass="e-outline" floatLabelType="Auto"></ejs-textbox>
+                        <ejs-textbox id="discountCode" name="DiscountCode" placeholder="Enter discount code" cssClass="e-outline" floatLabelType="Auto" value="@Model.DiscountCode"></ejs-textbox>
                     </div>
                     <div class="form-group" style="max-width: 150px;">
                         <ejs-button id="applyDiscountBtn" cssClass="e-outline" content="Apply" button-type="Button"></ejs-button>
@@ -152,27 +150,31 @@
             <div class="order-costs">
                 <div class="cost-row">
                     <span class="cost-label">Subtotal</span>
-                    <span class="cost-value">@Model.Subtotal.ToString("F2") lei</span>
+                    <span class="cost-value" id="subtotalValue">@Model.Subtotal.ToString("F2") lei</span>
                 </div>
 
                 @if (Model.Discount > 0)
                 {
                     <div class="cost-row discount" id="discount-row">
                         <span class="cost-label">Discount</span>
-                        <span class="cost-value discount">
-                            -@Model.Discount.ToString("F2") lei (@Model.DiscountPercentage%)
+                        <span class="cost-value discount" id="discountValue">
+                            -@Model.Discount.ToString("F2") lei
+                            @if (Model.DiscountPercentage > 0)
+                            {
+                                <text> (@Model.DiscountPercentage%)</text>
+                            }
                         </span>
                     </div>
                 }
 
                 <div class="cost-row">
                     <span class="cost-label">Delivery Service</span>
-                    <span class="cost-value">+@Model.DeliveryFee.ToString("F2") lei</span>
+                    <span class="cost-value" id="deliveryFeeValue">+@Model.DeliveryFee.ToString("F2") lei</span>
                 </div>
 
                 <div class="cost-row total">
                     <span class="cost-label">Total</span>
-                    <span class="cost-value total-value">@Model.TotalAmount.ToString("F2") lei</span>
+                    <span class="cost-value total-value" id="totalValue">@Model.TotalAmount.ToString("F2") lei</span>
                 </div>
             </div>
 
@@ -181,13 +183,21 @@
             </button>
         </div>
     </div>
+
+    <input type="hidden" id="orderId" value="@Model.OrderId" />
 </div>
 
+<script>
+    const currentDiscount = @Model.Discount.ToString("F2");
+    const currentDiscountPercentage = @Model.DiscountPercentage;
+    const modelSubtotal = parseFloat("@Model.Subtotal.ToString("F2").Replace(',', '.')");
+    const modelDiscount = parseFloat("@Model.Discount.ToString("F2").Replace(',', '.')");
+</script>
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-    const deliveryFees = @Html.Raw(JsonSerializer.Serialize(DeliveryFeeMap.Options.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Fee)));
-
-    let currentDiscount = 0;
+    const deliveryFees = @Html.Raw(JsonSerializer.Serialize(
+        DeliveryFeeMap.Options.ToDictionary(kvp => kvp.Key, kvp => decimal.Parse(kvp.Value.Fee.ToString(System.Globalization.CultureInfo.InvariantCulture)))
+    ));
 
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('applyDiscountBtn').addEventListener('click', function (e) {
@@ -204,20 +214,16 @@
 
         function updateDeliveryFee(deliveryMethod) {
             const deliveryFee = deliveryFees[deliveryMethod] || 0;
-            const subtotal = parseFloat(document.querySelector('.cost-row .cost-value').textContent);
 
-            // Update delivery fee
-            const deliveryRow = [...document.querySelectorAll('.cost-row')]
-                .find(r => r.querySelector('.cost-label').textContent.trim() === 'Delivery Service');
-            deliveryRow.querySelector('.cost-value').textContent = `+${deliveryFee.toFixed(2)} lei`;
+            // Update UI
+            const deliveryFeeSpan = document.getElementById('deliveryFeeValue');
+            deliveryFeeSpan.textContent = `+${deliveryFee.toFixed(2)} lei`;
 
-            // Update total
-            const discount = currentDiscount || 0;
-            const total = subtotal + deliveryFee - discount;
+            // Calculate new total
+            const newTotal = modelSubtotal + deliveryFee - modelDiscount;
 
-            const totalRow = [...document.querySelectorAll('.cost-row')]
-                .find(r => r.classList.contains('total'));
-            totalRow.querySelector('.cost-value').textContent = `${total.toFixed(2)} lei`;
+            const totalSpan = document.getElementById('totalValue');
+            totalSpan.textContent = `${newTotal.toFixed(2)} lei`;
         }
 
         deliveryOptions.forEach(radio => {
@@ -251,40 +257,22 @@
     document.getElementById('payBtn').addEventListener('click', async function (e) {
         e.preventDefault();
 
-        const firstName = document.getElementById('firstName')?.value?.trim();
-        const lastName = document.getElementById('lastName')?.value?.trim();
-        const email = document.getElementById('email')?.value?.trim();
-        const phoneNumber = document.getElementById('phoneNumber')?.value?.trim();
-        const countryCode = document.getElementById('countryCode')?.ej2_instances?.[0]?.value ?? "+46";
-        const postalCode = document.querySelector('input[name="PostalCode"]')?.value?.trim();
-
-        const deliveryMethod = document.querySelector('input[name="selectedDelivery"]:checked')?.value || "Normal";
-        const paymentMethod = document.querySelector('input[name="PaymentMethod"]:checked')?.value || "IPay";
-        const discountCode = document.getElementById('discountCode')?.value?.trim() || "";
-
-        const subtotal = parseFloat(document.querySelector('.cost-row .cost-value').textContent);
-        const deliveryFeeText = document.querySelector('.cost-row:nth-child(3) .cost-value').textContent;
-        const deliveryFee = parseFloat(deliveryFeeText.replace('+', '').replace(' lei', ''));
-        const totalText = document.querySelector('.cost-row.total .cost-value').textContent;
-        const totalAmount = parseFloat(totalText.replace(' lei', ''));
+        const data = {
+            orderId: "@Model.OrderId",
+            email: @Html.Raw(JsonSerializer.Serialize(Model.Email)),
+            phoneNumber: document.getElementById('phoneNumber')?.ej2_instances?.[0]?.value?.trim() || "",
+            countryCode: @Html.Raw(JsonSerializer.Serialize(Model.CountryCode ?? "+40")),
+            postalCode: document.getElementById('postalCode')?.ej2_instances?.[0]?.value?.trim() || "",
+            deliveryMethod: @Html.Raw(JsonSerializer.Serialize(Model.DeliveryMethod ?? "Normal")),
+            discountCode: @Html.Raw(JsonSerializer.Serialize(Model.DiscountCode ?? "")),
+            deliveryFee: parseFloat("@Model.DeliveryFee.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)"),
+            totalAmount: parseFloat("@Model.TotalAmount.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)")
+        };
 
         const response = await fetch('@Url.Action("CreateCheckoutSession", "Cart")', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                firstName,
-                lastName,
-                email,
-                phoneNumber,
-                countryCode,
-                postalCode,
-                deliveryMethod,
-                paymentMethod,
-                discountCode,
-                subtotal,
-                deliveryFee,
-                totalAmount
-            })
+            body: JSON.stringify(data)
         });
 
         if (!response.ok) {

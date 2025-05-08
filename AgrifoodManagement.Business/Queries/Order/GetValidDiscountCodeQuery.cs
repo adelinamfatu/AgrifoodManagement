@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AgrifoodManagement.Business.Commands.Order
+namespace AgrifoodManagement.Business.Queries.Order
 {
-    public class GetCartByEmailQuery : IRequest<CartDto>
+    public class GetValidDiscountCodeQuery : IRequest<DiscountCodeDto?>
     {
-        public string BuyerEmail { get; init; } = "";
+        public string Code { get; set; } = string.Empty;
     }
 }

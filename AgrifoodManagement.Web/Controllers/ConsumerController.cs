@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.Commands.Order;
+using AgrifoodManagement.Business.Queries.Order;
 using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Business.Queries.Shop;
 using AgrifoodManagement.Util.Models;

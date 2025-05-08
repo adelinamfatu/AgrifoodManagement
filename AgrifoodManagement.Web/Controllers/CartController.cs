@@ -1,6 +1,8 @@
 ﻿using AgrifoodManagement.Business.Commands.Order;
+using AgrifoodManagement.Business.Queries.Order;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
+using AgrifoodManagement.Web.Mappers;
 using AgrifoodManagement.Web.Models.Shop;
 using AgrifoodManagement.Web.Services;
 using MediatR;
@@ -82,43 +84,24 @@ namespace AgrifoodManagement.Web.Controllers
 
             var deliveryMethod = selectedDelivery ?? "Normal";
             var deliveryFee = DeliveryFeeMap.Options.TryGetValue(deliveryMethod, out var option)
-                    ? option.Fee
-                    : 0m;
+                ? option.Fee
+                : 0m;
 
-            decimal discount = 0m;
-            int discountPercentage = 0;
-
-            if (!string.IsNullOrEmpty(discountCode) && discountCode.Equals("SAVE10", StringComparison.OrdinalIgnoreCase))
+            DiscountCodeDto? discountDto = null;
+            if (!string.IsNullOrEmpty(discountCode))
             {
-                discountPercentage = 10;
-                discount = cartDto.SubTotal * 0.10m;
+                discountDto = await _mediator.Send(new GetValidDiscountCodeQuery { Code = discountCode });
             }
 
-            var vm = new CheckoutViewModel
-            {
-                FirstName = "John",
-                LastName = "Doe",
-                Email = email,
-                CountryCode = "+46",
-                PhoneNumber = "0701234567",
-
-                PostalCode = "12345",
-                DeliveryMethod = deliveryMethod,
-
-                ItemCount = cartDto.Items.Sum(i => i.QuantityOrdered),
-                Subtotal = cartDto.SubTotal,
-                Discount = discount,
-                DiscountPercentage = discountPercentage,
-                DeliveryFee = deliveryFee
-            };
+            var viewModel = CheckoutViewModelMapper.Map(cartDto, email, deliveryMethod, deliveryFee, discountDto);
 
             ViewBag.CountryCodes = await GetCountryCodesAsync();
 
-            return View("~/Views/Consumer/Checkout.cshtml", vm);
+            return View("~/Views/Consumer/Checkout.cshtml", viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCheckoutSession([FromBody] CheckoutViewModel model)
+        public async Task<IActionResult> CreateCheckoutSession([FromBody] CreateCheckoutSessionDto model)
         {
             StripeConfiguration.ApiKey = _stripeSettings.Value.SecretKey;
 
@@ -141,7 +124,7 @@ namespace AgrifoodManagement.Web.Controllers
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
                                 Name = "Agrifood Order",
-                                Description = $"{model.ItemCount} items - Delivery: {model.DeliveryMethod}"
+                                Description = $"Delivery: {model.DeliveryMethod}"
                             },
                         },
                         Quantity = 1
@@ -160,6 +143,40 @@ namespace AgrifoodManagement.Web.Controllers
                 sessionId = session.Id,
                 publishableKey = _stripeSettings.Value.PublishableKey
             });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveOrder([FromBody] ConfirmOrderCommand command)
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+                return Unauthorized();
+
+            var orderId = await _mediator.Send(command);
+            return Ok(new { message = "Order saved", orderId });
+        }
+
+        private async Task<(decimal? lat, decimal? lng)> GeocodeAddressAsync(string postalCode, string countryCode, string? city = null, string? street = null)
+        {
+            var address = $"{street} {city} {postalCode} {countryCode}".Trim();
+            var url = $"https://nominatim.openstreetmap.org/search?q={Uri.EscapeDataString(address)}&format=json&limit=1";
+
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "AgroFoodManagementApp");
+
+            var response = await httpClient.GetAsync(url);
+            if (!response.IsSuccessStatusCode) return (null, null);
+
+            var content = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<List<NominatimResult>>(content);
+
+            if (result?.Any() == true)
+            {
+                var location = result.First();
+                return (decimal.Parse(location.lat), decimal.Parse(location.lon));
+            }
+
+            return (null, null);
         }
 
         private async Task<List<object>> GetCountryCodesAsync()

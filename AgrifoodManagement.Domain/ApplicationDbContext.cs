@@ -31,6 +31,8 @@ namespace AgrifoodManagement.Domain
 
         public DbSet<WishlistItem> WishlistItems { get; set; }
 
+        public DbSet<DiscountCode> DiscountCodes { get; set; }
+
         public DbSet<ExtendedProperty> ExtendedProperties { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
@@ -104,9 +106,17 @@ namespace AgrifoodManagement.Domain
                 .Property(p => p.TotalAmount)
                 .HasColumnType("decimal(18, 2)");
 
+            modelBuilder.Entity<Order>()
+                .Property(o => o.DeliveryFee)
+                .HasPrecision(18, 2);
+
             modelBuilder.Entity<OrderDetail>()
                 .Property(p => p.UnitPrice)
                 .HasColumnType("decimal(18, 2)");
+
+            modelBuilder.Entity<DiscountCode>()
+                .Property(dc => dc.Value)
+                .HasPrecision(18, 2);
 
             // Create indexes
             modelBuilder.Entity<ExtendedProperty>()

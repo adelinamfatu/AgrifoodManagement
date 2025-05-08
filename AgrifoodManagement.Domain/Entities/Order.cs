@@ -23,6 +23,24 @@ namespace AgrifoodManagement.Domain.Entities
         [Required]
         public decimal TotalAmount { get; set; }
 
+        [Required]
+        public string DeliveryAddress { get; set; }
+
+        [Required]
+        public double DeliveryLatitude { get; set; }
+
+        [Required]
+        public double DeliveryLongitude { get; set; }
+
+        public string DeliveryMethod { get; set; } = "Normal";
+
+        public decimal DeliveryFee { get; set; }
+
+        [ForeignKey("DiscountCode")]
+        public string? DiscountCodeId { get; set; }
+
+        public virtual DiscountCode? DiscountCode { get; set; }
+
         [ForeignKey("User")]
         public Guid BuyerId { get; set; }
 

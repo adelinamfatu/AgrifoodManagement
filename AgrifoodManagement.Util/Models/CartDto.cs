@@ -8,6 +8,7 @@ namespace AgrifoodManagement.Util.Models
 {
     public class CartDto
     {
+        public Guid OrderId { get; set; }
         public IReadOnlyList<CartItemDto> Items { get; init; } = Array.Empty<CartItemDto>();
         public decimal SubTotal => Items.Sum(i => i.UnitPrice * i.QuantityOrdered);
         public decimal ShippingCost { get; init; } = 5m;

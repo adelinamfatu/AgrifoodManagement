@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Util.Models
 {
-    public class DiscountRequest
+    public class NominatimResult
     {
-        public string DiscountCode { get; set; }
-        public string DeliveryMethod { get; set; }
+        public string lat { get; set; }
+        public string lon { get; set; }
     }
 }

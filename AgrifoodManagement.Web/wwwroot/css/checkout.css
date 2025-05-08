@@ -222,6 +222,9 @@
 .payment-options {
     display: flex;
     gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
 }
 
 .payment-option {
@@ -255,6 +258,8 @@
 .payment-logo {
     font-weight: 600;
     font-size: 1.1rem;
+    height: 24px;
+    margin-right: 8px;
 }
 
 .order-summary {
@@ -386,7 +391,7 @@
 }
 
     .pay-button:hover {
-        background-color: #229960; /* Darker green for hover */
+        background-color: #229960;
     }
 
 @media (max-width: 920px) {
@@ -415,13 +420,13 @@
 
 .delivery-option input[type="radio"]:checked + .delivery-option-content {
     border-color: var(--checkout-primary-color);
-    background-color: rgba(38, 181, 113, 0.05); /* Updated for green */
+    background-color: rgba(38, 181, 113, 0.05);
     color: var(--checkout-primary-color);
 }
 
 .payment-option input[type="radio"]:checked + .payment-option-content {
     border-color: var(--checkout-primary-color);
-    background-color: rgba(38, 181, 113, 0.05); /* Updated for green */
+    background-color: rgba(38, 181, 113, 0.05);
 }
 
 .form-control {
@@ -470,4 +475,9 @@ input {
 
 .postal-code-input {
     text-align: left;
+}
+
+.payment-option.disabled {
+    opacity: 0.5;
+    pointer-events: none;
 }

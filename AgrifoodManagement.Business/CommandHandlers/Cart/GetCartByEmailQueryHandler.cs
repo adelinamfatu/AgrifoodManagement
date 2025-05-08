@@ -1,4 +1,4 @@
-﻿using AgrifoodManagement.Business.Commands.Order;
+﻿using AgrifoodManagement.Business.Queries.Order;
 using AgrifoodManagement.Domain;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
@@ -62,6 +62,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
 
             return new CartDto
             {
+                OrderId = order.Id,
                 Items = items,
                 ShippingCost = 5m
             };
