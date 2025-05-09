@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.Commands.Order
 {
-    public class ConfirmOrderCommand : IRequest<Unit>
+    public class ConfirmOrderCommand : IRequest<Guid>
     {
         public Guid OrderId { get; set; }
+        public string CountryCode { get; set; }
+        public string PhoneNumber { get; set; }
+        public string PostalCode { get; set; }
         public decimal TotalAmount { get; set; }
-        public OrderStatus FinalStatus { get; set; } = OrderStatus.Procesing;
         public string? DeliveryMethod { get; set; }
         public decimal? DeliveryFee { get; set; }
         public string? DiscountCode { get; set; }

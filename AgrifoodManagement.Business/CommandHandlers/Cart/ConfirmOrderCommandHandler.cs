@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace AgrifoodManagement.Business.CommandHandlers.Cart
 {
-    public class ConfirmOrderCommandHandler : IRequestHandler<ConfirmOrderCommand, Unit>
+    public class ConfirmOrderCommandHandler : IRequestHandler<ConfirmOrderCommand, Guid>
     {
         private readonly ApplicationDbContext _context;
 
@@ -16,27 +16,35 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
             _context = context;
         }
 
-        public async Task<Unit> Handle(ConfirmOrderCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(ConfirmOrderCommand request, CancellationToken cancellationToken)
         {
             var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == request.OrderId, cancellationToken);
             
             if (order == null)
                 throw new KeyNotFoundException("Order not found.");
 
-            order.Status = request.FinalStatus;
+            order.Status = Util.ValueObjects.OrderStatus.Pending;
             order.TotalAmount = request.TotalAmount;
             order.OrderedAt = DateTime.UtcNow;
             order.DeliveryMethod = request.DeliveryMethod;
             order.DeliveryFee = request.DeliveryFee ?? 0;
-            order.DiscountCodeId = request.DiscountCode;
+            order.DiscountCodeId = !string.IsNullOrWhiteSpace(request.DiscountCode) ? request.DiscountCode : null;
             order.DeliveryAddress = request.DeliveryAddress;
 
             var (lat, lon) = await GeocodeAddressAsync(request.DeliveryAddress);
             order.DeliveryLatitude = lat ?? 0;
             order.DeliveryLongitude = lon ?? 0;
 
-            await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
+            try
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to save order: " + ex.Message, ex);
+            }
+
+            return order.Id;
         }
 
         private async Task<(double? lat, double? lon)> GeocodeAddressAsync(string address)
@@ -44,6 +52,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
             if (string.IsNullOrWhiteSpace(address))
                 return (null, null);
 
+            address = address.Replace(",", " ");
             var url = $"https://nominatim.openstreetmap.org/search?q={Uri.EscapeDataString(address)}&format=json&limit=1";
 
             using var httpClient = new HttpClient();

@@ -28,16 +28,20 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <ejs-textbox id="address" name="Address" placeholder="Full address" cssClass="e-outline" floatLabelType="Auto" value="@Model.Address"></ejs-textbox>
+                        <ejs-textbox id="street" name="Street" placeholder="Street" cssClass="e-outline" floatLabelType="Auto"></ejs-textbox>
                     </div>
 
                     <div class="form-group">
-                        <ejs-maskedtextbox id="postalCode" name="PostalCode"
-                                           mask="00000"
-                                           placeholder="Postal code"
-                                           floatLabelType="Auto"
-                                           cssClass="e-outline"
-                                           value="@Model.PostalCode"></ejs-maskedtextbox>
+                        <ejs-textbox id="number" name="Number" placeholder="Number" cssClass="e-outline" floatLabelType="Auto"></ejs-textbox>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <ejs-textbox id="city" name="City" placeholder="City" cssClass="e-outline" floatLabelType="Auto"></ejs-textbox>
+                    </div>
+                    <div class="form-group">
+                        <ejs-textbox id="county" name="County" placeholder="County" cssClass="e-outline" floatLabelType="Auto"></ejs-textbox>
                     </div>
                 </div>
 
@@ -259,30 +263,57 @@
 
         const data = {
             orderId: "@Model.OrderId",
-            email: @Html.Raw(JsonSerializer.Serialize(Model.Email)),
             phoneNumber: document.getElementById('phoneNumber')?.ej2_instances?.[0]?.value?.trim() || "",
             countryCode: @Html.Raw(JsonSerializer.Serialize(Model.CountryCode ?? "+40")),
             postalCode: document.getElementById('postalCode')?.ej2_instances?.[0]?.value?.trim() || "",
             deliveryMethod: @Html.Raw(JsonSerializer.Serialize(Model.DeliveryMethod ?? "Normal")),
             discountCode: @Html.Raw(JsonSerializer.Serialize(Model.DiscountCode ?? "")),
             deliveryFee: parseFloat("@Model.DeliveryFee.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)"),
-            totalAmount: parseFloat("@Model.TotalAmount.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)")
+            totalAmount: parseFloat("@Model.TotalAmount.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)"),
+            deliveryAddress: [
+                document.getElementById('street')?.ej2_instances?.[0]?.value?.trim(),
+                document.getElementById('number')?.ej2_instances?.[0]?.value?.trim(),
+                document.getElementById('city')?.ej2_instances?.[0]?.value?.trim(),
+                document.getElementById('county')?.ej2_instances?.[0]?.value?.trim()
+            ].filter(Boolean).join(', ')
         };
 
-        const response = await fetch('@Url.Action("CreateCheckoutSession", "Cart")', {
+        const saveResponse = await fetch('@Url.Action("SaveOrder", "Cart")', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
 
-        if (!response.ok) {
-            const errorText = await response.text();
+        if (!saveResponse.ok) {
+            const errorText = await saveResponse.text();
+            console.error("Failed to save order:", errorText);
+            alert("Could not create order. Try again.");
+            return;
+        }
+
+        const { orderId } = await saveResponse.json();
+
+        // Stripe session
+        const sessionData = {
+            orderId: orderId,
+            deliveryMethod: data.deliveryMethod,
+            totalAmount: data.totalAmount
+        };
+
+        const sessionResponse = await fetch('@Url.Action("CreateCheckoutSession", "Cart")', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(sessionData)
+        });
+
+        if (!sessionResponse.ok) {
+            const errorText = await sessionResponse.text();
             console.error("Checkout session failed:", errorText);
             alert("Something went wrong: " + errorText);
             return;
         }
 
-        const { sessionId, publishableKey } = await response.json();
+        const { sessionId, publishableKey } = await sessionResponse.json();
 
         const stripe = Stripe(publishableKey);
         const { error } = await stripe.redirectToCheckout({ sessionId });

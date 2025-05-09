@@ -105,10 +105,5 @@ namespace AgrifoodManagement.Web.Controllers
         {
             return View();
         }
-
-        public IActionResult Support()
-        {
-            return View();
-        }
     }
 }

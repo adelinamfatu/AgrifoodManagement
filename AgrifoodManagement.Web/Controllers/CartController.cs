@@ -124,18 +124,23 @@ namespace AgrifoodManagement.Web.Controllers
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
                                 Name = "Agrifood Order",
-                                Description = $"Delivery: {model.DeliveryMethod}"
+                                Description = $"Order {model.OrderId} with delivery: {model.DeliveryMethod}"
                             },
                         },
                         Quantity = 1
                     }
                 },
                 Mode = "payment",
-                SuccessUrl = domain + "/Cart/Success?session_id={CHECKOUT_SESSION_ID}",
-                CancelUrl = domain + "/Cart/Cancel"
+                Metadata = new Dictionary<string, string>
+                {
+                    { "orderId", model.OrderId.ToString() }
+                },
+                SuccessUrl = $"{domain}/Cart/ConfirmOrderRedirect?session_id={{CHECKOUT_SESSION_ID}}",
+                CancelUrl = domain + "/Cart/Checkout"
             };
 
             var service = new SessionService();
+
             var session = await service.CreateAsync(options);
 
             return Json(new
@@ -156,27 +161,22 @@ namespace AgrifoodManagement.Web.Controllers
             return Ok(new { message = "Order saved", orderId });
         }
 
-        private async Task<(decimal? lat, decimal? lng)> GeocodeAddressAsync(string postalCode, string countryCode, string? city = null, string? street = null)
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmOrderRedirect(string session_id)
         {
-            var address = $"{street} {city} {postalCode} {countryCode}".Trim();
-            var url = $"https://nominatim.openstreetmap.org/search?q={Uri.EscapeDataString(address)}&format=json&limit=1";
+            var sessionService = new SessionService();
+            var session = await sessionService.GetAsync(session_id);
 
-            using var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("User-Agent", "AgroFoodManagementApp");
-
-            var response = await httpClient.GetAsync(url);
-            if (!response.IsSuccessStatusCode) return (null, null);
-
-            var content = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<List<NominatimResult>>(content);
-
-            if (result?.Any() == true)
+            if (session.PaymentStatus == "paid" && session.Metadata.TryGetValue("orderId", out var orderIdStr))
             {
-                var location = result.First();
-                return (decimal.Parse(location.lat), decimal.Parse(location.lon));
+                if (Guid.TryParse(orderIdStr, out var orderId))
+                {
+                    await _mediator.Send(new MarkOrderAsPaidCommand { OrderId = orderId });
+                }
             }
 
-            return (null, null);
+            return RedirectToAction("Home", "Consumer");
         }
 
         private async Task<List<object>> GetCountryCodesAsync()

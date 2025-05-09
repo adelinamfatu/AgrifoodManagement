@@ -20,9 +20,10 @@ namespace AgrifoodManagement.Web.Models.Shop
         public string CountryCode { get; set; } = "+46";
 
         // Delivery Information
-        [Required(ErrorMessage = "Postal code is required")]
-        public string PostalCode { get; set; }
-
+        public string Street { get; set; }
+        public string StreetNumber { get; set; }
+        public string City { get; set; }
+        public string Country { get; set; }
         public string DeliveryMethod { get; set; } = "Normal";
         public string PaymentMethod { get; set; } = "IPay";
 

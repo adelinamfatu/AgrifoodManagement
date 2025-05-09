@@ -25,7 +25,8 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
                 .Include(o => o.Buyer)
                 .SingleOrDefaultAsync(o =>
                     o.Buyer!.Email == request.BuyerEmail &&
-                    o.Status == OrderStatus.InCart,
+                    o.Status == OrderStatus.InCart ||
+                    o.Status == OrderStatus.Pending,
                     ct);
 
             if (order == null)
