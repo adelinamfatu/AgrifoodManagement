@@ -36,6 +36,8 @@ namespace AgrifoodManagement.Domain.Entities
 
         public decimal DeliveryFee { get; set; }
 
+        public string PhoneNumber { get; set; }
+
         [ForeignKey("DiscountCode")]
         public string? DiscountCodeId { get; set; }
 

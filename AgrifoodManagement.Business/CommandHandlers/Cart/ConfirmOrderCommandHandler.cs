@@ -30,6 +30,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
             order.DeliveryFee = request.DeliveryFee ?? 0;
             order.DiscountCodeId = !string.IsNullOrWhiteSpace(request.DiscountCode) ? request.DiscountCode : null;
             order.DeliveryAddress = request.DeliveryAddress;
+            order.PhoneNumber = request.PhoneNumber;
 
             var (lat, lon) = await GeocodeAddressAsync(request.DeliveryAddress);
             order.DeliveryLatitude = lat ?? 0;

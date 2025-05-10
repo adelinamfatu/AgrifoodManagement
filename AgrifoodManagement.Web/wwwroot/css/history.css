@@ -1,0 +1,89 @@
+﻿.order-history-page {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.order-history-container {
+    width: 100%;
+    max-width: 1350px;
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.order-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.order-header {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2e7d32;
+    margin: 0;
+}
+
+.delivery-note {
+    font-size: 13px;
+    background-color: #f0f8ff;
+    padding: 5px 12px;
+    color: #333;
+    border-left: 4px solid #2196f3;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.type-badge,
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+    .type-badge.delivery {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .type-badge.collection {
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .status-badge.processing {
+        background-color: #e3f2fd;
+        color: #1565c0;
+    }
+
+    .status-badge.shipped {
+        background-color: #d0f0c0;
+        color: #388e3c;
+    }
+
+    .status-badge.cancelled {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .status-badge.completed {
+        background-color: #e6ffe6;
+        color: #2e7d32;
+    }
+
+.small-action-btn {
+    font-size: 12px;
+    padding: 6px 10px;
+    margin: 0 4px;
+    border-radius: 6px;
+    white-space: nowrap;
+}

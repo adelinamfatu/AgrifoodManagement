@@ -1,5 +1,4 @@
-﻿using AgrifoodManagement.Business.Commands.Order;
-using AgrifoodManagement.Business.Queries.Order;
+﻿using AgrifoodManagement.Business.Queries.Order;
 using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Business.Queries.Shop;
 using AgrifoodManagement.Util.Models;
@@ -28,10 +27,6 @@ namespace AgrifoodManagement.Web.Controllers
             if (dealsResult.IsSuccess)
             {
                 dealViewModels = ProductViewModelMapper.Map(dealsResult.Value);
-            }
-            else
-            {
-                // handle error: log or show fallback
             }
 
             var viewModel = new HomeViewModel
@@ -96,9 +91,15 @@ namespace AgrifoodManagement.Web.Controllers
             return View();
         }
 
-        public IActionResult History()
+        public async Task<IActionResult> HistoryAsync()
         {
-            return View();
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email)) 
+                return RedirectToAction("Auth", "Account");
+
+            var dto = await _mediator.Send(new GetProcessedOrdersQuery(email));
+            var viewModel = OrderHistoryViewModelMapper.Map(dto);
+            return View(viewModel);
         }
 
         public IActionResult Loyalty()

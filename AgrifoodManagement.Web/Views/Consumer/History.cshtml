@@ -2,5 +2,146 @@
     Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
 }
 
-<h2>Blogs Page</h2>
-<p>This is your Blogs page.</p>
+@model OrderHistoryViewModel
+
+<div class="order-history-page">
+    <div class="order-history-container">
+        <div class="order-header-row">
+            <h2 class="order-header">Order History</h2>
+            <p class="delivery-note">
+                <strong>Note:</strong> <em>Processing</em> may mean unpicked or already in delivery (no delivery app integration yet).
+            </p>
+        </div>
+
+        <ejs-treegrid id="OrderTreeGrid"
+                      dataSource="@(Model.Orders)"
+                      childMapping="Children"
+                      treeColumnIndex="0"
+                      allowSorting="true"
+                      allowFiltering="true"
+                      rowHeight="52"
+                      height="520"
+                      load="onGridLoad"
+                      gridLines="None">
+            <e-treegrid-filtersettings type="Menu"></e-treegrid-filtersettings>
+            <e-treegrid-columns>
+                <e-treegrid-column field="Id" headerText="Id" width="260" textAlign="Center" clipMode="EllipsisWithTooltip"></e-treegrid-column>
+                <e-treegrid-column field="Name" headerText="Product" width="250" textAlign="Center" clipMode="EllipsisWithTooltip"></e-treegrid-column>
+                <e-treegrid-column field="Delivery" headerText="Delivery" width="140" textAlign="Center"></e-treegrid-column>
+                <e-treegrid-column field="Status" headerText="Status" width="140" textAlign="Center" template="#statusTemplate"></e-treegrid-column>
+                <e-treegrid-column field="Quantity" headerText="Quantity" width="100" textAlign="Center"></e-treegrid-column>
+                <e-treegrid-column field="Total" headerText="Total" format="C2" width="120" textAlign="Center"></e-treegrid-column>
+                <e-treegrid-column headerText="Action" width="160" textAlign="Center" template="actionTemplate" allowFiltering="false" allowSorting="false"></e-treegrid-column>
+            </e-treegrid-columns>
+        </ejs-treegrid>
+    </div>
+</div>
+
+<ejs-toast id="actionToast" newestOnTop="true" showCloseButton="true" timeOut="4000">
+    <e-toast-position X="Right" Y="Top"></e-toast-position>
+</ejs-toast>
+
+<script id="statusTemplate" type="text/x-template">
+    <span class="status-badge ${Status.toLowerCase()}">${Status}</span>
+</script>
+
+<script>
+    function showToast(type, title, message) {
+        const toastObj = document.getElementById('actionToast').ej2_instances[0];
+        toastObj.show({
+            title: title,
+            content: message,
+            cssClass: `e-toast-${type}`,
+            icon: `e-${type} toast-icons`
+        });
+    }
+
+    function onGridLoad(args) {
+        var grid = document.getElementById("OrderTreeGrid").ej2_instances[0];
+
+        grid.columns.forEach(function (col) {
+            if (col.headerText === "Action") {
+                col.template = actionTemplate;
+            }
+        });
+    }
+
+    function actionTemplate(data) {
+        if (data.Status === "Processing") {
+            return "<button class='e-btn e-danger small-action-btn' onclick=\"cancelOrder('" + data.Id + "')\">Cancel</button>";
+        } else if (data.Status === "Shipped") {
+            return "<button class='e-btn e-success small-action-btn' onclick=\"completeOrder('" + data.Id + "')\">Complete</button>";
+        }
+        return "";
+    }
+
+    function cancelOrder(id) {
+        ej.popups.DialogUtility.confirm({
+            title: 'Cancel Order',
+            content: 'Are you sure you want to cancel this order?',
+            okButton: {
+                click: function () {
+                    this.hide();
+                    fetch('/Consumer/Cancel', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(id)
+                    })
+                        .then(res => {
+                            if (res.ok) {
+                                showToast("success",  "Canceled", "Order was canceled successfully.");
+                                setTimeout(() => location.reload(), 1000);
+                            } else {
+                                showToast("danger", "Error", "Could not cancel the order.");
+                            }
+                        });
+                }
+            },
+            cancelButton: {
+                text: 'Cancel',
+                click: function () { this.hide(); }
+            },
+            animationSettings: { effect: 'Zoom' },
+            width: '400px',
+            position: { X: 'center', Y: 'center' },
+            closeOnEscape: true
+        });
+    }
+
+    function completeOrder(id) {
+        ej.popups.DialogUtility.confirm({
+            title: 'Complete Order',
+            content: 'Mark this order as completed?',
+            okButton: {
+                click: function () {
+                    this.hide();
+                    fetch('/History/Complete', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(id)
+                    })
+                        .then(res => {
+                            if (res.ok) {
+                                showToast("success", "Completed", "Order marked as completed.");
+                                setTimeout(() => location.reload(), 1000);
+                            } else {
+                                showToast("error", "Error", "Could not complete the order.");
+                            }
+                        });
+                }
+            },
+            cancelButton: {
+                text: 'Cancel',
+                click: function () { this.hide(); }
+            },
+            animationSettings: { effect: 'Zoom' },
+            width: '400px',
+            position: { X: 'center', Y: 'center' },
+            closeOnEscape: true
+        });
+    }
+</script>

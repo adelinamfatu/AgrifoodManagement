@@ -17,15 +17,14 @@ using System.Text.Json;
 namespace AgrifoodManagement.Web.Controllers
 {
     [Authorize(Roles = "Buyer")]
-    public class CartController : Controller
+    public class CartController : BaseUserController
     {
-        private readonly IMediator _mediator;
         private readonly IOptions<StripeSettings> _stripeSettings;
         private readonly HttpClient _httpClient;
 
         public CartController(IMediator mediator, IOptions<StripeSettings> stripeSettings, HttpClient httpClient)
+            : base(mediator)
         {
-            _mediator = mediator;
             _stripeSettings = stripeSettings;
             _httpClient = httpClient;
         }

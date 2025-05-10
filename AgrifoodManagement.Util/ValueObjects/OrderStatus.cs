@@ -10,7 +10,7 @@ namespace AgrifoodManagement.Util.ValueObjects
     {
         InCart,
         Pending,
-        Procesing,
+        Processing,
         Shipped,
         Canceled,
         Completed

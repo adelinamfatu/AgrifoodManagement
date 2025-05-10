@@ -25,7 +25,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
             if (order == null)
                 throw new KeyNotFoundException("Order not found.");
 
-            order.Status = OrderStatus.Procesing;
+            order.Status = OrderStatus.Processing;
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
