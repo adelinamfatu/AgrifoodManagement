@@ -61,7 +61,7 @@ app.Use(async (context, next) =>
 
             if (userType == "Seller")
             {
-                context.Response.Redirect("/Producer/Dashboard");
+                context.Response.Redirect("/Producer/Announcements");
                 return;
             }
             else if (userType == "Buyer")

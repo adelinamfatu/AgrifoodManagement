@@ -2,5 +2,148 @@
     Layout = "~/Views/Shared/_ProducerSidebarLayout.cshtml";
 }
 
-<h2>Reports Page</h2>
-<p>This is your Reports page.</p>
+@model AgrifoodManagement.Web.Models.Report.ReportsViewModel
+
+<div class="reports-container">
+    <ejs-dashboardlayout id="reportsLayout"
+                         columns="3"
+                         cellSpacing="@(Model.CellSpacing)"
+                         cellAspectRatio="1.5"
+                         allowDragging="false"
+                         allowResizing="true"
+                         created="onReportsLayoutCreated">
+        <e-dashboardlayout-panels>
+            <e-dashboardlayout-panel sizeX="2" sizeY="2" row="1" col="0">
+                <e-content-template>
+                    <div class="e-panel-container">
+                        <div class="e-panel-header"><div class="title">Sales — Yearly</div></div>
+                        <div class="e-panel-content">
+                            <ejs-chart id="colChart" style="height:100%;width:100%">
+                                <e-chart-primaryxaxis valueType="Category" interval="1">
+                                    <e-majorgridlines width="0"></e-majorgridlines>
+                                </e-chart-primaryxaxis>
+                                <e-series-collection>
+                                    <e-series dataSource="@(Model.ColumnChartData)" xName="Period" yName="OnlinePercentage" name="Online" type="Column" fill="#28a745"></e-series>
+                                    <e-series dataSource="@(Model.ColumnChartData)" xName="Period" yName="RetailPercentage" name="Retail" type="Column" fill="#dc3545"></e-series>
+                                </e-series-collection>
+                                <e-chart-legendsettings visible="true"></e-chart-legendsettings>
+                            </ejs-chart>
+                        </div>
+                    </div>
+                </e-content-template>
+            </e-dashboardlayout-panel>
+
+            <e-dashboardlayout-panel sizeX="1" sizeY="2" row="1" col="2">
+                <e-content-template>
+                    <div class="e-panel-container">
+                        <div class="e-panel-header"><div class="title">Product Share</div></div>
+                        <div class="e-panel-content">
+                            <ejs-accumulationchart id="pieChart" style="height:100%;width:100%">
+                                <e-accumulation-series-collection>
+                                    <e-accumulation-series dataSource="@(Model.PieData)"
+                                                           xName="Product"
+                                                           yName="Percentage"
+                                                           type="Pie"
+                                                           palettes="@(Model.Palettes)">
+                                    </e-accumulation-series>
+                                </e-accumulation-series-collection>
+                            </ejs-accumulationchart>
+                        </div>
+                    </div>
+                </e-content-template>
+            </e-dashboardlayout-panel>
+
+            <e-dashboardlayout-panel sizeX="3" sizeY="2" row="3" col="0">
+                <e-content-template>
+                    <div class="e-panel-container">
+                        <div class="e-panel-header"><div class="title">Monthly Trend</div></div>
+                        <div class="e-panel-content">
+                            <ejs-chart id="splineChart" style="height:100%;width:100%">
+                                <e-chart-primaryxaxis valueType="Category"></e-chart-primaryxaxis>
+                                <e-series-collection>
+                                    <e-series dataSource="@(Model.SplineChartData)" xName="Period" yName="OnlinePercentage" name="Online" type="SplineArea" fill="#28a745" opacity="0.3"></e-series>
+                                    <e-series dataSource="@(Model.SplineChartData)" xName="Period" yName="RetailPercentage" name="Retail" type="SplineArea" fill="#dc3545" opacity="0.3"></e-series>
+                                </e-series-collection>
+                                <e-chart-legendsettings visible="true"></e-chart-legendsettings>
+                            </ejs-chart>
+                        </div>
+                    </div>
+                </e-content-template>
+            </e-dashboardlayout-panel>
+        </e-dashboardlayout-panels>
+    </ejs-dashboardlayout>
+</div>
+
+<script>
+    function onReportsLayoutCreated() {
+        var dash = document.getElementById('reportsLayout').ej2_instances[0];
+        if (ej.base.Browser.isDevice) {
+            dash.columns = 1;
+            dash.cellAspectRatio = 1.2;
+            dash.refresh();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var dash = document.getElementById('reportsLayout').ej2_instances[0];
+        var col = document.getElementById('colChart')?.ej2_instances[0];
+        var pie = document.getElementById('pieChart')?.ej2_instances[0];
+        var spline = document.getElementById('splineChart')?.ej2_instances[0];
+
+        [dash, col, pie, spline].forEach(x => x && x.refresh());
+
+        var wrapper = document.querySelector('.reports-container');
+        if (window.ResizeObserver && wrapper) {
+            new ResizeObserver(function () {
+                dash.refresh();
+                if (col) { col.refresh(); }
+                if (pie) { pie.refresh(); }
+                if (spline) { spline.refresh(); }
+            }).observe(wrapper);
+        } else {
+            window.addEventListener('resize', function () {
+                dash.refresh();
+                col && col.refresh();
+                pie && pie.refresh();
+                spline && spline.refresh();
+            });
+        }
+    });
+</script>
+
+<style>
+    .reports-container {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+        overflow: hidden;
+    }
+
+        .reports-container .e-panel-header {
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #fafafa;
+        }
+
+        .reports-container .title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+    #reportsLayout {
+        flex: 1;
+        width: 100%;
+    }
+
+    .e-panel-container {
+        height: 100%;
+    }
+
+    .e-panel-content {
+        padding: 12px;
+        overflow: auto;
+    }
+</style>

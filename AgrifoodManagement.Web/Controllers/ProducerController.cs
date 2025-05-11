@@ -1,8 +1,10 @@
 ﻿using AgrifoodManagement.Business.Queries.Forum;
 using AgrifoodManagement.Business.Queries.Product;
+using AgrifoodManagement.Business.Queries.Report;
 using AgrifoodManagement.Web.Mappers;
 using AgrifoodManagement.Web.Models;
 using AgrifoodManagement.Web.Models.Forum;
+using AgrifoodManagement.Web.Models.Report;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,44 +25,10 @@ namespace AgrifoodManagement.Web.Controllers
             ViewBag.ActiveItemId = activeItemId;
         }
 
-        public IActionResult Dashboard()
-        {
-            SetSidebar("1");
-            return View();
-        }
-
-        public async Task<IActionResult> StocksAsync()
-        {
-            SetSidebar("2");
-
-            var products = await _mediator.Send(new GetProductStocksQuery());
-            var stocks = ProductViewModelMapper.Map(products);
-
-            return View(stocks);
-        }
-
-        public IActionResult Orders()
-        {
-            SetSidebar("3");
-            return View();
-        }
-
-        public IActionResult Reports()
-        {
-            SetSidebar("4");
-            return View();
-        }
-
-        public IActionResult Forecasting()
-        {
-            SetSidebar("5");
-            return View();
-        }
-
         public async Task<IActionResult> AnnouncementsAsync()
         {
             var productCategories = await _mediator.Send(new GetChildCategoriesQuery());
-            SetSidebar("6");
+            SetSidebar("1");
             ViewBag.ProductCategories = productCategories;
 
             var productDtos = await _mediator.Send(new GetUserProductsQuery());
@@ -90,7 +58,7 @@ namespace AgrifoodManagement.Web.Controllers
         public async Task<IActionResult> ProductAsync(Guid? id)
         {
             var productCategories = await _mediator.Send(new GetProductCategoriesQuery());
-            SetSidebar("6");
+            SetSidebar("1");
             ViewBag.ProductCategories = productCategories;
 
             UpsertProductViewModel viewModel = new UpsertProductViewModel();
@@ -121,9 +89,70 @@ namespace AgrifoodManagement.Web.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> StocksAsync()
+        {
+            SetSidebar("2");
+
+            var products = await _mediator.Send(new GetProductStocksQuery());
+            var stocks = ProductViewModelMapper.Map(products);
+
+            return View(stocks);
+        }
+
+        public IActionResult Orders()
+        {
+            SetSidebar("3");
+            return View();
+        }
+
+        public async Task<IActionResult> ReportsAsync()
+        {
+            SetSidebar("4");
+
+            var pieData = await _mediator.Send(new GetCategoryShareQuery());
+            var columnData = await _mediator.Send(new GetQuarterlySalesQuery());
+            var splineData = await _mediator.Send(new GetMonthlySalesQuery(6));
+
+            var viewModel = new ReportsViewModel
+            {
+                CellSpacing = new double[] { 10, 10 },
+
+                PieData = pieData
+                         .Select(x => new PieData
+                         {
+                             Product = x.Category,
+                             Percentage = x.Percentage
+                         }).ToList(),
+
+                ColumnChartData = columnData
+                         .Select(x => new ColumnData
+                         {
+                             Period = x.Period,
+                             OnlinePercentage = x.Sales 
+                         }).ToList(),
+
+                SplineChartData = splineData
+                         .Select(x => new SplineData
+                         {
+                             Period = x.Period,
+                             OnlinePercentage = x.Sales
+                         }).ToList(),
+
+                Palettes = new[] { "#2485FA", "#FEC200", "#28A745", "#DC3545" }
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult Forecasting()
+        {
+            SetSidebar("5");
+            return View();
+        }
+
         public async Task<IActionResult> ForumAsync()
         {
-            SetSidebar("7");
+            SetSidebar("6");
 
             var topicDtos = await _mediator.Send(new GetForumTopicsQuery());
 
@@ -166,13 +195,12 @@ namespace AgrifoodManagement.Web.Controllers
         {
             return new List<SidebarViewModel>
             {
-                new SidebarViewModel { Id = "1", Name = "Dashboard", IconCss = "bi bi-speedometer2", Url = "/Producer/Dashboard", IsPro = false },
+                new SidebarViewModel { Id = "1", Name = "Announcements", IconCss = "bi bi-megaphone", Url = "/Producer/Announcements", IsPro = false },
                 new SidebarViewModel { Id = "2", Name = "Stock Management", IconCss = "bi bi-box-seam", Url = "/Producer/Stocks", IsPro = false },
                 new SidebarViewModel { Id = "3", Name = "Orders & Transactions", IconCss = "bi bi-cart3", Url = "/Producer/Orders", IsPro = false },
                 new SidebarViewModel { Id = "4", Name = "Reports & Analytics", IconCss = "bi bi-graph-up", Url = "/Producer/Reports", IsPro = true },
                 new SidebarViewModel { Id = "5", Name = "Demand Forecasting", IconCss = "bi bi-calendar-check", Url = "/Producer/Forecasting", IsPro = true },
-                new SidebarViewModel { Id = "6", Name = "Announcements", IconCss = "bi bi-megaphone", Url = "/Producer/Announcements", IsPro = false },
-                new SidebarViewModel { Id = "7", Name = "Forum", IconCss = "bi bi-chat-dots", Url = "/Producer/Forum", IsPro = true },
+                new SidebarViewModel { Id = "6", Name = "Forum", IconCss = "bi bi-chat-dots", Url = "/Producer/Forum", IsPro = true },
             };
         }
 

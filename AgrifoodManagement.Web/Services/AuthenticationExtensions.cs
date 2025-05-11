@@ -51,7 +51,7 @@ namespace AgrifoodManagement.Web.Services
                             if (roleClaim == "Seller")
                             {
                                 context.Response.StatusCode = StatusCodes.Status302Found;
-                                context.Response.Headers.Location = "/Producer/Dashboard";
+                                context.Response.Headers.Location = "/Producer/Announcements";
                                 return Task.CompletedTask;
                             }
 

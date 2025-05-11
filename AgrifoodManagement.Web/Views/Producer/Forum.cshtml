@@ -23,135 +23,137 @@
 
 @model List<TopicViewModel>
 
-<div class="message-container">
-    <ejs-message id="msg_success"
-                 content="Your thread will be posted shortly"
-                 severity="Success"
-                 visible=false>
-    </ejs-message>
+<div class="forum-page-container">
+    <div class="message-container">
+        <ejs-message id="msg_success"
+                     content="Your thread will be posted shortly"
+                     severity="Success"
+                     visible=false>
+        </ejs-message>
 
-    <ejs-message id="msg_warning"
-                 content="Network issue. Please try again."
-                 severity="Warning"
-                 visible=false>
-    </ejs-message>
+        <ejs-message id="msg_warning"
+                     content="Network issue. Please try again."
+                     severity="Warning"
+                     visible=false>
+        </ejs-message>
 
-    <ejs-message id="msg_error"
-                 content="An error occurred while submitting your discussion"
-                 severity="Error"
-                 visible=false>
-    </ejs-message>
-</div>
-
-<div id="target" class="forum-container">
-    <div class="forum-header">
-        <div class="filters">
-            <ejs-dropdownlist id="filterDropdown"
-                              dataSource="filterOptions"
-                              placeholder="Select Filter">
-            </ejs-dropdownlist>
-        </div>
+        <ejs-message id="msg_error"
+                     content="An error occurred while submitting your discussion"
+                     severity="Error"
+                     visible=false>
+        </ejs-message>
     </div>
 
-    <div class="forum-content">
-        <div class="discussions">
-            @foreach (var topic in Model)
-            {
-                <div class="topic-card" 
-                     data-topic-id="@topic.Id"
-                     data-category="@topic.Category"
-                     data-date="@topic.CreatedAt.ToString("o")"
-                     data-comments="@topic.CommentsCount">
-                    <div class="topic-main">
-                        <div class="topic-author">
-                            <div class="author-avatar">
-                                <img src="@(string.IsNullOrEmpty(topic.Author.AvatarUrl) ? "/api/placeholder/40/40" : topic.Author.AvatarUrl)" alt="@topic.Author.Name avatar">
-                            </div>
-                        </div>
-                        <div class="topic-content">
-                            <div class="topic-header">
-                                <h3 class="topic-title">@topic.Title</h3>
-                            </div>
-                            @if (topic.Category != null)
-                            {
-                                <div class="category-tag tag-@topic.Category" style="color: @topic.Category.GetCategoryColor()">@topic.Category.GetDisplayName()</div>
-                            }
-                            @if (topic.CommentsCount > 0)
-                            {
-                                <div class="topic-meta">Latest reply from @topic.LatestReplyAuthor @topic.LatestReplyTimeAgo</div>
-                            }
-                            <p class="topic-text">@topic.Text</p>
-                            <div class="topic-stats">
-                                <div class="topic-commenters">
-                                    @foreach (var commenter in topic.TopCommenters.Take(4))
-                                    {
-                                        <div class="commenter-avatar">
-                                            <img src="@(string.IsNullOrEmpty(commenter.AvatarUrl) ? "/api/placeholder/24/24" : commenter.AvatarUrl)" alt="@commenter.Name">
-                                        </div>
-                                    }
-                                </div>
-                                <span class="comments-count" onclick="toggleComments(@topic.Id)">@topic.CommentsCount Comments</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="comments-section" id="comments-@topic.Id">
-                        <div class="comments-list">
-                            @if (topic.Comments != null && topic.Comments.Any())
-                            {
-                                foreach (var comment in topic.Comments)
-                                {
-                                    <div class="comment">
-                                        <div class="comment-author">
-                                            <div class="author-avatar">
-                                                <img src="@(string.IsNullOrEmpty(comment.Author.AvatarUrl) ? "/api/placeholder/40/40" : comment.Author.AvatarUrl)" alt="@comment.Author.Name avatar">
-                                            </div>
-                                        </div>
-                                        <div class="comment-content">
-                                            <div class="comment-header">
-                                                <span class="comment-author-name">@comment.Author.Name</span>
-                                                <span class="comment-date">@comment.TimeAgo</span>
-                                            </div>
-                                            <p class="comment-text">@comment.Text</p>
-                                        </div>
-                                    </div>
-                                }
-                            }
-                            else
-                            {
-                                <p>No comments yet. Be the first to comment!</p>
-                            }
-                        </div>
-                        <div class="add-comment">
-                            <ejs-textarea id="commentTextarea-@topic.Id"
-                                          class="comment-input" placeholder="Add your comment..."
-                                          floatLabelType="Auto" cssClass="e-outline" rows="5" cols="250"
-                                          resizeMode="Vertical"></ejs-textarea>
-                            <ejs-button id="submitCommentBtn-@topic.Id" class="submit-comment-btn" content="Submit" onclick="submitComment('@topic.Id')" isPrimary="true"></ejs-button>
-                        </div>
-                    </div>
-                </div>
-            }
+    <div id="target" class="forum-container">
+        <div class="forum-header">
+            <div class="filters">
+                <ejs-dropdownlist id="filterDropdown"
+                                  dataSource="filterOptions"
+                                  placeholder="Select Filter">
+                </ejs-dropdownlist>
+            </div>
         </div>
 
-        <div class="sidebar">
-            <ejs-button id="openDialogBtn" class="new-discussion-btn-large" content="Start New Discussion" isPrimary="true"></ejs-button>
+        <div class="forum-content">
+            <div class="discussions">
+                @foreach (var topic in Model)
+                {
+                    <div class="topic-card"
+                         data-topic-id="@topic.Id"
+                         data-category="@topic.Category"
+                         data-date="@topic.CreatedAt.ToString("o")"
+                         data-comments="@topic.CommentsCount">
+                        <div class="topic-main">
+                            <div class="topic-author">
+                                <div class="author-avatar">
+                                    <img src="@(string.IsNullOrEmpty(topic.Author.AvatarUrl) ? "/api/placeholder/40/40" : topic.Author.AvatarUrl)" alt="@topic.Author.Name avatar">
+                                </div>
+                            </div>
+                            <div class="topic-content">
+                                <div class="topic-header">
+                                    <h3 class="topic-title">@topic.Title</h3>
+                                </div>
+                                @if (topic.Category != null)
+                                {
+                                    <div class="category-tag tag-@topic.Category" style="color: @topic.Category.GetCategoryColor()">@topic.Category.GetDisplayName()</div>
+                                }
+                                @if (topic.CommentsCount > 0)
+                                {
+                                    <div class="topic-meta">Latest reply from @topic.LatestReplyAuthor @topic.LatestReplyTimeAgo</div>
+                                }
+                                <p class="topic-text">@topic.Text</p>
+                                <div class="topic-stats">
+                                    <div class="topic-commenters">
+                                        @foreach (var commenter in topic.TopCommenters.Take(4))
+                                        {
+                                            <div class="commenter-avatar">
+                                                <img src="@(string.IsNullOrEmpty(commenter.AvatarUrl) ? "/api/placeholder/24/24" : commenter.AvatarUrl)" alt="@commenter.Name">
+                                            </div>
+                                        }
+                                    </div>
+                                    <span class="comments-count" onclick="toggleComments(@topic.Id)">@topic.CommentsCount Comments</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comments-section" id="comments-@topic.Id">
+                            <div class="comments-list">
+                                @if (topic.Comments != null && topic.Comments.Any())
+                                {
+                                    foreach (var comment in topic.Comments)
+                                    {
+                                        <div class="comment">
+                                            <div class="comment-author">
+                                                <div class="author-avatar">
+                                                    <img src="@(string.IsNullOrEmpty(comment.Author.AvatarUrl) ? "/api/placeholder/40/40" : comment.Author.AvatarUrl)" alt="@comment.Author.Name avatar">
+                                                </div>
+                                            </div>
+                                            <div class="comment-content">
+                                                <div class="comment-header">
+                                                    <span class="comment-author-name">@comment.Author.Name</span>
+                                                    <span class="comment-date">@comment.TimeAgo</span>
+                                                </div>
+                                                <p class="comment-text">@comment.Text</p>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No comments yet. Be the first to comment!</p>
+                                }
+                            </div>
+                            <div class="add-comment">
+                                <ejs-textarea id="commentTextarea-@topic.Id"
+                                              class="comment-input" placeholder="Add your comment..."
+                                              floatLabelType="Auto" cssClass="e-outline" rows="5" cols="250"
+                                              resizeMode="Vertical"></ejs-textarea>
+                                <ejs-button id="submitCommentBtn-@topic.Id" class="submit-comment-btn" content="Submit" onclick="submitComment('@topic.Id')" isPrimary="true"></ejs-button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
 
-            <div class="sidebar-section">
-                <ul class="sidebar-links">
-                    <li class="sidebar-link active" data-category="All">
-                        <i class="fas fa-list"></i>
-                        <span>All Categories</span>
-                    </li>
+            <div class="sidebar">
+                <ejs-button id="openDialogBtn" class="new-discussion-btn-large" content="Start New Discussion" isPrimary="true"></ejs-button>
 
-                    @foreach (var forumCategory in Enum.GetValues(typeof(ForumCategory)).Cast<ForumCategory>())
-                    {
-                        <li class="sidebar-link"
-                            data-category="@forumCategory">
-                            @Html.Raw(forumCategory.GetIcon())
-                            <span>@forumCategory.GetDisplayName()</span>
+                <div class="sidebar-section">
+                    <ul class="sidebar-links">
+                        <li class="sidebar-link active" data-category="All">
+                            <i class="fas fa-list"></i>
+                            <span>All Categories</span>
                         </li>
-                    }
-                </ul>
+
+                        @foreach (var forumCategory in Enum.GetValues(typeof(ForumCategory)).Cast<ForumCategory>())
+                        {
+                            <li class="sidebar-link"
+                                data-category="@forumCategory">
+                                @Html.Raw(forumCategory.GetIcon())
+                                <span>@forumCategory.GetDisplayName()</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

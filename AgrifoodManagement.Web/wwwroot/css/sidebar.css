@@ -137,7 +137,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 }
 
 .pro-badge {
-    background-color: #4361ee;
+    background-color: #FF8C42;
     color: white;
     font-size: 0.75rem;
     font-weight: 500;
@@ -148,7 +148,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 
 .upgrade-pro-container {
     margin-top: 40px;
-    background-color: #f8f9fa;
+    background-color: #FFF4E6;
     border-radius: 8px;
     padding: 20px;
     text-align: center;
@@ -156,7 +156,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 }
 
 .upgrade-pro-logo {
-    background-color: #4361ee;
+    background-color: #FF8C42;
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -185,7 +185,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 }
 
 .upgrade-button {
-    background-color: #4361ee;
+    background-color: #FF8C42;
     color: white;
     border: none;
     border-radius: 24px;
@@ -196,9 +196,9 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     transition: background-color 0.3s;
 }
 
-.upgrade-button:hover {
-    background-color: #3249d3;
-}
+    .upgrade-button:hover {
+        background-color: #e97730;
+    }
 
 .toolbar-right {
     margin-left: auto !important;

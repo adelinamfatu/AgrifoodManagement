@@ -49,7 +49,7 @@ namespace AgrifoodManagement.Web.Controllers
             switch (result.Value.UserType)
             {
                 case UserType.Seller:
-                    return Redirect("/Producer/Dashboard");
+                    return Redirect("/Producer/Announcements");
                 case UserType.Buyer:
                     return Redirect("/Consumer/Home");
                 default:
@@ -109,7 +109,7 @@ namespace AgrifoodManagement.Web.Controllers
             switch (loginResult.Value.UserType)
             {
                 case UserType.Seller:
-                    return Redirect("/Producer/Dashboard");
+                    return Redirect("/Producer/Stocks");
                 case UserType.Buyer:
                     return Redirect("/Consumer/Home");
                 default:
