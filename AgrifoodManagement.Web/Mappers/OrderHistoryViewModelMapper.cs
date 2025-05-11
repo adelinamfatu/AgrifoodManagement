@@ -20,6 +20,7 @@ namespace AgrifoodManagement.Web.Mappers
                 Id = dto.Id,
                 Name = dto.Name,
                 Delivery = dto.Delivery,
+                BuyerPhone = dto.BuyerPhone,
                 Status = dto.Status,
                 Quantity = dto.Quantity,
                 Total = dto.Total,

@@ -1,83 +1,31 @@
-﻿.custom-toast-success,
-.custom-toast-error,
-.custom-toast-warning,
-.custom-toast-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-radius: 8px;
-    padding: 12px 16px;
-    border: none !important;
+﻿.e-toast-container.e-toast-error > .e-toast {
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+    border-left: 4px solid #f5c6cb !important;
+    box-shadow: none !important;
 }
 
-.custom-toast-success {
-    background: #28a745 !important;
-    color: white !important;
+.e-toast-container.e-toast-error .e-toast-title {
+    font-weight: 600 !important;
+    color: #721c24 !important;
 }
 
-.custom-toast-error {
-    background: #dc3545 !important;
-    color: white !important;
+.e-toast-container.e-toast-error .e-toast-icon {
+    color: #721c24 !important;
 }
 
-.custom-toast-warning {
-    background: #ffc107 !important;
-    color: #212529 !important;
+.e-toast-container.e-toast-success > .e-toast {
+    background-color: #d4edda !important;
+    color: #155724 !important;
+    border-left: 4px solid #c3e6cb !important;
+    box-shadow: none !important;
 }
 
-.custom-toast-info {
-    background: #17a2b8 !important;
-    color: white !important;
+.e-toast-container.e-toast-success .e-toast-title {
+    font-weight: 600 !important;
+    color: #155724 !important;
 }
 
-/* Toast icons */
-.toast-icon-success::before {
-    content: "\e7d9"; /* e-icons checkmark */
+.e-toast-container.e-toast-success .e-toast-icon {
+    color: #155724 !important;
 }
-
-.toast-icon-error::before {
-    content: "\e7a7"; /* e-icons error */
-}
-
-.toast-icon-warning::before {
-    content: "\e254"; /* e-icons warning */
-}
-
-.toast-icon-info::before {
-    content: "\e607"; /* e-icons info */
-}
-
-.e-toast-icon {
-    font-size: 20px;
-    min-width: 20px;
-    color: inherit !important;
-}
-
-/* Override Syncfusion toast default styles */
-.e-toast-container .e-toast {
-    border: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-    .e-toast-container .e-toast .e-toast-message {
-        padding: 0;
-    }
-
-    .e-toast-container .e-toast .e-toast-title {
-        font-weight: 600;
-        margin-bottom: 4px;
-        color: inherit;
-    }
-
-    .e-toast-container .e-toast .e-toast-content {
-        color: inherit;
-    }
-
-    .e-toast-container .e-toast .e-toast-close-icon {
-        color: inherit;
-        opacity: 0.8;
-    }
-
-        .e-toast-container .e-toast .e-toast-close-icon:hover {
-            opacity: 1;
-        }

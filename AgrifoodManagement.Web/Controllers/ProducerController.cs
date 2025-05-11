@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.Queries.Forum;
+using AgrifoodManagement.Business.Queries.Order;
 using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Business.Queries.Report;
 using AgrifoodManagement.Web.Mappers;
@@ -8,6 +9,7 @@ using AgrifoodManagement.Web.Models.Report;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AgrifoodManagement.Web.Controllers
 {
@@ -99,10 +101,17 @@ namespace AgrifoodManagement.Web.Controllers
             return View(stocks);
         }
 
-        public IActionResult Orders()
+        public async Task<IActionResult> OrdersAsync()
         {
             SetSidebar("3");
-            return View();
+
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+                return RedirectToAction("Auth", "Account");
+
+            var dto = await _mediator.Send(new GetSellerOrdersQuery(email));
+            var viewModel = OrderHistoryViewModelMapper.Map(dto);
+            return View(viewModel);
         }
 
         public async Task<IActionResult> ReportsAsync()

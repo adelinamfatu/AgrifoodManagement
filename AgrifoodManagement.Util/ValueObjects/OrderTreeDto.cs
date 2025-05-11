@@ -10,7 +10,7 @@ namespace AgrifoodManagement.Util.ValueObjects
     {
         public Guid Id { get; set; } = Guid.Empty;
         public string Name { get; set; } = "";
-        public string PhoneNumber { get; set; } = "";
+        public string BuyerPhone { get; set; } = "";
         public string Delivery { get; set; } = "";
         public string Status { get; set; } = "";
         public string Quantity { get; set; }

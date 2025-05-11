@@ -2,5 +2,105 @@
     Layout = "~/Views/Shared/_ProducerSidebarLayout.cshtml";
 }
 
-<h2>Orders Page</h2>
-<p>This is your Orders page.</p>
+@model OrderHistoryViewModel
+
+<div class="order-history-page">
+    <div class="order-history-container">
+        <div class="order-header-row">
+            <p class="delivery-note">
+                <strong>Note:</strong> <em>Processing</em> may mean unpicked or already in delivery (no delivery app integration yet).
+            </p>
+        </div>
+
+        <ejs-treegrid id="OrderTreeGrid"
+                      dataSource="@(Model.Orders)"
+                      childMapping="Children"
+                      treeColumnIndex="0"
+                      allowSorting="true"
+                      allowFiltering="true"
+                      rowHeight="52"
+                      height="520"
+                      load="onGridLoad"
+                      gridLines="None">
+            <e-treegrid-filtersettings type="Menu"></e-treegrid-filtersettings>
+            <e-treegrid-columns>
+                <e-treegrid-column field="Id" headerText="Id" width="260" textAlign="Center" clipMode="EllipsisWithTooltip"></e-treegrid-column>
+                <e-treegrid-column field="Name" headerText="Product" width="250" textAlign="Center" clipMode="EllipsisWithTooltip"></e-treegrid-column>
+                <e-treegrid-column field="BuyerPhone" headerText="Buyer Phone" width="140" textAlign="Center"></e-treegrid-column>
+                <e-treegrid-column field="Status" headerText="Status" width="140" textAlign="Center" template="#statusTemplate"></e-treegrid-column>
+                <e-treegrid-column field="Quantity" headerText="Quantity" width="100" textAlign="Center"></e-treegrid-column>
+                <e-treegrid-column field="Total" headerText="Total" format="C2" width="120" textAlign="Center"></e-treegrid-column>
+                <e-treegrid-column headerText="Action" width="160" textAlign="Center" template="actionTemplate" allowFiltering="false" allowSorting="false"></e-treegrid-column>
+            </e-treegrid-columns>
+        </ejs-treegrid>
+    </div>
+</div>
+
+<ejs-toast id="actionToast" newestOnTop="true" showCloseButton="true" timeOut="4000">
+    <e-toast-position X="Right" Y="Top"></e-toast-position>
+</ejs-toast>
+
+<script id="statusTemplate" type="text/x-template">
+    <span class="status-badge ${Status.toLowerCase()}">${Status}</span>
+</script>
+
+<script>
+    function showToast(type, title, message) {
+        const toastObj = document.getElementById('actionToast').ej2_instances[0];
+        toastObj.show({
+            title: title,
+            content: message,
+            cssClass: `e-toast-${type}`
+        });
+    }
+
+    function onGridLoad(args) {
+        var grid = document.getElementById("OrderTreeGrid").ej2_instances[0];
+
+        grid.columns.forEach(function (col) {
+            if (col.headerText === "Action") {
+                col.template = actionTemplate;
+            }
+        });
+    }
+
+    function actionTemplate(data) {
+        if (data.Status === "Processing") {
+            return "<button class='e-btn e-primary small-action-btn' onclick=\"confirmPickup('" + data.Id + "')\">Confirm Pickup</button>";
+        }
+        return "";
+    }
+
+    function confirmPickup(id) {
+        ej.popups.DialogUtility.confirm({
+            title: 'Confirm Pickup',
+            content: 'Has the delivery person picked up the products for this order?',
+            okButton: {
+                click: function () {
+                    this.hide();
+                    fetch('/History/UpdateStatus', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                        orderId: id,
+                        newStatus: 'Shipped'
+                        })
+                    })
+                        .then(res => {
+                            if (res.ok) {
+                                showToast("success", "Picked Up", "Delivery confirmed.");
+                                setTimeout(() => location.reload(), 1000);
+                            } else {
+                                showToast("error", "Error", "Could not confirm pickup.");
+                            }
+                        });
+                }
+            },
+            cancelButton: { text: 'Cancel', click: function () { this.hide(); } },
+            animationSettings: { effect: 'Zoom' },
+            width: '400px',
+            position: { X: 'center', Y: 'center' },
+            closeOnEscape: true
+        });
+    }
+</script>

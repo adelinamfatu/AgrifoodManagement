@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AgrifoodManagement.Util.ValueObjects;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.Commands.Order
 {
-    public record CancelOrderCommand(Guid OrderId) : IRequest<bool>;
+    public record UpdateOrderStatusCommand(Guid OrderId, OrderStatus NewStatus) : IRequest<bool>;
 }

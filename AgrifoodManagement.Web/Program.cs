@@ -11,13 +11,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Syncfusion.Licensing;
 using AgrifoodManagement.Web.Controllers;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBPh8sVXJ8S0d+X1JPd11dXmJWd1p/THNYflR1fV9DaUwxOX1dQl9mSXxTcERnWn1deXBRRmI=;Mgo+DSMBMAY9C3t2XVhhQlJHfV5AQmBIYVp/TGpJfl96cVxMZVVBJAtUQF1hTH5RdkNiXXxcc31RQ2Vb");
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(opts =>
+    {
+        opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddApplicationMediatR();
 builder.Services.AddJwtAuthentication(builder.Configuration);

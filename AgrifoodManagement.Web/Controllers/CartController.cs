@@ -171,7 +171,7 @@ namespace AgrifoodManagement.Web.Controllers
             {
                 if (Guid.TryParse(orderIdStr, out var orderId))
                 {
-                    await _mediator.Send(new MarkOrderAsPaidCommand { OrderId = orderId });
+                    await _mediator.Send(new UpdateOrderStatusCommand(orderId, OrderStatus.Processing));
                 }
             }
 
