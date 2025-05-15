@@ -1,4 +1,6 @@
 ﻿using AgrifoodManagement.Business.Commands.Product;
+using AgrifoodManagement.Business.Services;
+using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models;
 using AgrifoodManagement.Web.Models.Shop;
@@ -14,10 +16,12 @@ namespace AgrifoodManagement.Web.Controllers
     public class ProductController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IStripeCheckoutService _stripeService;
 
-        public ProductController(IMediator mediator)
+        public ProductController(IMediator mediator, IStripeCheckoutService stripeService)
         {
             _mediator = mediator;
+            _stripeService = stripeService;
         }
 
         [HttpPost]
@@ -158,6 +162,77 @@ namespace AgrifoodManagement.Web.Controllers
                     toastType = "error"
                 });
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Promote([FromBody] PromoteProductDto dto)
+        {
+            var items = new[]
+            {
+                new StripeLineItemDto {
+                    Name        = $"Promote “{dto.ProductName}”",
+                    Description = "Boost your listing",
+                    UnitAmount  = 2500,
+                    Currency    = "ron",
+                    Quantity    = 1
+                }
+            };
+
+            var domain = $"{Request.Scheme}://{Request.Host}";
+            var successUrl = $"{domain}/Product/CompletePromotion?productId={dto.ProductId}&session_id={{CHECKOUT_SESSION_ID}}";
+            var cancelUrl = $"{domain}/Producer/Announcements";
+
+            var result = await _stripeService.CreateCheckoutSessionAsync(
+                lineItems: items,
+                successUrl: successUrl,
+                cancelUrl: cancelUrl,
+                metadata: new Dictionary<string, string>
+                {
+                    ["ProductId"] = dto.ProductId.ToString()
+                }
+            );
+
+            if (!result.Success)
+                return BadRequest(new { success = false, error = result.ErrorMessage });
+
+            return Ok(new { 
+                success = true, 
+                sessionId = result.SessionId, 
+                publishableKey = result.PublishableKey });
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> CompletePromotion(Guid productId, string session_id)
+        {
+            var service = new Stripe.Checkout.SessionService();
+            var session = await service.GetAsync(session_id);
+            if (session.PaymentStatus != "paid")
+            {
+                TempData["Error"] = "Payment not completed.";
+                return RedirectToAction("Announcements");
+            }
+
+            // Mark the product as promoted & record in ExtendedProperty
+            var ok = await _mediator.Send(new PromoteProductCommand(productId, session_id));
+            if (!ok)
+            {
+                TempData["Error"] = "Could not finalize promotion.";
+            }
+            else
+            {
+                TempData["Success"] = "Your product is now promoted!";
+            }
+
+            return RedirectToAction("Producer/Announcements");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProductStatus([FromBody] UpdateProductStatusDto dto)
+        {
+            var ok = await _mediator.Send(new UpdateProductStatusCommand(dto.ProductId, dto.NewStatus));
+
+            return ok ? Ok() : BadRequest("Could not update product status");
         }
     }
 }

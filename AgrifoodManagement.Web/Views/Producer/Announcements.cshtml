@@ -4,8 +4,8 @@
     Layout = "~/Views/Shared/_ProducerSidebarLayout.cshtml";
 
     var productCategoriesData = ViewBag.ProductCategories as List<CategoryNode>;
-
     var sortOptions = new[] { "Expiration Date", "Price: High to Low", "Price: Low to High", "Quantity" };
+    var current = ViewBag.CurrentFilter as string ?? "active";
 }
 
 @model List<UpsertProductViewModel>
@@ -23,8 +23,7 @@
         <div class="filter-options">
             <ejs-dropdownlist id="productCategories"
                               dataSource="@productCategoriesData"
-                              placeholder="Select a product category"
-                              index="0"
+                              placeholder="Select a category"
                               popupHeight="220px"
                               change="categoryValueChange">
                 <e-dropdownlist-fields text="Category" value="Id"></e-dropdownlist-fields>
@@ -36,10 +35,10 @@
 
     <ejs-chiplist id="chip-default">
         <e-chips>
-            <e-chip text="Active" cssClass="e-primary" enabled="true" value="active"></e-chip>
-            <e-chip text="Expiring Soon" cssClass="e-warning" enabled="true" value="expiring"></e-chip>
-            <e-chip text="Low Stock" cssClass="e-danger" enabled="true" value="lowStock"></e-chip>
-            <e-chip text="Archived" cssClass="e-secondary" enabled="true" value="archived"></e-chip>
+            <e-chip text="Active" value="active" cssClass="e-primary" selected="@(current=="active")" />
+            <e-chip text="Expiring Soon" value="expiring" cssClass="e-warning" selected="@(current=="expiring")" />
+            <e-chip text="Low Stock" value="lowStock" cssClass="e-danger" selected="@(current=="lowStock")" />
+            <e-chip text="Archived" value="archived" cssClass="e-secondary" selected="@(current=="archived")" />
         </e-chips>
     </ejs-chiplist>
 
@@ -72,7 +71,12 @@
                     }
                     else
                     {
-                        <img src="/images/product-placeholder.png" alt="@product.Name" class="product-image" />
+                        <img src="/images/no-image-placeholder.png" alt="@product.Name" class="product-image" />
+                    }
+
+                    @if (product.IsPromoted)
+                    {
+                        <span class="promoted-badge">Promoted</span>
                     }
 
                     <div class="product-header-controls">
@@ -82,7 +86,7 @@
 
                         @if (!product.IsPromoted)
                         {
-                            <button class="promote-btn" onclick="promoteProduct(@product.Id)">
+                            <button class="promote-btn" onclick="promoteProduct('@product.Id', '@product.Name')">
                                 <i class="fa fa-bullhorn"></i> Promote
                             </button>
                         }
@@ -94,7 +98,11 @@
                         <h3 class="product-name">@product.Name</h3>
                         <div class="product-controls">
                             <button class="edit-btn" title="Edit Listing"><i class="fa fa-pencil"></i></button>
-                            <button class="archive-btn" title="Archive Listing"><i class="fa fa-archive"></i></button>
+                            <button class="archive-btn"
+                                title="Archive Listing"
+                                onclick="archiveProduct('@product.Id')">
+                                <i class="fa fa-archive"></i>
+                            </button>
                         </div>
                     </div>
 
@@ -130,12 +138,12 @@
                     <div class="product-footer">
                         <div class="metrics">
                             <div class="metric">
-                                <span class="metric-value">12</span>
-                                <span class="metric-label">Views</span>
+                                <span class="metric-value">@product.CartQuantity</span>
+                                <span class="metric-label">in carts</span>
                             </div>
                             <div class="metric">
-                                <span class="metric-value">3</span>
-                                <span class="metric-label">Inquiries</span>
+                                <span class="metric-value">@product.WishlistQuantity</span>
+                                <span class="metric-label">in wishlists</span>
                             </div>
                             <div class="suggested-price-tag">
                                 Est. Market: $@((product.Price * 1.15m).ToString("0.00"))
@@ -147,6 +155,12 @@
         }
     </div>
 </div>
+
+<ejs-toast id="actionToast" newestOnTop="true" showCloseButton="true" timeOut="4000">
+    <e-toast-position X="Right" Y="Top"></e-toast-position>
+</ejs-toast>
+
+<script src="https://js.stripe.com/v3/"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -218,30 +232,20 @@
         chips.forEach(function (chip) {
             chip.addEventListener('click', function () {
                 var status = chip.getAttribute('data-value');
-
-                document.querySelectorAll(".product-card").forEach(function (card) {
-                    var productStatus = card.getAttribute("data-status").toLowerCase();
-                    var expirationDate = new Date(card.dataset.expiration);
-                    var stockQuantity = parseInt(card.dataset.quantity);
-
-                    if (status === 'active' && productStatus === 'published') {
-                        card.style.display = "";
-                    } else if (status === 'expiring' && (expirationDate - new Date()) < 14 * 24 * 60 * 60 * 1000) {
-                        card.style.display = "";
-                    } else if (status === 'lowStock' && stockQuantity < 21) {
-                        card.style.display = "";
-                    } else if (status === 'archived' && (productStatus === 'archived'
-                                                            || productStatus === 'expired')) {
-                        card.style.display = "";
-                    } else {
-                        card.style.display = "none";
-                    }
-                });
-
-                updateActiveListingsCount();
+                console.log(status);
+                window.location.search = '?filter=' + status;
             });
         });
     });
+
+    function showToast(type, title, message) {
+        const toastObj = document.getElementById('actionToast').ej2_instances[0];
+        toastObj.show({
+            title: title,
+            content: message,
+            cssClass: `e-toast-${type}`
+        });
+    }
 
     // Update active listings count
     function updateActiveListingsCount() {
@@ -269,11 +273,69 @@
                 window.location.href = "/Producer/Product";
             }
         } catch (error) {
-            console.error("Error during navigation:", error);
+            showToast("error", "Error", "There was an error. Please try again later");
         }
     }
 
-    function promoteProduct(productId) {
-        // Handle promote logic
+    function promoteProduct(productId, productName) {
+        ej.popups.DialogUtility.confirm({
+            title: 'Promote Product',
+            content: 'This will charge your account and boost your listing. Continue?',
+            okButton: {
+                click: function () {
+                    this.hide();
+                    fetch('@Url.Action("Promote", "Product")', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            productId: productId,
+                            productName: productName
+                        })
+                    })
+                        .then(async res => {
+                            if (!res.ok) {
+                                const text = await res.text();
+                                showToast("error", "Error", "There was an error. Please try again later");
+                            }
+                            return res.json();
+                        })
+                        .then(data => {
+                            const stripe = Stripe(data.publishableKey);
+                            return stripe.redirectToCheckout({ sessionId: data.sessionId });
+                        })
+                }
+            },
+            cancelButton: { text: 'Cancel', click: function () { this.hide(); } },
+            width: '400px', position: { X: 'center', Y: 'center' }
+        });
+    }
+
+    function archiveProduct(productId) {
+        ej.popups.DialogUtility.confirm({
+            title: 'Archive Product',
+            content: 'Are you sure you want to archive this listing?',
+            okButton: {
+                click: function () {
+                    this.hide();
+                    fetch('@Url.Action("UpdateProductStatus", "Product")', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            productId: productId,
+                            newStatus: 'Archived'})
+                    })
+                        .then(res => {
+                            if (res.ok) {
+                                showToast("success", "Archived", "Product archived.");
+                                setTimeout(() => location.reload(), 1000);
+                            } else {
+                                showToast("error", "Error", "Could not archive product.");
+                            }
+                        });
+                }
+            },
+            cancelButton: { text: 'Cancel', click: function () { this.hide(); } },
+            width: '400px', position: { X: 'center', Y: 'center' }
+        });
     }
 </script>

@@ -31,9 +31,9 @@ namespace AgrifoodManagement.Web.Models
 
         public string? CategoryName { get; set; }
 
-        public int ViewCount { get; set; }
+        public int? CartQuantity { get; set; }
 
-        public int InquiryCount { get; set; }
+        public int? WishlistQuantity { get; set; }
 
         public decimal EstimatedMarketPrice { get; set; }
 

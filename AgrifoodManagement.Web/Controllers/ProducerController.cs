@@ -2,6 +2,8 @@
 using AgrifoodManagement.Business.Queries.Order;
 using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Business.Queries.Report;
+using AgrifoodManagement.Util.Models;
+using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Mappers;
 using AgrifoodManagement.Web.Models;
 using AgrifoodManagement.Web.Models.Forum;
@@ -27,65 +29,55 @@ namespace AgrifoodManagement.Web.Controllers
             ViewBag.ActiveItemId = activeItemId;
         }
 
-        public async Task<IActionResult> AnnouncementsAsync()
+        public async Task<IActionResult> AnnouncementsAsync([FromQuery] string filter = "active")
         {
-            var productCategories = await _mediator.Send(new GetChildCategoriesQuery());
             SetSidebar("1");
+
+            var productCategories = await _mediator.Send(new GetChildCategoriesQuery());
             ViewBag.ProductCategories = productCategories;
 
-            var productDtos = await _mediator.Send(new GetUserProductsQuery());
+            var allDtos = await _mediator.Send(new GetUserProductsQuery());
 
-            var viewModel = productDtos.Select(p => new UpsertProductViewModel
+            IEnumerable<ProductDto> filtered = filter switch
             {
-                Id = p.Id,
-                Name = p.Name,
-                Description = p.Description,
-                Price = p.CurrentPrice,
-                Quantity = p.Quantity,
-                UnitOfMeasurement = p.UnitOfMeasurement,
-                ExpirationDate = p.ExpirationDate,
-                Category = p.CategoryId,
-                CategoryName = p.CategoryName,
-                ViewCount = p.ViewCount,
-                InquiryCount = p.InquiryCount,
-                EstimatedMarketPrice = p.EstimatedMarketPrice,
-                IsPromoted = p.IsPromoted,
-                AnnouncementStatus = p.AnnouncementStatus,
-                PhotoUrls = p.PhotoUrls
-            }).ToList();
+                "active" => allDtos
+                                  .Where(d => d.AnnouncementStatus == AnnouncementStatus.Published),
+                "expiring" => allDtos
+                                  .Where(d => (d.ExpirationDate - DateTime.UtcNow).TotalDays < 14),
+                "lowStock" => allDtos
+                                  .Where(d => d.Quantity < 21),
+                "archived" => allDtos
+                                  .Where(d => d.AnnouncementStatus == AnnouncementStatus.Archived
+                                           || d.AnnouncementStatus == AnnouncementStatus.Expired),
+                _ => allDtos
+            };
+
+            var viewModel = UpsertProductViewModelMapper.MapList(filtered);
+
+            ViewBag.CurrentFilter = filter;
 
             return View(viewModel);
         }
 
         public async Task<IActionResult> ProductAsync(Guid? id)
         {
-            var productCategories = await _mediator.Send(new GetProductCategoriesQuery());
             SetSidebar("1");
+
+            var productCategories = await _mediator.Send(new GetProductCategoriesQuery());
             ViewBag.ProductCategories = productCategories;
 
-            UpsertProductViewModel viewModel = new UpsertProductViewModel();
+            UpsertProductViewModel viewModel;
 
             if (id.HasValue)
             {
-                var product = await _mediator.Send(new GetProductByIdQuery { Id = id.Value });
-                if (product == null)
-                {
-                    return NotFound();
-                }
+                var dto = await _mediator.Send(new GetProductByIdQuery { Id = id.Value });
+                if (dto == null) return NotFound();
 
-                viewModel = new UpsertProductViewModel
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Description = product.Description,
-                    Price = product.OriginalPrice,
-                    Quantity = product.Quantity,
-                    UnitOfMeasurement = product.UnitOfMeasurement,
-                    ExpirationDate = product.ExpirationDate,
-                    Category = product.CategoryId,
-                    CategoryName = product.CategoryName,
-                    PhotoUrls = product.PhotoUrls
-                };
+                viewModel = UpsertProductViewModelMapper.MapForDetail(dto);
+            }
+            else
+            {
+                viewModel = new UpsertProductViewModel();
             }
 
             return View(viewModel);

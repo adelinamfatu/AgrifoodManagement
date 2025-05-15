@@ -57,7 +57,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Shop
                     UnitOfMeasurement = p.UnitOfMeasurement,
                     ExpirationDate = p.ExpirationDate,
                     CategoryId = p.ProductCategoryId,
-                    ViewCount = 15,
+                    //ViewCount = 15,
                     IsPromoted = p.IsPromoted,
                     PhotoUrls = photoUrlsDict.ContainsKey(p.Id) ? photoUrlsDict[p.Id] : new List<string>()
                 }).ToList();

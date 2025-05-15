@@ -46,5 +46,9 @@ namespace AgrifoodManagement.Domain.Entities
 
         [ForeignKey("UserId")]
         public User? Seller { get; set; }
+
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
+
+        public virtual ICollection<WishlistItem> WishlistItems { get; set; } = new HashSet<WishlistItem>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.Queries.Product;
+using AgrifoodManagement.Domain.Entities;
 using AgrifoodManagement.Domain.Interfaces;
 using AgrifoodManagement.Util.Models;
 using MediatR;
@@ -24,6 +25,8 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
         {
             return await _context.Products
                 .Include(p => p.ProductCategory)
+                .Include(p => p.OrderDetails)
+                .Include(p => p.WishlistItems)
                 .Select(p => new ProductDto
                 {
                     Id = p.Id,
@@ -35,8 +38,8 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
                     ExpirationDate = p.ExpirationDate,
                     CategoryId = p.ProductCategoryId,
                     CategoryName = p.ProductCategory != null ? p.ProductCategory.Name : "Uncategorized",
-                    ViewCount = 15,
-                    InquiryCount = 20,
+                    CartQuantity = p.OrderDetails.Sum(od => od.Quantity),
+                    WishlistQuantity = p.WishlistItems.Count(),
                     EstimatedMarketPrice = 50,
                     IsPromoted = p.IsPromoted,
                     AnnouncementStatus = p.AnnouncementStatus,

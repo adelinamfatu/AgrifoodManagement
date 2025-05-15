@@ -6,12 +6,10 @@ using AgrifoodManagement.Web.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
-using Stripe.Terminal;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Syncfusion.Licensing;
 using AgrifoodManagement.Web.Controllers;
 using System.Text.Json.Serialization;
+using AgrifoodManagement.Business.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +30,10 @@ builder.Services.AddSingleton<CloudinaryService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddHttpClient<CartController>();
+
+// Services
+builder.Services
+    .AddSingleton<IStripeCheckoutService, StripeCheckoutService>();
 
 // Stripe
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));

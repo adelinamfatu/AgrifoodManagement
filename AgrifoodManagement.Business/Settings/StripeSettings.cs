@@ -1,4 +1,4 @@
-﻿namespace AgrifoodManagement.Web.Services
+﻿namespace AgrifoodManagement.Business.Services
 {
     public class StripeSettings
     {

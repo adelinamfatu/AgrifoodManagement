@@ -1,5 +1,6 @@
 ﻿using AgrifoodManagement.Business.Commands.Order;
 using AgrifoodManagement.Business.Queries.Order;
+using AgrifoodManagement.Business.Services;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Mappers;
@@ -19,14 +20,14 @@ namespace AgrifoodManagement.Web.Controllers
     [Authorize(Roles = "Buyer")]
     public class CartController : BaseUserController
     {
-        private readonly IOptions<StripeSettings> _stripeSettings;
         private readonly HttpClient _httpClient;
+        private readonly IStripeCheckoutService _stripeCheckoutService;
 
-        public CartController(IMediator mediator, IOptions<StripeSettings> stripeSettings, HttpClient httpClient)
+        public CartController(IMediator mediator, IStripeCheckoutService stripeCheckoutService, HttpClient httpClient)
             : base(mediator)
         {
-            _stripeSettings = stripeSettings;
             _httpClient = httpClient;
+            _stripeCheckoutService = stripeCheckoutService;
         }
 
         [HttpPost]
@@ -102,50 +103,34 @@ namespace AgrifoodManagement.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCheckoutSession([FromBody] CreateCheckoutSessionDto model)
         {
-            StripeConfiguration.ApiKey = _stripeSettings.Value.SecretKey;
-
-            if (!ModelState.IsValid)
-                return BadRequest("Invalid checkout data");
-
-            var domain = HttpContext.Request.Scheme + "://" + HttpContext.Request.Host.Value;
-
-            var options = new SessionCreateOptions
-            {
-                PaymentMethodTypes = new List<string> { "card" },
-                LineItems = new List<SessionLineItemOptions>
-                {
-                    new SessionLineItemOptions
-                    {
-                        PriceData = new SessionLineItemPriceDataOptions
-                        {
-                            UnitAmountDecimal = (long)(model.TotalAmount * 100),
-                            Currency = "ron",
-                            ProductData = new SessionLineItemPriceDataProductDataOptions
-                            {
-                                Name = "Agrifood Order",
-                                Description = $"Order {model.OrderId} with delivery: {model.DeliveryMethod}"
-                            },
-                        },
-                        Quantity = 1
-                    }
-                },
-                Mode = "payment",
-                Metadata = new Dictionary<string, string>
-                {
-                    { "orderId", model.OrderId.ToString() }
-                },
-                SuccessUrl = $"{domain}/Cart/ConfirmOrderRedirect?session_id={{CHECKOUT_SESSION_ID}}",
-                CancelUrl = domain + "/Cart/Checkout"
+            var items = new List<StripeLineItemDto> {
+                new StripeLineItemDto {
+                    Name       = "Agrifood Order",
+                    Description= $"Order {model.OrderId} via {model.DeliveryMethod}",
+                    UnitAmount = (long)(model.TotalAmount * 100),
+                    Currency   = "ron",
+                    Quantity   = 1
+                }
             };
 
-            var service = new SessionService();
+            var domain = $"{Request.Scheme}://{Request.Host}";
+            var success = $"{domain}/Cart/ConfirmOrderRedirect?session_id={{CHECKOUT_SESSION_ID}}";
+            var cancel = $"{domain}/Cart/Checkout";
 
-            var session = await service.CreateAsync(options);
+            var result = await _stripeCheckoutService.CreateCheckoutSessionAsync(
+                lineItems: items,
+                successUrl: success,
+                cancelUrl: cancel,
+                metadata: new Dictionary<string, string> { { "orderId", model.OrderId.ToString() } },
+                paymentMethodTypes: new[] { "card" });
+
+            if (!result.Success)
+                return BadRequest(result.ErrorMessage);
 
             return Json(new
             {
-                sessionId = session.Id,
-                publishableKey = _stripeSettings.Value.PublishableKey
+                sessionId = result.SessionId,
+                publishableKey = result.PublishableKey
             });
         }
 

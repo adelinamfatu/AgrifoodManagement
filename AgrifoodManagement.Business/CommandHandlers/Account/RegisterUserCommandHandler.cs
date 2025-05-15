@@ -34,6 +34,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Account
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,
+                IsPro = false,
                 UserType = request.UserType
             };
 

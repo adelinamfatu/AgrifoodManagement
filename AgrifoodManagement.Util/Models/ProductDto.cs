@@ -19,8 +19,8 @@ namespace AgrifoodManagement.Util.Models
         public DateTime ExpirationDate { get; set; }
         public int? CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public int ViewCount { get; set; }
-        public int InquiryCount { get; set; }
+        public int? CartQuantity { get; set; }
+        public int? WishlistQuantity { get; set; }
         public decimal EstimatedMarketPrice { get; set; }
         public bool IsPromoted { get; set; }
         public int DiscountPercentage {  get; set; }
