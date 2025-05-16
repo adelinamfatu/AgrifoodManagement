@@ -1,7 +1,10 @@
 ﻿using AgrifoodManagement.Business.Commands.Account;
+using AgrifoodManagement.Business.Services;
+using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models.Auth;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -10,10 +13,12 @@ namespace AgrifoodManagement.Web.Controllers
     public class AccountController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IStripeCheckoutService _stripeCheckoutService;
 
-        public AccountController(IMediator mediator)
+        public AccountController(IMediator mediator, IStripeCheckoutService stripeCheckoutService)
         {
             _mediator = mediator;
+            _stripeCheckoutService = stripeCheckoutService;
         }
 
         [HttpGet]
@@ -153,6 +158,72 @@ namespace AgrifoodManagement.Web.Controllers
             {
                 return Json(new { success = false, message = "An error occurred while processing your request." });
             }
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> CreateProCheckoutSession()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+                return Unauthorized();
+
+            var items = new[]
+            {
+                new StripeLineItemDto {
+                    Name        = "Harvestica PRO Subscription",
+                    Description = "Unlock PRO features",
+                    UnitAmount  = 4999,
+                    Currency    = "ron",
+                    Quantity    = 1
+                }
+            };
+
+            var domain = $"{Request.Scheme}://{Request.Host}";
+            var successUrl = $"{domain}/Account/CompletePro?session_id={{CHECKOUT_SESSION_ID}}";
+            var cancelUrl = $"{domain}/Account/Announcements";
+
+            var result = await _stripeCheckoutService.CreateCheckoutSessionAsync(
+                lineItems: items,
+                successUrl: successUrl,
+                cancelUrl: cancelUrl,
+                metadata: new Dictionary<string, string> { ["UserEmail"] = email }
+            );
+
+            if (!result.Success)
+                return BadRequest(new { success = false, error = result.ErrorMessage });
+
+            return Ok(new
+            {
+                success = true,
+                sessionId = result.SessionId,
+                publishableKey = result.PublishableKey
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CompletePro(string session_id)
+        {
+            var service = new Stripe.Checkout.SessionService();
+            var session = await service.GetAsync(session_id);
+            if (session.PaymentStatus != "paid")
+            {
+                TempData["Error"] = "Payment not completed.";
+                return RedirectToAction("Producer/Announcements");
+            }
+
+            if (!session.Metadata.TryGetValue("UserEmail", out var userEmail))
+            {
+                return BadRequest("Invalid session metadata.");
+            }
+
+            await _mediator.Send(new UpgradeUserToProCommand(
+                userEmail,
+                session.Created,
+                session.AmountTotal / 100m
+            ));
+
+            return RedirectToAction("Producer/Announcements");
         }
 
         [HttpPost]

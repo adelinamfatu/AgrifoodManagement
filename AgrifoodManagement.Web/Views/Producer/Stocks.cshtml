@@ -12,13 +12,10 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 12px;
-        width: 100%;
-        max-width: 1400px;
+        max-width: 100%;
         margin: 0 auto;
         position: relative;
     ">
-    <h3 style="flex: 0 0 auto; margin-right: 24px;">Product Stock Table</h3>
-
     <ejs-toast id="toastObj" created="onToastCreated">
         <e-toast-position X="Right" />
     </ejs-toast>
@@ -48,32 +45,32 @@
             <e-grid-column field="Description"
                            headerText="Description"
                            allowEditing="false"
-                           width="200">
+                           width="170">
             </e-grid-column>
 
             <e-grid-column field="Quantity"
                            headerText="Quantity"
                            allowEditing="true"
                            editType="numericedit"
-                           textAlign="Right"
-                           validationRules="@(new { required=true, min=0 })"
-                           width="100">
-            </e-grid-column>
-
-            <e-grid-column field="CurrentPrice"
-                           headerText="Price (lei)"
-                           allowEditing="true"
-                           format="C2"
-                           editType="numericedit"
-                           textAlign="Right"
+                           textAlign="Center"
                            validationRules="@(new { required=true, min=0 })"
                            width="100">
             </e-grid-column>
 
             <e-grid-column field="UnitOfMeasurementText"
                            headerText="Unit of Measurement"
+                           textAlign="Center"
                            allowEditing="false"
-                           width="150">
+                           width="100">
+            </e-grid-column>
+
+            <e-grid-column field="CurrentPrice"
+                           headerText="Price (lei)"
+                           allowEditing="true"
+                           editType="numericedit"
+                           textAlign="Center"
+                           validationRules="@(new { required=true, min=0 })"
+                           width="100">
             </e-grid-column>
 
             <e-grid-column field="CategoryName"

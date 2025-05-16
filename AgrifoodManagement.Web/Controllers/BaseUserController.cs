@@ -24,12 +24,15 @@ namespace AgrifoodManagement.Web.Controllers
             {
                 UserDto user = await _mediator.Send(new GetUserByEmailQuery(email));
                 ViewBag.FullName = user != null ? $"{user.FirstName} {user.LastName}" : "Guest";
+                ViewBag.IsPro = user != null ? user.IsPro : false;
+                ViewBag.DaysLeft = user != null ? user.DaysLeft : 0;
                 ViewBag.AvatarUrl = user?.AvatarUrl != string.Empty ? user?.AvatarUrl 
                     : "/images/avatar-placeholder.png";
             }
             else
             {
                 ViewBag.FullName = "Guest";
+                ViewBag.IsPro = false;
                 ViewBag.AvatarUrl = "/images/default-avatar.png";
             }
 

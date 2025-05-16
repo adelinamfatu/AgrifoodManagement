@@ -4,6 +4,9 @@
 
     var antiforgery = Context.RequestServices.GetService<Microsoft.AspNetCore.Antiforgery.IAntiforgery>();
     var tokenSet = antiforgery.GetAndStoreTokens(Context);
+
+    bool isPro = ViewBag.IsPro as bool? ?? false;
+    int daysLeft = ViewBag.DaysLeft as int? ?? 0;
 }
 
 <div class="layout-container">
@@ -50,6 +53,8 @@
                         {
                             @foreach (var item in sidebarItems)
                             {
+                                bool locked = item.IsPro && !isPro;
+
                                 <div class="menu-item @(item.Id == ViewBag.ActiveItemId ? "active" : "")" onclick="navigateTo('@item.Url', '@item.Id')">
                                     <div class="menu-item-content">
                                         <i class="menu-item-icon @item.IconCss"></i>
@@ -63,16 +68,39 @@
                             }
                         }
 
-                        <div class="upgrade-pro-container">
-                            <div class="upgrade-pro-logo">
-                                <i class="bi bi-gem"></i>
+                        @if (!isPro)
+                        {
+                            <div class="upgrade-pro-container">
+                                <div class="upgrade-pro-logo"><i class="bi bi-gem"></i></div>
+                                <h3>Upgrade to PRO</h3>
+                                <p>Improve your development process and start doing more with Harvestica PRO!</p>
+                                <button id="upgradeProBtn" type="button" class="upgrade-button">
+                                    Upgrade to PRO
+                                </button>
                             </div>
-                            <h3>Upgrade to PRO</h3>
-                            <p>Improve your development process and start doing more with Harvestica PRO!</p>
-                            <button class="upgrade-button" onclick="window.location.href='/Subscription/Upgrade'">
-                                Upgrade to PRO
-                            </button>
-                        </div>
+                        }
+                        else
+                        {
+                            <div class="countdown-pro-container">
+                                <div class="upgrade-pro-logo"><i class="bi bi-hourglass-split"></i></div>
+                                <h3>PRO Expires</h3>
+                                <p>
+                                    @if (daysLeft > 1)
+                                    {
+                                        @($"in {daysLeft} days")
+                                    }
+                                    else if (daysLeft == 1)
+                                    {
+                                        <strong>in 1 day</strong>
+                                    }
+                                    else
+                                    {
+                                        <strong>today</strong>
+                                    }
+                                </p>
+                                <small>Renew to keep your PRO access.</small>
+                            </div>
+                        }
                     </div>
                 </e-content-template>
             </ejs-sidebar>
@@ -86,6 +114,12 @@
 </div>
 
 <div id="logoutConfirmDialog"></div>
+<div id="upgradeConfirmDialog"></div>
+<ejs-toast id="upgradeToast" newestOnTop="true" showCloseButton="true" timeOut="4000">
+    <e-toast-position X="Right" Y="Top"></e-toast-position>
+</ejs-toast>
+
+<script src="https://js.stripe.com/v3/"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -124,13 +158,19 @@
                             // Update avatar image if successful
                             avatarImg.src = data.imageUrl;
                         } else {
-                            console.error('Upload failed:', data.message);
-                            alert('Upload failed: ' + data.message);
+                            showToast(
+                                'error',
+                                'Upload failed',
+                                'An error occured. Please try again later'
+                            );
                         }
                     })
                     .catch(error => {
-                        console.error('Error:', error);
-                        alert('An error occurred during upload. Please try again later.');
+                        showToast(
+                            'error',
+                            'Upload failed',
+                            'An error occurred during upload. Please try again later.'
+                        );
                     });
             }
         });
@@ -176,6 +216,71 @@
         document.getElementById('logoutBtn').addEventListener('click', function () {
             dialogObj.show();
         });
+
+        var upgradeDialog = new ej.popups.Dialog({
+            header: 'Confirm Upgrade',
+            content: '<div class="confirm-upgrade-text">Are you sure you want to upgrade to PRO?</div>',
+            showCloseIcon: false,
+            width: '350px',
+            isModal: true,
+            visible: false,
+            target: document.body,
+            cssClass: 'upgrade-dialog rounded-dialog',
+            buttons: [
+                {
+                    click: function () { upgradeDialog.hide(); },
+                    buttonModel: { content: 'NO', isPrimary: false, cssClass: 'e-flat no-btn' }
+                },
+                {
+                    click: function () {
+                        upgradeDialog.hide();
+                        createProCheckout();
+                    },
+                    buttonModel: { content: 'YES', isPrimary: true, cssClass: 'e-flat yes-btn' }
+                }
+            ],
+            position: { X: 'center', Y: 'center' }
+        });
+
+        upgradeDialog.appendTo('#upgradeConfirmDialog');
+
+        const upgradeBtn = document.getElementById('upgradeProBtn');
+        if (!upgradeBtn) {
+            showToast(
+                'error',
+                'Fail',
+                'An error occured. Please try again later'
+            );
+            return;
+        }
+        upgradeBtn.addEventListener('click', e => {
+            e.preventDefault();
+            upgradeDialog.show();
+        });
+
+        async function createProCheckout() {
+            try {
+                const res = await fetch('@Url.Action("CreateProCheckoutSession", "Account")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const payload = await res.json();
+                if (!payload.success) {
+                    throw new Error(payload.error || 'Unknown error');
+                }
+                const stripe = Stripe(payload.publishableKey);
+                const { error } = await stripe.redirectToCheckout({ sessionId: payload.sessionId });
+                if (error) throw error;
+            } catch (err) {
+                showToast(
+                    'error',
+                    'Checkout Failed',
+                    'An error occured. Please try again later'
+                );
+            }
+        }
     });
 
     function navigateTo(url, id) {
@@ -186,5 +291,14 @@
         document.querySelector(`.menu-item[onclick*='${id}']`).classList.add('active');
 
         window.location.href = url;
+    }
+
+    function showToast(type, title, message) {
+        const toastObj = document.getElementById('upgradeToast').ej2_instances[0];
+        toastObj.show({
+            title: title,
+            content: message,
+            cssClass: `e-toast-${type}`
+        });
     }
 </script>

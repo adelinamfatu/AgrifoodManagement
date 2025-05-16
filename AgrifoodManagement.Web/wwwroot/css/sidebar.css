@@ -200,6 +200,49 @@ h1, h2, h3, h4, h5, h6, p, span, div {
         background-color: #e97730;
     }
 
+.countdown-pro-container {
+    margin: 40px 16px 20px;
+    background-color: #FFF4E6;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
+.countdown-pro-logo {
+    background-color: #42A5FF;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+}
+
+    .countdown-pro-logo i {
+        color: #FFFFFF;
+        font-size: 1.8rem;
+    }
+
+.countdown-pro-container h3 {
+    color: #212529;
+    font-size: 1.2rem;
+    margin: 0 0 8px;
+    font-weight: 600;
+}
+
+.countdown-pro-container p {
+    color: #212529;
+    font-size: 1rem;
+    margin: 0 0 8px;
+    font-weight: 500;
+}
+
+.countdown-pro-container small {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
 .toolbar-right {
     margin-left: auto !important;
     display: flex;

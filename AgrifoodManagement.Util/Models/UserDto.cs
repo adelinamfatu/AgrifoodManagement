@@ -11,5 +11,7 @@ namespace AgrifoodManagement.Util.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string AvatarUrl { get; set; }
+        public bool IsPro { get; set; }
+        public int? DaysLeft { get; set; }
     }
 }

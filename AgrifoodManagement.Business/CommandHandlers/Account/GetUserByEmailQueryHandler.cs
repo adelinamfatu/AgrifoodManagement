@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,15 +23,49 @@ namespace AgrifoodManagement.Business.CommandHandlers.Account
 
         public async Task<UserDto?> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Users
+            var user = await _context.Users
                 .Where(u => u.Email == request.Email)
-                .Select(u => new UserDto
-                {
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    AvatarUrl = u.Avatar ?? "/images/avatar-placeholder.png"
+                .Select(u => new {
+                    u.Id,
+                    u.FirstName,
+                    u.LastName,
+                    u.IsPro,
+                    u.Avatar
                 })
                 .FirstOrDefaultAsync(cancellationToken);
+
+            if (user == null)
+                return null;
+
+            var rawDate = await _context.ExtendedProperties
+                .Where(ep =>
+                    ep.EntityType == "User" &&
+                    ep.EntityId == user.Id &&
+                    ep.Key == "ProUpgradeDate")
+                .Select(ep => ep.Value)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            int daysLeft = 0;
+            if (rawDate != null
+                && DateTime.TryParse(
+                     rawDate,
+                     CultureInfo.InvariantCulture,
+                     DateTimeStyles.RoundtripKind,
+                     out var proStart))
+            {
+                var expiry = proStart.AddDays(30);
+                var span = expiry.Date - DateTime.UtcNow.Date;
+                daysLeft = Math.Max(0, span.Days);
+            }
+
+            return new UserDto
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                IsPro = user.IsPro,
+                AvatarUrl = user.Avatar ?? "/images/avatar-placeholder.png",
+                DaysLeft = daysLeft
+            };
         }
     }
 }
