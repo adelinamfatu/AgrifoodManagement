@@ -246,11 +246,6 @@
 
         const upgradeBtn = document.getElementById('upgradeProBtn');
         if (!upgradeBtn) {
-            showToast(
-                'error',
-                'Fail',
-                'An error occured. Please try again later'
-            );
             return;
         }
         upgradeBtn.addEventListener('click', e => {

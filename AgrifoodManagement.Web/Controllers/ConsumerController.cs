@@ -3,10 +3,12 @@ using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Business.Queries.Shop;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Web.Mappers;
+using AgrifoodManagement.Web.Models.Locator;
 using AgrifoodManagement.Web.Models.Shop;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Security.Claims;
 
 namespace AgrifoodManagement.Web.Controllers
@@ -88,7 +90,44 @@ namespace AgrifoodManagement.Web.Controllers
 
         public IActionResult Locator()
         {
-            return View();
+            var jsonPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot", "scripts", "WorldMap.json");
+            var mapJson = System.IO.File.ReadAllText(jsonPath);
+            var mapData = JsonConvert.DeserializeObject(mapJson);
+
+            var locations = new List<Location>
+            {
+                new() { latitude = 37.6276571, longitude = -122.4276688, name = "San Bruno" },
+                new() { latitude = 33.5302186, longitude = -117.7418381, name = "Laguna Niguel" },
+                new() { latitude = 40.7424509, longitude = -74.0081468, name = "New York" },
+                new() { latitude = -23.5268201, longitude = -46.6489927, name = "Bom Retiro" },
+                new() { latitude = 43.6533855, longitude = -79.3729994, name = "Toronto" },
+                new() { latitude = 48.8773406, longitude = 2.3299627, name = "Paris" },
+                new() { latitude = 52.4643089, longitude = 13.4107368, name = "Berlin" },
+                new() { latitude = 19.1555762, longitude = 72.8849595, name = "Mumbai" },
+                new() { latitude = 35.6628744, longitude = 139.7345469, name = "Minato" },
+                new() { latitude = 51.5326602, longitude = -0.1262422, name = "London" }
+            };
+
+            var continentColors = new List<ContinentColor>
+            {
+                new() { continent = "North America", color = "#71b081" },
+                new() { continent = "South America", color = "#5a9a77" },
+                new() { continent = "Africa", color = "#498770" },
+                new() { continent = "Europe", color = "#39776c" },
+                new() { continent = "Asia", color = "#266665" },
+                new() { continent = "Australia", color = "#124f5e" }
+            };
+
+            var viewModel = new LocatorViewModel
+            {
+                MapData = mapData,
+                Locations = locations,
+                ContinentColors = continentColors
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> HistoryAsync()

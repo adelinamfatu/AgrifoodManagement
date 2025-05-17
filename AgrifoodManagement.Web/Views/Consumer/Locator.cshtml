@@ -1,28 +1,71 @@
-﻿@{
+﻿@using Syncfusion.EJ2.Maps;
+@using Newtonsoft.Json;
+@using System.IO;
+@using AgrifoodManagement.Web.Models.Locator;
+
+@{
     Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
 }
 
-<div id="map" style="height: 400px; width: 100%;"></div>
+@model LocatorViewModel;
 
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBv3ktn7wtxKN7yMV0NIqE2ezc8vQRvzVI&callback=initMap&libraries=marker">
-</script>
+@{
+    string continentField = "continent";
 
-<script>
-    function initMap() {
-        var mapOptions = {
-            center: { lat: 40.7128, lng: -74.0060 },
-            zoom: 12,
-            mapId: "5a515fab960b165e"
-        };
+    var tooltip = new MapsTooltipSettings
+    {
+        Visible = true,
+        ValuePath = "name",
+        TextStyle = new MapsFont { FontFamily = "Segoe UI" }
+    };
+}
 
-        var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+<div class="control-section">
+    <div class="row">
+        <div class="col-md-12">
+            <ejs-maps id="maps" width="100%" height="calc(100vh - 150px)">
+                <e-maps-titlesettings text="Farming locations"
+                    alignment="Center"
+                    textStyle="@(new MapsFont { Size = "16px", FontFamily = "Segoe UI", FontWeight = "Bold" })" />
+                <e-maps-zoomsettings enable="true" />
+                <e-maps-legendsettings visible="true" />
 
-        var marker = new google.maps.marker.AdvancedMarkerElement({
-            map: map,
-            position: mapOptions.center,
-            title: "Hello World!"
-        });
+                <e-maps-layers>
+                    <e-maps-layer shapeData="@(Model.MapData)"
+                        dataSource="@(Model.ContinentColors)"
+                        shapePropertyPath="@continentField"  
+                        shapeDataPath="@continentField">
+
+                        <e-layersettings-shapesettings colorValuePath="color"
+                                                       fill="#E5E5E5"
+                                                       stroke="#999" />
+
+                        <e-layersettings-shapesettings 
+                            Fill="#E5E5E5"
+                            Stroke="#999"
+                            ColorValuePath="color" />
+
+                        <e-layersettings-markers>
+                            <e-layersettings-marker visible="true"
+                                                    dataSource="@Model.Locations"
+                                                    shape="Image"
+                                                    imageUrl="@Url.Content("~/images/balloon.png")"
+                                                    height="20" width="20"
+                                                    animationDuration="0"
+                                                    tooltipSettings="@tooltip" />
+                        </e-layersettings-markers>
+                    </e-maps-layer>
+                </e-maps-layers>
+            </ejs-maps>
+        </div>
+    </div>
+</div>
+
+<style>
+    .markerTemplate {
+        font-size: 12px;
+        color: white;
+        text-shadow: 0 1px 1px black;
+        font-weight: 500;
     }
-</script>
-
+</style>
