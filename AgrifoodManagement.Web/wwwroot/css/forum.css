@@ -1,15 +1,15 @@
 ﻿.forum-page-container {
     display: flex;
-    width: 100%;
-    max-width: 1400px;
     margin: 0 auto;
-    position: relative;
     overflow-x: hidden;
 }
 
 .forum-container {
     max-width: 100%;
     margin: 0 auto;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     padding: 0 20px 20px 20px;
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -262,12 +262,12 @@
     cursor: pointer;
 }
 
-.sidebar {
+.forum-sidebar {
     width: 260px;
     flex-shrink: 0;
 }
 
-.sidebar-section {
+.forum-sidebar-section {
     background-color: white;
     border-radius: 8px;
     border: 1px solid #e1e4e8;
@@ -275,11 +275,11 @@
     padding: 15px;
 }
 
-.sidebar-section {
+.forum-sidebar-section {
     margin-top: 20px;
 }
 
-.sidebar-links {
+.forum-sidebar-links {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -287,7 +287,7 @@
     overflow: hidden;
 }
 
-.sidebar-link {
+.forum-sidebar-link {
     display: flex;
     align-items: center;
     padding: 12px 16px;
@@ -297,83 +297,83 @@
     margin-bottom: 2px;
 }
 
-    .sidebar-link:hover {
+    .forum-sidebar-link:hover {
         background-color: rgba(53, 53, 53, 0.05);
     }
 
-    .sidebar-link.active {
+    .forum-sidebar-link.active {
         background-color: #f0fff5;
         font-weight: 500;
     }
 
-    .sidebar-link span {
+    .forum-sidebar-link span {
         margin-left: 12px;
         font-size: 0.95rem;
         color: #333;
     }
 
-    .sidebar-link i {
+    .forum-sidebar-link i {
         width: 24px;
         text-align: center;
         font-size: 16px;
         transition: transform 0.2s ease;
     }
 
-    .sidebar-link:hover i {
+    .forum-sidebar-link:hover i {
         transform: scale(1.1);
     }
 
-    .sidebar-link .checkmark {
+    .forum-sidebar-link .checkmark {
         margin-left: auto;
         color: #2ecc71;
         font-weight: bold;
     }
 
-    .icon-GeneralDiscussion, .sidebar-link:nth-child(1) svg {
+    .icon-GeneralDiscussion, .forum-sidebar-link:nth-child(1) svg {
         color: #4a6da7;
     }
 
-    .icon-CropManagement, .sidebar-link:nth-child(2) svg {
+    .icon-CropManagement, .forum-sidebar-link:nth-child(2) svg {
         color: #2ecc71;
     }
 
-    .icon-Harvesting, .sidebar-link:nth-child(3) svg {
+    .icon-Harvesting, .forum-sidebar-link:nth-child(3) svg {
         color: #e67e22;
     }
 
-    .icon-StockManagement, .sidebar-link:nth-child(4) svg {
+    .icon-StockManagement, .forum-sidebar-link:nth-child(4) svg {
         color: #3498db;
     }
 
-    .icon-MarketTrends, .sidebar-link:nth-child(5) svg {
+    .icon-MarketTrends, .forum-sidebar-link:nth-child(5) svg {
         color: #9b59b6;
     }
 
-    .icon-EquipmentAndTechnology, .sidebar-link:nth-child(6) svg {
+    .icon-EquipmentAndTechnology, .forum-sidebar-link:nth-child(6) svg {
         color: #34495e;
     }
 
-    .icon-Sustainability, .sidebar-link:nth-child(7) svg {
+    .icon-Sustainability, .forum-sidebar-link:nth-child(7) svg {
         color: #27ae60;
     }
 
-    .icon-Networking, .sidebar-link:nth-child(8) svg {
+    .icon-Networking, .forum-sidebar-link:nth-child(8) svg {
         color: #e74c3c;
     }
 
-    .icon-LegalAndRegulatory, .sidebar-link:nth-child(9) svg {
+    .icon-LegalAndRegulatory, .forum-sidebar-link:nth-child(9) svg {
         color: #f39c12;
     }
 
-    .icon-FarmingEvents, .sidebar-link:nth-child(10) svg {
+    .icon-FarmingEvents, .forum-sidebar-link:nth-child(10) svg {
         color: #8e44ad;
     }
 
-    .icon-ProductPricing, .sidebar-link:nth-child(11) svg {
+    .icon-ProductPricing, .forum-sidebar-link:nth-child(11) svg {
         color: #16a085;
     }
 
-    .icon-FeedbackAndSuggestions, .sidebar-link:nth-child(12) svg {
+    .icon-FeedbackAndSuggestions, .forum-sidebar-link:nth-child(12) svg {
         color: #d35400;
     }
 
@@ -448,7 +448,7 @@ img {
         flex-direction: column;
     }
 
-    .sidebar {
+    .forum-sidebar {
         width: 100%;
         margin-bottom: 20px;
         margin-top: 0;

@@ -134,19 +134,19 @@
                 }
             </div>
 
-            <div class="sidebar">
+            <div class="forum-sidebar">
                 <ejs-button id="openDialogBtn" class="new-discussion-btn-large" content="Start New Discussion" isPrimary="true"></ejs-button>
 
-                <div class="sidebar-section">
-                    <ul class="sidebar-links">
-                        <li class="sidebar-link active" data-category="All">
+                <div class="forum-sidebar-section">
+                    <ul class="forum-sidebar-links">
+                        <li class="forum-sidebar-link active" data-category="All">
                             <i class="fas fa-list"></i>
                             <span>All Categories</span>
                         </li>
 
                         @foreach (var forumCategory in Enum.GetValues(typeof(ForumCategory)).Cast<ForumCategory>())
                         {
-                            <li class="sidebar-link"
+                            <li class="forum-sidebar-link"
                                 data-category="@forumCategory">
                                 @Html.Raw(forumCategory.GetIcon())
                                 <span>@forumCategory.GetDisplayName()</span>
@@ -244,9 +244,9 @@
             e.stopPropagation();
         });
     });
-    document.querySelectorAll('.sidebar-link').forEach(link => {
+    document.querySelectorAll('.forum-sidebar-link').forEach(link => {
         link.addEventListener('click', function () {
-            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.forum-sidebar-link').forEach(l => l.classList.remove('active'));
             this.classList.add('active');
 
             const selectedCat = this.getAttribute('data-category');
@@ -311,9 +311,6 @@
                     buttonModel: { content: 'Cancel' }
                 }
             ],
-            close: function () {
-                console.log("Dialog closed");
-            },
             content: `
                         <div class="form-group" style="margin-bottom: 15px;">
                             <label for="discussionTitle">Title</label>

@@ -46,13 +46,13 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 }
 
 #toolbar {
-    background-color: #ffffff !important;
-    border-bottom: 1px solid #eaeaea !important;
+    background-color: #7bae7f !important;
+    border-bottom: 1px solid #3b8e3f !important;
     padding: 0 16px;
 }
 
 #sidebarObj {
-    background-color: #4CAF50 !important;
+    background-color: #7bae7f !important;
     border: none !important;
     color: white;
 }
@@ -60,7 +60,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 .menu-button {
     background: transparent !important;
     border: none !important;
-    color: #4CAF50;
+    color: white;
     cursor: pointer;
     padding: 8px;
     display: flex;
@@ -71,7 +71,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 }
 
 .menu-button:hover {
-    background-color: rgba(76, 175, 80, 0.1) !important;
+    background-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 .menu-icon {
@@ -81,7 +81,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 .app-title {
     font-size: 18px;
     font-weight: 600;
-    color: #4CAF50;
+    color: white;
     margin-left: 12px;
     display: inline-block;
 }
@@ -129,11 +129,11 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 .e-toolbar .e-toolbar-items .e-toolbar-item button.e-btn {
     background-color: transparent;
     border: none;
-    color: #4CAF50;
+    color: white;
 }
 
 .e-toolbar .e-toolbar-items .e-toolbar-item button.e-btn:hover {
-    background-color: rgba(76, 175, 80, 0.1);
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .pro-badge {
@@ -266,7 +266,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     position: relative;
     width: 40px;
     height: 40px;
-    background-color: #f5f6fa;
+    background-color: rgba(255, 255, 255, 0.15);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -275,7 +275,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 }
 
     .notification-item i {
-        color: #212b36;
+        color: white;
         font-size: 1.2rem;
     }
 
@@ -311,11 +311,12 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 .user-name {
     font-weight: 500;
     font-size: 0.9rem;
+    color: white;
 }
 
 .user-role {
     font-size: 0.8rem;
-    color: #637381;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 #sidebar-menu {
@@ -349,18 +350,18 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     display: flex;
     align-items: center;
     gap: 6px;
-    background-color: transparent;
-    border: 1px solid #ccc;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 4px;
     padding: 6px 12px;
     font-size: 14px;
-    color: #333;
+    color: white;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
     .logout-button:hover {
-        background-color: #f8f9fa;
+        background-color: rgba(255, 255, 255, 0.25);
     }
 
     .logout-button i {
@@ -424,3 +425,12 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     .e-dialog.rounded-dialog .e-footer-content {
         border-radius: 8px;
     }
+
+.e-toolbar-items, .e-toolbar-item {
+    background-color: #7bae7f !important;
+}
+
+.e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn {
+    background-color: #7bae7f !important;
+    color: white !important;
+}
