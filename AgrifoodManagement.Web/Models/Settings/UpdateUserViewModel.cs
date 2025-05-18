@@ -26,10 +26,8 @@ namespace AgrifoodManagement.Web.Models.Settings
         [Phone]
         [Display(Name = "Phone number")]
         [RegularExpression(
-            @"^(\+?\d{1,3}[-\s]?)?
-            (\(?\d+\)?[-\s]?)*
-            (\s?(ext|x|extension)\s?\d{1,5})?$",
-          ErrorMessage = "Must be a valid phone (e.g. +44 20 7123 4567 ext 1234)")]
+            @"^(\+?\d{1,3}[-\s]?)?(\(?\d+\)?[-\s]?)*(\s?(ext|x|extension)\s?\d{1,5})?$",
+            ErrorMessage = "Must be a valid phone (e.g. +44 20 7123 4567 ext 1234)")]
         public string PhoneNumber { get; set; } = "";
 
         [Display(Name = "Address")]

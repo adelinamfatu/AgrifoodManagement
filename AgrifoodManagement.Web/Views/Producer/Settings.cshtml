@@ -17,13 +17,16 @@
           method="post"
           enctype="multipart/form-data">
 
+        <input type="hidden" asp-for="UserId" />
+
         <div class="settings-page-header">
             <div class="settings-header-title">
                 <h1>Edit Profile</h1>
             </div>
             <div class="settings-action-buttons">
                 <ejs-button id="btnSaveProfile"
-                            type="submit"
+                            type="button"
+                            click="onSaveClick"
                             content="Save Changes"
                             cssClass="e-success">
                 </ejs-button>
@@ -154,7 +157,7 @@
                         </div>
                     </div>
 
-                    <input type="hidden" id="DeliveryAddress" name="DeliveryAddress" />
+                    <input type="hidden" id="DeliveryAddress" asp-for="Address" />
                 </div>
             </div>
 
@@ -183,38 +186,52 @@
 </ejs-toast>
 
 <script>
-    document
-        .getElementById('editProfileForm')
-        .addEventListener('submit', function () {
-            const parts = [
-                document.getElementById('Street')?.ej2_instances?.[0]?.value?.trim(),
-                document.getElementById('Number')?.ej2_instances?.[0]?.value?.trim(),
-                document.getElementById('City')?.ej2_instances?.[0]?.value?.trim(),
-                document.getElementById('Country')?.ej2_instances?.[0]?.value?.trim()
-            ];
-            const full = parts.filter(x => x).join(', ');
-            document.getElementById('DeliveryAddress').value = full;
-        });
-
-    const toastObj = document
-        .getElementById('actionToast')
-        .ej2_instances[0];
-
-    function showToast(msg) {
+    function showToast(type, title, message) {
+        const toastObj = document.getElementById('actionToast').ej2_instances[0];
         toastObj.show({
-            title: 'Validation Error',
-            content: msg,
-            cssClass: 'e-toast-danger',
-            timeOut: 3000
+            title: title,
+            content: message,
+            cssClass: `e-toast-${type}`
         });
     }
 
-    document
-        .querySelectorAll('#editProfileForm input, #editProfileForm textarea')
-        .forEach(el => {
-            el.addEventListener('invalid', e => {
-                e.preventDefault();
-                showToast(e.target.validationMessage);
-            });
-        });
+    function onSaveClick(e) {
+        e.preventDefault();
+
+        const form = document.getElementById('editProfileForm');
+        if (!form.reportValidity()) {
+            return;
+        }
+
+        const parts = ['Street', 'Number', 'City', 'Country']
+            .map(id => {
+                const inst = document.getElementById(id)?.ej2_instances?.[0];
+                return inst ? inst.value.trim() : '';
+            })
+            .filter(x => x);
+
+        document.getElementById('DeliveryAddress').value = parts.join(', ');
+
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+            .then(r => r.json())
+            .then(json => {
+                if (json.success) {
+                    showToast('success', 'Success', json.message);
+                } else {
+                    (json.errors || ['Unknown error']).forEach(err => showToast('error', 'Error', err));
+                }
+            })
+            .catch(() => showToast('error', 'Network error', 'An error occured when saving the transaction. Please try again later.'));
+    }
+
+    const btnElem = document.getElementById('btnSaveProfile');
+    if (btnElem?.ej2_instances?.length) {
+        btnElem.ej2_instances[0].element.addEventListener('click', onSaveClick);
+    } else if (btnElem) {
+        btnElem.addEventListener('click', onSaveClick);
+    }
 </script>

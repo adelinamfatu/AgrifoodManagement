@@ -1,5 +1,5 @@
 ﻿.e-toast-container.e-toast-error > .e-toast {
-    background-color: #f8d7da !important;
+    background-color: #f5c6cb !important;
     color: #721c24 !important;
     border-left: 4px solid #f5c6cb !important;
     box-shadow: none !important;
@@ -15,7 +15,7 @@
 }
 
 .e-toast-container.e-toast-success > .e-toast {
-    background-color: #d4edda !important;
+    background-color: #c3e6cb !important;
     color: #155724 !important;
     border-left: 4px solid #c3e6cb !important;
     box-shadow: none !important;

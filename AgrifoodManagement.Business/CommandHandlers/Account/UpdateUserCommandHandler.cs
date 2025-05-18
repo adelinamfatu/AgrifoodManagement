@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.Commands.Account;
+using AgrifoodManagement.Business.Services.Interfaces;
 using AgrifoodManagement.Domain;
 using AgrifoodManagement.Domain.Entities;
 using MediatR;
@@ -16,11 +17,13 @@ namespace AgrifoodManagement.Business.CommandHandlers.Account
     {
         private readonly ApplicationDbContext _context;
         private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly IGeocodingService _geocoder;
 
-        public UpdateUserCommandHandler(ApplicationDbContext context, IPasswordHasher<User> passwordHasher)
+        public UpdateUserCommandHandler(ApplicationDbContext context, IPasswordHasher<User> passwordHasher, IGeocodingService geocodingService)
         {
             _context = context;
             _passwordHasher = passwordHasher;
+            _geocoder = geocodingService;
         }
 
         public async Task<Unit> Handle(UpdateUserCommand cmd, CancellationToken ct)
@@ -36,6 +39,10 @@ namespace AgrifoodManagement.Business.CommandHandlers.Account
             user.LastName = cmd.LastName;
             user.PhoneNumber = cmd.PhoneNumber;
             user.Address = cmd.DeliveryAddress;
+
+            var (lat, lon) = await _geocoder.GeocodeAddressAsync(cmd.DeliveryAddress);
+            user.Latitude = lat;
+            user.Longitude = lon;
 
             if (!string.IsNullOrWhiteSpace(cmd.Password))
             {
