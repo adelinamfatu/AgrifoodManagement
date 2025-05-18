@@ -1,0 +1,35 @@
+﻿@using AgrifoodManagement.Web.Models.Wishlist;
+
+@{
+    Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
+    ViewData["Title"] = "Your Wishlist";
+}
+
+@model WishlistViewModel
+
+<div class="wishlist-list">
+    <h1>Your Wishlist</h1>
+
+    @foreach (var item in Model.Items)
+    {
+        <div class="wishlist-item card">
+            <div class="thumb">
+                <img src="@item.ImageUrl" alt="@item.Name" />
+            </div>
+            <div class="info">
+                <h3>@item.Name</h3>
+                <p class="price">@item.Price.ToString("C")</p>
+                <p class="unit">Size: @item.MeasurementUnit</p>
+                <button class="btn btn-outline-primary add-to-bag">Add to bag</button>
+
+                <div class="wishlist-actions">
+                    <a asp-controller="Wishlist" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
+                    |
+                    <a asp-controller="Wishlist" asp-action="Remove" asp-route-id="@item.ProductId">Remove</a>
+                    |
+                    <a href="#" class="add-comment">Add comment</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

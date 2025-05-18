@@ -11,11 +11,13 @@ namespace AgrifoodManagement.Business.Queries.Shop
 {
     public class GetProductsPerPageQuery : IRequest<Result<PagedResult<ProductDto>>>
     {
+        public string UserEmail { get; set; }
         public int Page { get; }
         public int PageSize { get; }
 
-        public GetProductsPerPageQuery(int page, int pageSize)
+        public GetProductsPerPageQuery(string userEmail, int page, int pageSize)
         {
+            UserEmail = userEmail;
             Page = page;
             PageSize = pageSize;
         }

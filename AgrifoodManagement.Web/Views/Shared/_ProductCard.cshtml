@@ -6,14 +6,17 @@
         <div class="product-badge">@Model.Badge</div>
     }
 
-    <div class="product-img" 
-        style="background-image:url('@Model.ImageUrls.FirstOrDefault()');">
+    <div id="product-img-@Model.Id" class="product-img"
+         style="background-image:url('@Model.ImageUrls.FirstOrDefault()');">
 
         <ejs-fab id="favorite-btn-@Model.Id"
-                 iconCss="fas fa-heart" 
-                 cssClass="favorite-fab"
+                 iconCss="@(Model.IsFavorited
+                    ? "fas fa-heart fa-2x"
+                    : "far fa-heart fa-2x")"
+                 cssClass="favorite-fab @(Model.IsFavorited ? "favorited" : "")"
                  isPrimary="false"
-                 target=".product-img">
+                 target="#product-img-@Model.Id"
+                 created="onFabCreated">
         </ejs-fab>
 
         <div class="product-actions">
@@ -102,5 +105,41 @@
                     type: 'danger'
                 });
             });
+    }
+
+    function onFabCreated() {
+        const fab = this;
+        const btn = fab.element;
+
+        btn.style.cursor = 'pointer';
+
+        btn.addEventListener('click', async () => {
+            const productId = btn.id.replace('favorite-btn-', '');
+
+            try {
+                const resp = await fetch('/Wishlist/Toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify(productId)
+                });
+
+                if (!resp.ok) {
+                    const text = await resp.text();
+                    throw new Error(text || resp.statusText);
+                }
+
+                const { isFavorited } = await resp.json();
+
+                fab.iconCss = isFavorited ? 'fas fa-heart' : 'far fa-heart';
+                fab.dataBind();
+                btn.classList.toggle('favorited', isFavorited);
+            }
+            catch (err) {
+                console.error('Toggle favorite failed:', err);
+            }
+        });
     }
 </script>

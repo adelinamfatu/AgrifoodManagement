@@ -47,6 +47,24 @@ namespace AgrifoodManagement.Business.CommandHandlers.Shop
                             g.Select(x => x.Value).FirstOrDefault() 
                         }, cancellationToken);
 
+                List<Guid> favIds = new();
+                if (!string.IsNullOrEmpty(request.UserEmail))
+                {
+                    var user = await _context.Users
+                                 .AsNoTracking()
+                                 .SingleOrDefaultAsync(u => u.Email == request.UserEmail,
+                                                        cancellationToken);
+                    if (user != null)
+                    {
+                        favIds = await _context.WishlistItems
+                            .AsNoTracking()
+                            .Where(w => w.UserId == user.Id
+                                     && productIds.Contains(w.ProductId))
+                            .Select(w => w.ProductId)
+                            .ToListAsync(cancellationToken);
+                    }
+                }
+
                 var items = products.Select(p => new ProductDto
                 {
                     Id = p.Id,
@@ -57,8 +75,8 @@ namespace AgrifoodManagement.Business.CommandHandlers.Shop
                     UnitOfMeasurement = p.UnitOfMeasurement,
                     ExpirationDate = p.ExpirationDate,
                     CategoryId = p.ProductCategoryId,
-                    //ViewCount = 15,
                     IsPromoted = p.IsPromoted,
+                    IsFavorited = favIds.Contains(p.Id),
                     PhotoUrls = photoUrlsDict.ContainsKey(p.Id) ? photoUrlsDict[p.Id] : new List<string>()
                 }).ToList();
 

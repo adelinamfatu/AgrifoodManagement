@@ -1,5 +1,6 @@
 ﻿using AgrifoodManagement.Business.Commands.Order;
 using AgrifoodManagement.Business.Queries.Order;
+using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Web.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,9 @@ namespace AgrifoodManagement.Web.Components
                     count = cartDto.Items?.Sum(i => i.QuantityOrdered) ?? 0;
                     break;
 
-                case "Tasks":
+                case "Favorites":
+                    var wishlistDto = await _mediator.Send(new GetUserWishlistQuery(email));
+                    count = wishlistDto.Count();
                     break;
             }
 

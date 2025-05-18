@@ -239,14 +239,18 @@
     z-index: 10;
 }
 
-    .favorite-fab.e-fab i {
-        font-size: 16px;
-        color: #666;
-    }
+.favorite-fab.e-fab {
+    color: inherit !important;
+}
 
-    .favorite-fab.e-fab.favorited i {
-        color: #ff5a5f;
-    }
+.favorite-fab .e-btn-icon {
+    font-size: 1.2rem !important;
+    color: #ff69b4 !important;
+}
+
+.favorite-fab.favorited .e-btn-icon {
+    color: #e91e63 !important;
+}
 
 @media (min-width: 576px), (min-width: 768px), (min-width: 992px) {
     .product-card, .product-img, .product-info {

@@ -44,7 +44,8 @@ namespace AgrifoodManagement.Web.Controllers
         public async Task<IActionResult> ShopAsync(int page = 1)
         {
             const int pageSize = 12;
-            var result = await _mediator.Send(new GetProductsPerPageQuery(page, pageSize));
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            var result = await _mediator.Send(new GetProductsPerPageQuery(email, page, pageSize));
 
             if (!result.IsSuccess)
             {
@@ -88,6 +89,8 @@ namespace AgrifoodManagement.Web.Controllers
 
             return View(viewModel);
         }
+
+
 
         public async Task<IActionResult> LocatorAsync()
         {

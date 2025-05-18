@@ -26,6 +26,7 @@ namespace AgrifoodManagement.Web.Mappers
                 ExpiryDate = dto.ExpirationDate,
                 Rating = 4.5m,
                 ReviewCount = 500,
+                IsFavorited = dto.IsFavorited,
                 Badge = dto.DiscountPercentage > 0 ? $"{dto.DiscountPercentage}% OFF" : string.Empty
             };
         }
