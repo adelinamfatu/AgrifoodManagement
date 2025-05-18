@@ -10,6 +10,8 @@ using Syncfusion.Licensing;
 using AgrifoodManagement.Web.Controllers;
 using System.Text.Json.Serialization;
 using AgrifoodManagement.Business.Services;
+using AgrifoodManagement.Business.Services.Impl;
+using AgrifoodManagement.Business.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,9 @@ builder.Services.AddHttpClient<CartController>();
 // Services
 builder.Services
     .AddSingleton<IStripeCheckoutService, StripeCheckoutService>();
+builder.Services
+    .AddHttpClient<IGeocodingService, NominatimGeocodingService>();
+
 
 // Stripe
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));

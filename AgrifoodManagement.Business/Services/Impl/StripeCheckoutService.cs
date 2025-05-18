@@ -1,9 +1,10 @@
-﻿using AgrifoodManagement.Util.Models;
+﻿using AgrifoodManagement.Business.Services.Interfaces;
+using AgrifoodManagement.Util.Models;
 using Microsoft.Extensions.Options;
 using Stripe;
 using Stripe.Checkout;
 
-namespace AgrifoodManagement.Business.Services
+namespace AgrifoodManagement.Business.Services.Impl
 {
     public class StripeCheckoutService : IStripeCheckoutService
     {

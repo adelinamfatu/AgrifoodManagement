@@ -1,0 +1,118 @@
+﻿.edit-profile-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+}
+
+.settings-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e1e1e1;
+    margin-bottom: 20px;
+}
+
+.settings-header-title h1 {
+    font-size: 1.75rem;
+    margin: 0;
+    color: #2c3e50;
+}
+
+.settings-action-buttons .e-success {
+    min-width: 140px;
+    height: 2.6rem;
+    font-weight: 600;
+    background: #4CAF50 !important;
+    border: none;
+}
+
+.settings-form-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+.settings-form-left-panel {
+    flex: 2;
+}
+
+.settings-form-right-panel {
+    flex: 1;
+    min-width: 220px;
+}
+
+.settings-form-section {
+    background: #fff;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+    .settings-form-section h2 {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        color: #34495e;
+        border-bottom: 2px solid #4CAF50;
+        padding-bottom: 8px;
+    }
+
+.settings-inline-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+    .settings-inline-input label {
+        width: 2.2rem;
+        text-align: center;
+        color: #4CAF50;
+        font-size: 1.4rem;
+        margin-right: 10px;
+    }
+
+    .settings-inline-input .e-outline {
+        flex: 1;
+    }
+
+        .settings-inline-input .e-outline .e-input,
+        .settings-inline-input .e-outline .e-input-group {
+            height: 2.6rem;
+            line-height: 2.6rem;
+            border-radius: 6px;
+            border-color: #e1e1e1 !important;
+        }
+
+.settings-form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 15px;
+}
+
+.settings-col {
+    flex: 1;
+}
+
+.settings-image-preview {
+    width: 100%;
+    height: 180px;
+    border: 2px dashed #ddd;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+    .settings-image-preview img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+
+.settings-inline-input label,
+.settings-inline-input label i {
+    color: #555 !important;
+}

@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.Commands.Order;
+using AgrifoodManagement.Business.Services.Interfaces;
 using AgrifoodManagement.Domain;
 using AgrifoodManagement.Util.Models;
 using MediatR;
@@ -10,10 +11,12 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
     public class ConfirmOrderCommandHandler : IRequestHandler<ConfirmOrderCommand, Guid>
     {
         private readonly ApplicationDbContext _context;
+        private readonly IGeocodingService _geocoder;
 
-        public ConfirmOrderCommandHandler(ApplicationDbContext context)
+        public ConfirmOrderCommandHandler(ApplicationDbContext context, IGeocodingService geocodingService)
         {
             _context = context;
+            _geocoder = geocodingService;
         }
 
         public async Task<Guid> Handle(ConfirmOrderCommand request, CancellationToken cancellationToken)
@@ -32,7 +35,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
             order.DeliveryAddress = request.DeliveryAddress;
             order.PhoneNumber = request.PhoneNumber;
 
-            var (lat, lon) = await GeocodeAddressAsync(request.DeliveryAddress);
+            var (lat, lon) = await _geocoder.GeocodeAddressAsync(request.DeliveryAddress);
             order.DeliveryLatitude = lat ?? 0;
             order.DeliveryLongitude = lon ?? 0;
 
@@ -46,32 +49,6 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
             }
 
             return order.Id;
-        }
-
-        private async Task<(double? lat, double? lon)> GeocodeAddressAsync(string address)
-        {
-            if (string.IsNullOrWhiteSpace(address))
-                return (null, null);
-
-            address = address.Replace(",", " ");
-            var url = $"https://nominatim.openstreetmap.org/search?q={Uri.EscapeDataString(address)}&format=json&limit=1";
-
-            using var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("User-Agent", "AgroFoodApp");
-
-            var response = await httpClient.GetAsync(url);
-            if (!response.IsSuccessStatusCode) return (null, null);
-
-            var content = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<List<NominatimResult>>(content);
-
-            if (result?.Any() == true)
-            {
-                var loc = result.First();
-                return (double.Parse(loc.lat), double.Parse(loc.lon));
-            }
-
-            return (null, null);
         }
     }
 }

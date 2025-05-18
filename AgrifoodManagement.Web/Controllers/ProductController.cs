@@ -1,5 +1,5 @@
 ﻿using AgrifoodManagement.Business.Commands.Product;
-using AgrifoodManagement.Business.Services;
+using AgrifoodManagement.Business.Services.Interfaces;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models;

@@ -1,8 +1,9 @@
 ﻿using AgrifoodManagement.Business.Commands.Account;
-using AgrifoodManagement.Business.Services;
+using AgrifoodManagement.Business.Services.Interfaces;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models.Auth;
+using AgrifoodManagement.Web.Models.Settings;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -161,6 +162,35 @@ namespace AgrifoodManagement.Web.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> UpdateProfile(UpdateUserViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                    .Where(kvp => kvp.Value.Errors.Count > 0)
+                    .SelectMany(kvp => kvp.Value.Errors
+                                          .Select(err => err.ErrorMessage))
+                    .ToArray();
+
+                return BadRequest(new { errors });
+            }
+
+            var cmd = new UpdateUserCommand
+            {
+                UserId = viewModel.UserId,
+                Email = viewModel.Email,
+                Password = viewModel.Password,
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName,
+                PhoneNumber = viewModel.PhoneNumber,
+                DeliveryAddress = viewModel.Address
+            };
+
+            await _mediator.Send(cmd);
+            return Ok(new { success = true, message = "Profile updated!" });
+        }
+
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateProCheckoutSession()
         {
@@ -171,11 +201,11 @@ namespace AgrifoodManagement.Web.Controllers
             var items = new[]
             {
                 new StripeLineItemDto {
-                    Name        = "Harvestica PRO Subscription",
+                    Name = "Harvestica PRO Subscription",
                     Description = "Unlock PRO features",
-                    UnitAmount  = 4999,
-                    Currency    = "ron",
-                    Quantity    = 1
+                    UnitAmount = 4999,
+                    Currency = "ron",
+                    Quantity = 1
                 }
             };
 

@@ -1,6 +1,6 @@
 ﻿using AgrifoodManagement.Business.Commands.Order;
 using AgrifoodManagement.Business.Queries.Order;
-using AgrifoodManagement.Business.Services;
+using AgrifoodManagement.Business.Services.Interfaces;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Mappers;

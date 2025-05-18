@@ -1,4 +1,5 @@
-﻿using AgrifoodManagement.Business.Queries.Forum;
+﻿using AgrifoodManagement.Business.Queries.Account;
+using AgrifoodManagement.Business.Queries.Forum;
 using AgrifoodManagement.Business.Queries.Order;
 using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Business.Queries.Report;
@@ -8,6 +9,7 @@ using AgrifoodManagement.Web.Mappers;
 using AgrifoodManagement.Web.Models;
 using AgrifoodManagement.Web.Models.Forum;
 using AgrifoodManagement.Web.Models.Report;
+using AgrifoodManagement.Web.Models.Settings;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -192,6 +194,17 @@ namespace AgrifoodManagement.Web.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> SettingsAsync()
+        {
+            SetSidebar("7");
+
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            var dto = await _mediator.Send(new GetUserSettingsQuery(email));
+            var viewModel = UpdateUserViewModelMapper.Map(dto);
+
+            return View(viewModel);
+        }
+
         private List<SidebarViewModel> GetSidebarItems()
         {
             return new List<SidebarViewModel>
@@ -202,6 +215,7 @@ namespace AgrifoodManagement.Web.Controllers
                 new SidebarViewModel { Id = "4", Name = "Reports & Analytics", IconCss = "bi bi-graph-up", Url = "/Producer/Reports", IsPro = true },
                 new SidebarViewModel { Id = "5", Name = "Demand Forecasting", IconCss = "bi bi-calendar-check", Url = "/Producer/Forecasting", IsPro = true },
                 new SidebarViewModel { Id = "6", Name = "Forum", IconCss = "bi bi-chat-dots", Url = "/Producer/Forum", IsPro = true },
+                new SidebarViewModel { Id = "7", Name = "Settings", IconCss = "bi bi-gear", Url = "/Producer/Settings", IsPro = false },
             };
         }
 

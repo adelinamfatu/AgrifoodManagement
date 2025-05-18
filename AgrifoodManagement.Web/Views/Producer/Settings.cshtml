@@ -1,0 +1,220 @@
+﻿@using AgrifoodManagement.Web.Models.Settings;
+@using Syncfusion.EJ2.Popups;
+@using Syncfusion.EJ2.Inputs;
+@using Syncfusion.EJ2.DropDowns;
+
+@{
+    Layout = "~/Views/Shared/_ProducerSidebarLayout.cshtml";
+}
+
+@model UpdateUserViewModel;
+
+<div class="edit-profile-container">
+    <form id="editProfileForm"
+          asp-controller="Account"
+          asp-action="UpdateProfile"
+          novalidate
+          method="post"
+          enctype="multipart/form-data">
+
+        <div class="settings-page-header">
+            <div class="settings-header-title">
+                <h1>Edit Profile</h1>
+            </div>
+            <div class="settings-action-buttons">
+                <ejs-button id="btnSaveProfile"
+                            type="submit"
+                            content="Save Changes"
+                            cssClass="e-success">
+                </ejs-button>
+            </div>
+        </div>
+
+        <div class="settings-form-container">
+
+            <div class="settings-form-left-panel">
+
+                <div class="settings-form-section">
+                    <h2>Personal Information</h2>
+
+                    <div class="settings-form-group settings-inline-input">
+                        <label for="Email" title="Email address">
+                            <i class="fa fa-envelope"></i>
+                        </label>
+                        <ejs-textbox id="Email"
+                                     name="Email"
+                                     value="@Model.Email"
+                                     placeholder="Email address"
+                                     floatLabelType="Auto"
+                                     cssClass="e-outline"
+                                     type="Email"
+                                     required="true">
+                        </ejs-textbox>
+                    </div>
+
+                    <div class="settings-form-group settings-inline-input">
+                        <label for="Password" title="New password">
+                            <i class="fa fa-lock"></i>
+                        </label>
+                        <ejs-textbox id="Password"
+                                     name="Password"
+                                     value="@Model.Password"
+                                     placeholder="New password"
+                                     floatLabelType="Auto"
+                                     cssClass="e-outline"
+                                     type="Password">
+                        </ejs-textbox>
+                    </div>
+
+                    <div class="settings-form-group settings-inline-input">
+                        <label for="FirstName" title="First name">
+                            <i class="fa fa-user"></i>
+                        </label>
+                        <ejs-textbox id="FirstName"
+                                     name="FirstName"
+                                     value="@Model.FirstName"
+                                     placeholder="First name"
+                                     floatLabelType="Auto"
+                                     cssClass="e-outline"
+                                     required="true">
+                        </ejs-textbox>
+                    </div>
+
+                    <div class="settings-form-group settings-inline-input">
+                        <label for="LastName" title="Last name">
+                            <i class="fa fa-user"></i>
+                        </label>
+                        <ejs-textbox id="LastName"
+                                     name="LastName"
+                                     value="@Model.LastName"
+                                     placeholder="Last name"
+                                     floatLabelType="Auto"
+                                     cssClass="e-outline"
+                                     required="true">
+                        </ejs-textbox>
+                    </div>
+
+                    <div class="settings-form-group settings-inline-input">
+                        <label for="PhoneNumber" title="Phone number">
+                            <i class="fa fa-phone"></i>
+                        </label>
+                        <ejs-textbox id="PhoneNumber"
+                                     name="PhoneNumber"
+                                     value="@Model.PhoneNumber"
+                                     placeholder="Phone number"
+                                     floatLabelType="Auto"
+                                     cssClass="e-outline"
+                                     type="tel">
+                        </ejs-textbox>
+                    </div>
+                </div>
+
+                <div class="settings-form-section">
+                    <h2>Address</h2>
+
+                    <div class="settings-form-row">
+                        <div class="settings-col settings-inline-input">
+                            <label for="Street"><i class="fa fa-road"></i></label>
+                            <ejs-textbox id="Street" name="Street"
+                                         value="@Model.Street"
+                                         placeholder="Street"
+                                         floatLabelType="Auto"
+                                         cssClass="e-outline">
+                            </ejs-textbox>
+                        </div>
+                        <div class="settings-col settings-inline-input">
+                            <label for="Number"><i class="fa fa-hashtag"></i></label>
+                            <ejs-textbox id="Number" name="Number"
+                                         value="@Model.Number"
+                                         placeholder="Number"
+                                         floatLabelType="Auto"
+                                         cssClass="e-outline">
+                            </ejs-textbox>
+                        </div>
+                    </div>
+
+                    <div class="settings-form-row">
+                        <div class="settings-col settings-inline-input">
+                            <label for="City"><i class="fa fa-city"></i></label>
+                            <ejs-textbox id="City" name="City"
+                                         value="@Model.City"
+                                         placeholder="City"
+                                         floatLabelType="Auto"
+                                         cssClass="e-outline">
+                            </ejs-textbox>
+                        </div>
+                        <div class="settings-col settings-inline-input">
+                            <label for="Country"><i class="fa fa-globe"></i></label>
+                            <ejs-textbox id="Country" name="Country"
+                                         value="@Model.Country"
+                                         placeholder="Country"
+                                         floatLabelType="Auto"
+                                         cssClass="e-outline">
+                            </ejs-textbox>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="DeliveryAddress" name="DeliveryAddress" />
+                </div>
+            </div>
+
+            <div class="settings-form-right-panel">
+                <div class="settings-form-section">
+                    <h2>Avatar</h2>
+
+                    <div class="settings-image-preview">
+                        <img src="@(Model.Avatar ?? "/images/avatar-placeholder.png")"
+                             alt="Avatar" />
+                    </div>
+
+                    <div class="settings-inline-input">
+                        <p class="avatar-note">
+                            Changing your photo can be done by clicking on the avatar in the toolbar.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<ejs-toast id="actionToast" newestOnTop="true" showCloseButton="true" timeOut="4000">
+    <e-toast-position X="Right" Y="Top"></e-toast-position>
+</ejs-toast>
+
+<script>
+    document
+        .getElementById('editProfileForm')
+        .addEventListener('submit', function () {
+            const parts = [
+                document.getElementById('Street')?.ej2_instances?.[0]?.value?.trim(),
+                document.getElementById('Number')?.ej2_instances?.[0]?.value?.trim(),
+                document.getElementById('City')?.ej2_instances?.[0]?.value?.trim(),
+                document.getElementById('Country')?.ej2_instances?.[0]?.value?.trim()
+            ];
+            const full = parts.filter(x => x).join(', ');
+            document.getElementById('DeliveryAddress').value = full;
+        });
+
+    const toastObj = document
+        .getElementById('actionToast')
+        .ej2_instances[0];
+
+    function showToast(msg) {
+        toastObj.show({
+            title: 'Validation Error',
+            content: msg,
+            cssClass: 'e-toast-danger',
+            timeOut: 3000
+        });
+    }
+
+    document
+        .querySelectorAll('#editProfileForm input, #editProfileForm textarea')
+        .forEach(el => {
+            el.addEventListener('invalid', e => {
+                e.preventDefault();
+                showToast(e.target.validationMessage);
+            });
+        });
+</script>
