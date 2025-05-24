@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.Commands.Order;
+using AgrifoodManagement.Business.Services.Interfaces;
 using AgrifoodManagement.Domain;
 using AgrifoodManagement.Util.ValueObjects;
 using MediatR;
@@ -13,30 +14,25 @@ namespace AgrifoodManagement.Business.CommandHandlers.History
     public class UpdateOrderStatusCommandHandler : IRequestHandler<UpdateOrderStatusCommand, bool>
     {
         private readonly ApplicationDbContext _context;
+        private readonly IOrderStatusTransitionValidator _validator;
 
-        public UpdateOrderStatusCommandHandler(ApplicationDbContext context) => _context = context;
+        public UpdateOrderStatusCommandHandler(ApplicationDbContext context, IOrderStatusTransitionValidator validator)
+        {
+            _context = context;
+            _validator = validator;
+        }
 
         public async Task<bool> Handle(UpdateOrderStatusCommand req, CancellationToken ct)
         {
             var order = await _context.Orders.FindAsync(new object[] { req.OrderId }, ct);
             if (order == null) return false;
 
-            if (!IsValidTransition(order.Status, req.NewStatus)) return false;
+            if (!_validator.IsValidTransition(order.Status, req.NewStatus))
+                return false;
 
             order.Status = req.NewStatus;
             await _context.SaveChangesAsync(ct);
             return true;
-        }
-
-        private bool IsValidTransition(OrderStatus oldS, OrderStatus newS)
-        {
-            return (oldS, newS) switch
-            {
-                (OrderStatus.Processing, OrderStatus.Shipped) => true,
-                (OrderStatus.Processing, OrderStatus.Canceled) => true,
-                (OrderStatus.Shipped, OrderStatus.Completed) => true,
-                _ => false
-            };
         }
     }
 }

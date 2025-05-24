@@ -55,7 +55,7 @@
                 @if (Model.OriginalPrice > Model.CurrentPrice)
                 {
                     <span class="original-price">@Model.OriginalPrice lei</span>
-                    <span class="discount-badge">-@(((Model.OriginalPrice - Model.CurrentPrice) / Model.OriginalPrice * 100).ToString("0"))%</span>
+                    <span class="discount-badge">-@((int)Math.Floor((Model.OriginalPrice - Model.CurrentPrice) / Model.OriginalPrice * 100))%</span>
                 }
             </div>
         </div>

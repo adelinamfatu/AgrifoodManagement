@@ -2,6 +2,7 @@
 using AgrifoodManagement.Business.Services.Interfaces;
 using AgrifoodManagement.Domain;
 using AgrifoodManagement.Util.Models;
+using AgrifoodManagement.Util.ValueObjects;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -12,11 +13,13 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
     {
         private readonly ApplicationDbContext _context;
         private readonly IGeocodingService _geocoder;
+        private readonly IOrderStatusTransitionValidator _validator;
 
-        public ConfirmOrderCommandHandler(ApplicationDbContext context, IGeocodingService geocodingService)
+        public ConfirmOrderCommandHandler(ApplicationDbContext context, IGeocodingService geocodingService, IOrderStatusTransitionValidator validator)
         {
             _context = context;
             _geocoder = geocodingService;
+            _validator = validator;
         }
 
         public async Task<Guid> Handle(ConfirmOrderCommand request, CancellationToken cancellationToken)
@@ -26,7 +29,13 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
             if (order == null)
                 throw new KeyNotFoundException("Order not found.");
 
-            order.Status = Util.ValueObjects.OrderStatus.Pending;
+            if (!_validator.IsValidTransition(order.Status, OrderStatus.Pending))
+            {
+                throw new InvalidOperationException(
+                   $"Cannot move order from {order.Status} to Pending.");
+            }
+
+            order.Status = OrderStatus.Pending;
             order.TotalAmount = request.TotalAmount;
             order.OrderedAt = DateTime.UtcNow;
             order.DeliveryMethod = request.DeliveryMethod;

@@ -21,6 +21,7 @@ namespace AgrifoodManagement.Web.Mappers
                 Name = dto.Name,
                 Delivery = dto.Delivery,
                 BuyerPhone = dto.BuyerPhone,
+                SellerPhone = dto.SellerPhone,
                 Status = dto.Status,
                 Quantity = dto.Quantity,
                 Total = dto.Total,

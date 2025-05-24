@@ -8,16 +8,13 @@
 @model BasketViewModel
 
 <div class="basket-container">
-    <div class="header-container">
-        <h2 class="basket-title">Your Shopping Basket</h2>
-    </div>
-
     @if (!Model.Items.Any())
     {
-        <div class="text-center py-5">
-            <i class="fas fa-shopping-basket fa-4x text-muted mb-3"></i>
-            <h4 class="text-muted mb-4">Your basket is empty</h4>
-            <a href="@Url.Action("Shop", "Consumer")" class="btn btn-success mt-2">
+        <div class="empty-basket">
+            <i class="fas fa-shopping-basket empty-icon"></i>
+            <h3 class="empty-title">Your basket is empty</h3>
+            <p class="empty-subtitle">Browse our fresh produce and add something to your cart!</p>
+            <a href="@Url.Action("Shop","Consumer")" class="btn btn-success empty-btn">
                 Start Shopping
             </a>
         </div>
@@ -65,7 +62,7 @@
             <div class="col-12">
                 <div class="checkout-container-new">
                     <div>
-                        <div class="order-summary" style="margin-top: 10px;">
+                        <div class="cart-order-summary" style="margin-top: 10px;">
                             <div class="summary-row">
                                 <span class="summary-label">Subtotal:</span>
                                 <span class="summary-value">@Model.SubTotal.ToString("N2") lei</span>

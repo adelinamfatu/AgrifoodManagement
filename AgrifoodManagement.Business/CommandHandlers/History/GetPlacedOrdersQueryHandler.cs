@@ -30,6 +30,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.History
                             o.Status == OrderStatus.Completed))
                 .Include(o => o.OrderDetails!)
                 .ThenInclude(d => d.Product!)
+                .ThenInclude(p => p.Seller!)
                 .ToListAsync(ct);
 
             var result = orders.Select(order => new OrderTreeDto
@@ -48,7 +49,8 @@ namespace AgrifoodManagement.Business.CommandHandlers.History
                     Id = od.Id,
                     Name = od.Product!.Name,
                     Quantity = $"{od.Quantity} {od.Product.UnitOfMeasurement}",
-                    Total = od.Quantity * od.UnitPrice
+                    Total = od.Quantity * od.UnitPrice,
+                    SellerPhone = od.Seller.PhoneNumber,
                 }).ToList()
             }).ToList();
 

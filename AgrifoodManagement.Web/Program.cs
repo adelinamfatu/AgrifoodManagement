@@ -38,7 +38,8 @@ builder.Services
     .AddSingleton<IStripeCheckoutService, StripeCheckoutService>();
 builder.Services
     .AddHttpClient<IGeocodingService, NominatimGeocodingService>();
-
+builder.Services
+    .AddScoped<IOrderStatusTransitionValidator, OrderStatusTransitionValidator>();
 
 // Stripe
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));

@@ -1,6 +1,6 @@
 ﻿:root {
-    --primary-color: #26B571;
-    --light-green: #9FDFC3;
+    --primary-color: #7bae7f;
+    --light-bg: #7bae7f;
     --text-dark: #333333;
 }
 
@@ -37,16 +37,16 @@ body {
 }
 
 .hero {
-    background-color: #F4FDF8;
-    padding: 40px;
+    background-color: #7bae7f;
+    padding: 6px 20px;
     border-radius: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
     overflow: hidden;
-    margin-bottom: 30px;
     width: 100%;
+    color: #fff;
 }
 
 .hero-content {
@@ -55,21 +55,23 @@ body {
 }
 
 .discount-text {
-    color: var(--primary-color);
+    color: #ffe8d6;
     font-size: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
 }
 
 .hero-title {
     font-size: 44px;
     color: var(--text-dark);
-    margin-bottom: 20px;
+    margin-bottom: 6px;
+    margin-left: 6px;
     line-height: 1.2;
 }
 
 .hero-description {
     color: #666;
-    margin-bottom: 30px;
+    margin-left: 6px;
+    margin-bottom: 6px;
     line-height: 1.6;
 }
 
@@ -88,8 +90,30 @@ body {
     z-index: 0;
 }
 
+.hero .shop-now-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #fff;
+    color: #7bae7f;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 2px solid transparent;
+    transition: background 0.3s, color 0.3s;
+}
+
+    .hero .shop-now-btn:hover {
+        background: rgba(255,255,255,0.85);
+        color: var(--text-dark);
+    }
+
+.hero-title,
+.hero-description {
+    color: #ffffff;
+}
+
 .category-section {
-    padding: 40px 0;
+    padding: 20px 0;
     position: relative;
 }
 
@@ -101,7 +125,7 @@ body {
 }
 
 .section-title {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     color: #333;
     position: relative;
 }
@@ -373,21 +397,22 @@ body {
 }
 
 .deal-of-week {
-    background-color: #f2f9f2;
+    background-color: #7bae7f;
     border-radius: 12px;
     padding: 40px;
     margin: 40px 0;
     position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    overflow: hidden;
+    align-items: stretch;
+    overflow: visible;
+    text-align: center;
 }
 
 .deal-title {
     font-size: 28px;
     font-weight: 600;
-    color: #333;
+    color: #fff;
     margin-bottom: 30px;
     text-align: center;
 }
@@ -451,82 +476,29 @@ body {
 }
 
 .deal-visuals {
+    position: absolute;
+    top: 40px;
+    bottom: 40px;
+    left: 60px;
+    right: 80px;
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    position: absolute;
-    bottom: -20px; /* Adjusted to better position elements */
-    z-index: 1;
-    opacity: 0.9; /* Slightly increased opacity */
+    align-items: center;
+    z-index: 2;
 }
 
-.veggie-bag-drawing {
-    position: relative;
-    width: 140px; /* Made slightly larger */
-    height: 170px;
-    background-color: #09a570;
-    border-radius: 12px 12px 45px 45px; /* Smoother curves */
-    left: 60px;
-    bottom: -15px;
-    box-shadow: 0 5px 15px rgba(9, 165, 112, 0.3); /* Added shadow for depth */
+.deal-image {
+    max-width: 200px;
+    height: auto;
 }
 
-    .veggie-bag-drawing::before {
-        content: '';
-        position: absolute;
-        width: 110px;
-        height: 25px;
-        background-color: #09a570;
-        border-radius: 12px;
-        top: -12px;
-        left: 15px;
-    }
-
-    .veggie-bag-drawing::after {
-        content: '';
-        position: absolute;
-        width: 90px;
-        height: 70px;
-        background: radial-gradient(circle, #ff6b6b 10%, #ffa500 25%, #7cba01 40%, #ffd700 55%, #ff914d 70%, #8bc34a 85%);
-        border-radius: 50%;
-        top: 20px;
-        left: 25px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); /* Added shadow for depth */
-    }
-
-.tomatoes-drawing {
-    position: relative;
-    right: 60px;
-    bottom: 25px;
+.deal-image--bag {
+    max-width: 260px;
 }
 
-    .tomatoes-drawing::before {
-        content: '';
-        position: absolute;
-        width: 70px;
-        height: 70px;
-        background-color: #e53935;
-        border-radius: 50%;
-        right: 0;
-        box-shadow: -20px 20px 0 -3px #e53935, 20px -20px 0 -8px #e53935, 0 5px 15px rgba(229, 57, 53, 0.3
-    }
-
-    .tomatoes-drawing::after {
-        content: '';
-        position: absolute;
-        width: 18px;
-        height: 18px;
-        background-color: #4caf50;
-        border-radius: 0 12px 0 12px;
-        transform: rotate(45deg);
-        top: -12px;
-        right: 30px;
-        box-shadow: -20px 25px 0 -3px #4caf50, 20px -15px 0 -6px #4caf50, 0 3px 5px rgba(76, 175, 80, 0.2);
-        /* Improved leaf details */
-    }
 
 .weekly-deals {
-    margin: 50px 0;
+    margin: 25px 0;
 }
 
 .section-header {
@@ -537,7 +509,7 @@ body {
 }
 
 .section-title {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     color: #333;
     position: relative;
 }
@@ -551,9 +523,16 @@ body {
         margin-top: 8px;
     }
 
+.weekly-deals .section-title,
+.category-section .section-title {
+    font-size: 2.2rem;
+    line-height: 1.2;
+}
+
 .pagination-dots {
     display: flex;
     gap: 8px;
+    margin-left: auto;
 }
 
 .dot {
@@ -567,6 +546,23 @@ body {
 
     .dot.active {
         background-color: #4CAF50;
+    }
+
+#products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.product-wrapper {
+    display: flex;
+    align-items: stretch;
+}
+
+    .product-wrapper .product-card {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
 
 @media (min-width: 992px) {
@@ -590,5 +586,9 @@ body {
 
     .category-item {
         min-width: 150px;
+    }
+
+    .deal-visuals {
+        display: none;
     }
 }

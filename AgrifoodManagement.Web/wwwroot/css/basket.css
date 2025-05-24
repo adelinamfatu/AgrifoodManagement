@@ -108,7 +108,7 @@
             box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
         }
 
-.order-summary {
+.cart-order-summary {
     margin-top: 30px;
     padding: 20px;
     background-color: #f8f9fa;
@@ -244,7 +244,7 @@
 }
 
 @media (max-width: 992px) {
-    .order-summary {
+    .cart-order-summary {
         margin-top: 30px;
     }
 
@@ -259,7 +259,7 @@
         margin: 20px 10px;
     }
 
-    .order-summary {
+    .cart-order-summary {
         width: 100%;
         margin-top: 30px;
         text-align: left;
@@ -324,3 +324,47 @@
 .card-body {
     padding: 0;
 }
+
+.empty-basket {
+    max-width: 480px;
+    margin: 4rem auto;
+    padding: 3rem 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+    .empty-basket .empty-icon {
+        font-size: 5rem;
+        color: #ced4da;
+        margin-bottom: 1.5rem;
+    }
+
+    .empty-basket .empty-title {
+        font-size: 1.5rem;
+        color: #343a40;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+
+    .empty-basket .empty-subtitle {
+        color: #6c757d;
+        margin-bottom: 1.75rem;
+        font-size: 1rem;
+    }
+
+    .empty-basket .empty-btn {
+        color: #218838;
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 6px;
+        transition: background-color .2s, transform .2s;
+    }
+
+        .empty-basket .empty-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            color: #fff !important;
+        }

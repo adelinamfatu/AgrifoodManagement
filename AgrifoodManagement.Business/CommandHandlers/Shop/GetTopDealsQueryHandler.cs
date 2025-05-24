@@ -34,6 +34,9 @@ namespace AgrifoodManagement.Business.CommandHandlers.Shop
                         p.Name,
                         p.CurrentPrice,
                         p.OriginalPrice,
+                        p.UnitOfMeasurement,
+                        p.ExpirationDate,
+                        p.Quantity,
                         Discount = (p.OriginalPrice - p.CurrentPrice) / p.OriginalPrice * 100
                     })
                     .OrderByDescending(x => x.Discount)
@@ -55,6 +58,9 @@ namespace AgrifoodManagement.Business.CommandHandlers.Shop
                     Name = p.Name,
                     CurrentPrice = (decimal)p.CurrentPrice,
                     OriginalPrice = p.OriginalPrice,
+                    UnitOfMeasurement = p.UnitOfMeasurement,
+                    ExpirationDate = p.ExpirationDate,
+                    Quantity = p.Quantity,
                     DiscountPercentage = (int)Math.Floor((decimal)p.Discount),
                     PhotoUrls = photoUrlsDict.ContainsKey(p.Id) ? photoUrlsDict[p.Id] : new List<string>()
                 }).ToList();

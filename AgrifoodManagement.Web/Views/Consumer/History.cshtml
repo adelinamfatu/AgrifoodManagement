@@ -29,7 +29,7 @@
                 <e-treegrid-column field="Delivery" headerText="Delivery" width="140" textAlign="Center"></e-treegrid-column>
                 <e-treegrid-column field="Status" headerText="Status" width="140" textAlign="Center" template="#statusTemplate"></e-treegrid-column>
                 <e-treegrid-column field="Quantity" headerText="Quantity" width="100" textAlign="Center"></e-treegrid-column>
-                <e-treegrid-column field="Total" headerText="Total" format="C2" width="120" textAlign="Center"></e-treegrid-column>
+                <e-treegrid-column field="Total" headerText="Total" width="120" textAlign="Center" template="#totalTemplate"></e-treegrid-column>
                 <e-treegrid-column headerText="Action" width="160" textAlign="Center" template="actionTemplate" allowFiltering="false" allowSorting="false"></e-treegrid-column>
             </e-treegrid-columns>
         </ejs-treegrid>
@@ -42,6 +42,10 @@
 
 <script id="statusTemplate" type="text/x-template">
     <span class="status-badge ${Status.toLowerCase()}">${Status}</span>
+</script>
+
+<script id="totalTemplate" type="text/x-template">
+    ${data.Total.toFixed(2)} lei
 </script>
 
 <script>
@@ -66,10 +70,24 @@
     }
 
     function actionTemplate(data) {
-        if (data.Status === "Processing") {
-            return "<button class='e-btn e-danger small-action-btn' onclick=\"cancelOrder('" + data.Id + "')\">Cancel</button>";
-        } else if (data.Status === "Shipped") {
-            return "<button class='e-btn e-success small-action-btn' onclick=\"completeOrder('" + data.Id + "')\">Complete</button>";
+        if (data.Children && data.Children.length) {
+            if (data.Status === "Processing") {
+                return "<button class='e-btn e-danger small-action-btn' " +
+                    "onclick=\"cancelOrder('" + data.Id + "')\">" +
+                    "Cancel</button>";
+            }
+            if (data.Status === "Shipped") {
+                return "<button class='e-btn e-success small-action-btn' " +
+                    "onclick=\"completeOrder('" + data.Id + "')\">" +
+                    "Complete</button>";
+            }
+            return "";
+        }
+
+        if (data.SellerPhone) {
+            return "<button class='e-btn e-info small-action-btn' " +
+                "onclick=\"showToast('info','Seller Phone','" + data.SellerPhone + "')\">" +
+                "<i class='fas fa-phone'></i></button>";
         }
         return "";
     }
@@ -81,17 +99,20 @@
             okButton: {
                 click: function () {
                     this.hide();
-                    fetch('/Consumer/Cancel', {
+                    fetch('/History/UpdateStatus', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(id)
+                        body: JSON.stringify({
+                            orderId: id,
+                            newStatus: 'Canceled'
+                        })
                     })
                         .then(res => {
                             if (res.ok) {
                                 showToast("success",  "Canceled", "Order was canceled successfully.");
-                                setTimeout(() => location.reload(), 1000);
+                                setTimeout(() => location.reload(), 4500);
                             } else {
                                 showToast("danger", "Error", "Could not cancel the order.");
                             }
@@ -116,17 +137,20 @@
             okButton: {
                 click: function () {
                     this.hide();
-                    fetch('/History/Complete', {
+                    fetch('/History/UpdateStatus', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(id)
+                        body: JSON.stringify({
+                            orderId: id,
+                            newStatus: 'Completed'
+                        })
                     })
                         .then(res => {
                             if (res.ok) {
                                 showToast("success", "Completed", "Order marked as completed.");
-                                setTimeout(() => location.reload(), 1000);
+                                setTimeout(() => location.reload(), 4500);
                             } else {
                                 showToast("error", "Error", "Could not complete the order.");
                             }

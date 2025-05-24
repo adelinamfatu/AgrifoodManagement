@@ -87,6 +87,11 @@ namespace AgrifoodManagement.Web.Controllers
             if (!string.IsNullOrEmpty(discountCode))
             {
                 discountDto = await _mediator.Send(new GetValidDiscountCodeQuery { Code = discountCode });
+
+                if (discountDto == null)
+                {
+                    TempData["DiscountError"] = "That discount code isn’t valid.";
+                }
             }
 
             var viewModel = CheckoutViewModelMapper.Map(cartDto, email, deliveryMethod, deliveryFee, discountDto);

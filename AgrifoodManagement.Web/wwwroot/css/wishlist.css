@@ -113,3 +113,49 @@
         color: #666;
         margin: 0;
     }
+
+.empty-wishlist {
+    max-width: 480px;
+    margin: 4rem auto;
+    padding: 3rem 2rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+    .empty-wishlist .empty-icon {
+        font-size: 4rem;
+        color: #ced4da;
+        margin-bottom: 1.5rem;
+    }
+
+    .empty-wishlist .empty-title {
+        font-size: 1.5rem;
+        color: #343a40;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+
+    .empty-wishlist .empty-subtitle {
+        color: #6c757d;
+        margin-bottom: 1.75rem;
+        font-size: 1rem;
+    }
+
+    .empty-wishlist .empty-btn {
+        display: inline-block;
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #fff;
+        background-color: #28a745;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: background-color .2s, transform .2s;
+    }
+
+        .empty-wishlist .empty-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }

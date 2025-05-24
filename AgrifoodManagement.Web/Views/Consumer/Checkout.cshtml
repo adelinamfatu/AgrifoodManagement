@@ -128,7 +128,7 @@
                         <ejs-textbox id="discountCode" name="DiscountCode" placeholder="Enter discount code" cssClass="e-outline" floatLabelType="Auto" value="@Model.DiscountCode"></ejs-textbox>
                     </div>
                     <div class="form-group" style="max-width: 150px;">
-                        <ejs-button id="applyDiscountBtn" cssClass="e-outline" content="Apply" button-type="Button"></ejs-button>
+                        <ejs-button id="applyDiscountBtn" cssClass="e-outline pay-button" content="Apply" button-type="Button"></ejs-button>
                     </div>
                 </div>
             </div>
@@ -191,6 +191,10 @@
     <input type="hidden" id="orderId" value="@Model.OrderId" />
 </div>
 
+<ejs-toast id="actionToast" newestOnTop="true" showCloseButton="true" timeOut="4000">
+    <e-toast-position X="Right" Y="Top"></e-toast-position>
+</ejs-toast>
+
 <script>
     const currentDiscount = @Model.Discount.ToString("F2");
     const currentDiscountPercentage = @Model.DiscountPercentage;
@@ -203,7 +207,25 @@
         DeliveryFeeMap.Options.ToDictionary(kvp => kvp.Key, kvp => decimal.Parse(kvp.Value.Fee.ToString(System.Globalization.CultureInfo.InvariantCulture)))
     ));
 
+    function showToast(type, title, message) {
+        const toastObj = document.getElementById('actionToast').ej2_instances[0];
+        toastObj.show({
+            title: title,
+            content: message,
+            cssClass: `e-toast-${type}`,
+            icon: `e-${type} toast-icons`
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
+        @if (TempData["DiscountError"] != null)
+        {
+            <text>
+                    showToast('error', 'Oops!', '@TempData["DiscountError"]');
+            </text>
+            ;
+        }
+
         document.getElementById('applyDiscountBtn').addEventListener('click', function (e) {
             e.preventDefault();
 
@@ -212,7 +234,7 @@
 
             const url = `@Url.Action("Checkout", "Cart")?selectedDelivery=${selectedDelivery}&discountCode=${encodeURIComponent(discountCode)}`;
             window.location.href = url;
-        });
+            });
 
         const deliveryOptions = document.querySelectorAll('.delivery-option input[type="radio"]');
 
@@ -228,7 +250,7 @@
 
             const totalSpan = document.getElementById('totalValue');
             totalSpan.textContent = `${newTotal.toFixed(2)} lei`;
-        }
+            }
 
         deliveryOptions.forEach(radio => {
             radio.addEventListener('change', function () {
@@ -261,6 +283,26 @@
     document.getElementById('payBtn').addEventListener('click', async function (e) {
         e.preventDefault();
 
+        // Validate contact info
+        const streetEl = document.getElementById('street').ej2_instances?.[0];
+        const numberEl = document.getElementById('number').ej2_instances?.[0];
+        const cityEl = document.getElementById('city').ej2_instances?.[0];
+        const countryEl = document.getElementById('country').ej2_instances?.[0];
+        const phoneEl = document.getElementById('phoneNumber').ej2_instances?.[0];
+        const emailEl = document.getElementById('email').ej2_instances?.[0];
+
+        const street = streetEl?.value?.trim();
+        const number = numberEl?.value?.trim();
+        const city = cityEl?.value?.trim();
+        const country = countryEl?.value?.trim();
+        const phone = phoneEl?.value?.trim();
+        const email = emailEl?.value?.trim();
+
+        if (!street || !number || !city || !country || !phone || !email) {
+            showToast('error', 'Incomplete Info', 'Please fill out all contact information before proceeding.');
+            return;
+        }
+
         const data = {
             orderId: "@Model.OrderId",
             postalCode: document.getElementById('postalCode')?.ej2_instances?.[0]?.value?.trim() || "",
@@ -286,8 +328,7 @@
 
         if (!saveResponse.ok) {
             const errorText = await saveResponse.text();
-            console.error("Failed to save order:", errorText);
-            alert("Could not create order. Try again.");
+            showToast('error', 'Failed to save order', 'Could not create order. Try again.');
             return;
         }
 
@@ -308,8 +349,7 @@
 
         if (!sessionResponse.ok) {
             const errorText = await sessionResponse.text();
-            console.error("Checkout session failed:", errorText);
-            alert("Something went wrong: " + errorText);
+            showToast('error', 'Checkout session failed', 'Something went wrong. Try again.');
             return;
         }
 
@@ -319,8 +359,7 @@
         const { error } = await stripe.redirectToCheckout({ sessionId });
 
         if (error) {
-            console.error(error);
-            alert(error.message);
+            showToast('error', 'Oops!', 'Something went wrong. Try again.');
         }
     });
 </script>

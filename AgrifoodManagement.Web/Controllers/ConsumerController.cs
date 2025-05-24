@@ -109,10 +109,5 @@ namespace AgrifoodManagement.Web.Controllers
             var viewModel = OrderHistoryViewModelMapper.Map(dto);
             return View(viewModel);
         }
-
-        public IActionResult Loyalty()
-        {
-            return View();
-        }
     }
 }

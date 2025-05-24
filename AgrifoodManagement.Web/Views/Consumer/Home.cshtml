@@ -20,7 +20,7 @@
             </p>
             <a href="/Listings/Explore" class="shop-now-btn">Explore Products</a>
         </div>
-        <img class="hero-image" src="/images/man-holding-vegetables-basket.png" alt="Organic Vegetables in Bag" />
+        <img class="hero-image" src="/images/farm.png" alt="Organic Vegetables in Bag" />
         <div class="hero-icons"></div>
     </section>
 
@@ -50,14 +50,13 @@
             </div>
         </div>
         <div class="deal-visuals">
-            <div class="veggie-bag-drawing"></div>
-            <div class="tomatoes-drawing"></div>
+            <img class="deal-image deal-image--bag" src="@Url.Content("~/images/veggie-bag.png")" alt="Veggie Bag Deal of the Week">
+            <img class="deal-image deal-image--tomatoes" src="@Url.Content("~/images/tomato.png")" alt="Fresh Tomatoes">
         </div>
     </section>
 
     <section class="weekly-deals">
         <div class="section-header">
-            <h2 class="section-title">Deals of the Week</h2>
             <div class="pagination-dots">
                 @for (int i = 0; i < totalPages; i++)
                 {
@@ -83,10 +82,6 @@
     <section class="category-section">
         <div class="section-header">
             <h2 class="section-title">Search by Category</h2>
-            <div class="slider-nav">
-                <div class="nav-btn prev">←</div>
-                <div class="nav-btn next">→</div>
-            </div>
         </div>
         <div class="category-slider">
             @foreach (var mainCategory in Model.Categories)
@@ -201,15 +196,6 @@
         });
 
         const slider = document.querySelector('.category-slider');
-        const prevBtn = document.querySelector('.nav-btn.prev');
-        const nextBtn = document.querySelector('.nav-btn.next');
-
-        prevBtn.addEventListener('click', () => {
-            slider.scrollBy({ left: -220, behavior: 'smooth' });
-        });
-        nextBtn.addEventListener('click', () => {
-            slider.scrollBy({ left: 220, behavior: 'smooth' });
-        });
 
         const categoryItems = document.querySelectorAll('.category-item');
         const subcategoryPanels = document.querySelectorAll('.subcategories-panel');

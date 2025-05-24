@@ -11,47 +11,60 @@
     <e-toast-position X="Right" Y="Top"></e-toast-position>
 </ejs-toast>
 
-<div class="wishlist-list container">
-    @foreach (var item in Model.Items)
-    {
-        <div class="wishlist-card" id="wishCard-@item.ProductId">
 
-            <ejs-fab id="addFab-@item.ProductId"
-                     data-product-id="@item.ProductId"
-                     cssClass="add-fab e-primary"
-                     iconCss="fas fa-cart-plus"
-                     target="#wishCard-@item.ProductId"
-                     title="Add to bag">
-            </ejs-fab>
+@if (!Model.Items.Any())
+{
+    <div class="empty-wishlist">
+        <i class="fas fa-heart-broken empty-icon"></i>
+        <h2 class="empty-title">Your wishlist is empty</h2>
+        <p class="empty-subtitle">Browse our shop and hit the ❤️ on anything you like.</p>
+        <a href="@Url.Action("Shop","Consumer")" class="empty-btn">Start Shopping</a>
+    </div>
+}
+else
+{
+    <div class="wishlist-list container">
+        @foreach (var item in Model.Items)
+        {
+            <div class="wishlist-card" id="wishCard-@item.ProductId">
 
-            <ejs-fab id="removeFab-@item.ProductId"
-                     data-product-id="@item.ProductId"
-                     cssClass="remove-fab e-flat e-danger"
-                     iconCss="fas fa-trash"
-                     target="#wishCard-@item.ProductId"
-                     title="Remove item">
-            </ejs-fab>
+                <ejs-fab id="addFab-@item.ProductId"
+                         data-product-id="@item.ProductId"
+                         cssClass="add-fab e-primary"
+                         iconCss="fas fa-cart-plus"
+                         target="#wishCard-@item.ProductId"
+                         title="Add to bag">
+                </ejs-fab>
 
-            <div class="thumb">
-                <img src="@item.ImageUrl" alt="@item.Name" />
+                <ejs-fab id="removeFab-@item.ProductId"
+                         data-product-id="@item.ProductId"
+                         cssClass="remove-fab e-flat e-danger"
+                         iconCss="fas fa-trash"
+                         target="#wishCard-@item.ProductId"
+                         title="Remove item">
+                </ejs-fab>
+
+                <div class="thumb">
+                    <img src="@item.ImageUrl" alt="@item.Name" />
+                </div>
+
+                <div class="info">
+                    <h5>@item.Name</h5>
+                    <p class="description text-muted">@item.Description</p>
+                </div>
+
+                <div class="details text-right">
+                    <p class="price-unit-value text-success fw-bold">
+                        @($"{item.Price:0.00} lei")
+                    </p>
+                    <p class="price-unit-label text-muted">
+                        @($"per {item.MeasurementUnit}")
+                    </p>
+                </div>
             </div>
-
-            <div class="info">
-                <h5>@item.Name</h5>
-                <p class="description text-muted">@item.Description</p>
-            </div>
-
-            <div class="details text-right">
-                <p class="price-unit-value text-success fw-bold">
-                    @($"{item.Price:0.00} lei")
-                </p>
-                <p class="price-unit-label text-muted">
-                    @($"per {item.MeasurementUnit}")
-                </p>
-            </div>
-        </div>
-    }
-</div>
+        }
+    </div>
+}
 
 <div id="deleteConfirmDialog"></div>
 

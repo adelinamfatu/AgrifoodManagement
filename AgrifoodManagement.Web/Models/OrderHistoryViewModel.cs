@@ -11,6 +11,7 @@
         public string Name { get; set; } = "";
         public string Delivery { get; set; } = "";
         public string BuyerPhone { get; set; } = "";
+        public string SellerPhone { get; set; } = "";
         public string Status { get; set; } = "";
         public string? Quantity { get; set; }
         public decimal? Total { get; set; }
