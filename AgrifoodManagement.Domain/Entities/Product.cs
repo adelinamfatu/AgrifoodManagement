@@ -50,5 +50,7 @@ namespace AgrifoodManagement.Domain.Entities
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
 
         public virtual ICollection<WishlistItem> WishlistItems { get; set; } = new HashSet<WishlistItem>();
+
+        public virtual ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
     }
 }

@@ -23,13 +23,10 @@ namespace AgrifoodManagement.Domain.Entities
         [Required]
         public decimal TotalAmount { get; set; }
 
-        [Required]
         public string DeliveryAddress { get; set; }
 
-        [Required]
         public double DeliveryLatitude { get; set; }
 
-        [Required]
         public double DeliveryLongitude { get; set; }
 
         public string DeliveryMethod { get; set; } = "Normal";

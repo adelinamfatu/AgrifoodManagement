@@ -21,6 +21,7 @@ namespace AgrifoodManagement.Web.Mappers
                 Name = i.Name,
                 Price = i.Price,
                 MeasurementUnit = i.MeasurementUnit.ToString(),
+                Description = i.Description,
                 ImageUrl = i.ImageUrl
             };
         }

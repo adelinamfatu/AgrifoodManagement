@@ -22,11 +22,10 @@ namespace AgrifoodManagement.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public Guid ReviewedUserId { get; set; }
+        public Guid ProductId { get; set; }
 
-        [ForeignKey(nameof(ReviewedUserId))]
-        [InverseProperty(nameof(User.ReviewsReceived))]
-        public User ReviewedUser { get; set; }
+        [ForeignKey(nameof(ProductId))]
+        public Product Product { get; set; }
 
         [Required]
         public Guid ReviewerId { get; set; }

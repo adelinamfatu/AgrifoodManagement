@@ -44,6 +44,8 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
                         Status = OrderStatus.InCart,
                         OrderedAt = null,
                         TotalAmount = 0,
+                        PhoneNumber = "",
+                        DeliveryAddress = "",
                         OrderDetails = new List<OrderDetail>()
                     };
 
@@ -59,12 +61,12 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
                 var unitPrice = product.CurrentPrice ?? product.OriginalPrice;
 
                 var existingItem = order.OrderDetails
-                    .FirstOrDefault(od => od.ProductId == request.ProductId);
+                    .FirstOrDefault(od => od.ProductId == request.ProductId
+                                    && od.Id == order.Id);
 
                 if (existingItem != null)
                 {
                     existingItem.Quantity += request.Quantity;
-                    _context.Entry(existingItem).State = EntityState.Modified;
                 }
                 else
                 {
@@ -79,11 +81,9 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
                     };
 
                     order.OrderDetails.Add(newDetail);
-                    _context.Entry(newDetail).State = EntityState.Added;
                 }
 
                 order.TotalAmount = order.OrderDetails.Sum(od => od.UnitPrice * od.Quantity);
-                _context.Entry(order).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync(cancellationToken);
 

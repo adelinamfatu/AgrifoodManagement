@@ -88,10 +88,10 @@ namespace AgrifoodManagement.Domain
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Review>()
-                .HasOne(r => r.ReviewedUser)
-                .WithMany(u => u.ReviewsReceived)
-                .HasForeignKey(r => r.ReviewedUserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(r => r.Product)
+                .WithMany(p => p.Reviews)
+                .HasForeignKey(r => r.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Set exactly 2 decimals
             modelBuilder.Entity<Product>()

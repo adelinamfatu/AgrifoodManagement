@@ -7,29 +7,135 @@
 
 @model WishlistViewModel
 
-<div class="wishlist-list">
-    <h1>Your Wishlist</h1>
+<ejs-toast id="actionToast" newestOnTop="true" showCloseButton="true" timeOut="4000">
+    <e-toast-position X="Right" Y="Top"></e-toast-position>
+</ejs-toast>
 
+<div class="wishlist-list container">
     @foreach (var item in Model.Items)
     {
-        <div class="wishlist-item card">
+        <div class="wishlist-card" id="wishCard-@item.ProductId">
+
+            <ejs-fab id="addFab-@item.ProductId"
+                     data-product-id="@item.ProductId"
+                     cssClass="add-fab e-primary"
+                     iconCss="fas fa-cart-plus"
+                     target="#wishCard-@item.ProductId"
+                     title="Add to bag">
+            </ejs-fab>
+
+            <ejs-fab id="removeFab-@item.ProductId"
+                     data-product-id="@item.ProductId"
+                     cssClass="remove-fab e-flat e-danger"
+                     iconCss="fas fa-trash"
+                     target="#wishCard-@item.ProductId"
+                     title="Remove item">
+            </ejs-fab>
+
             <div class="thumb">
                 <img src="@item.ImageUrl" alt="@item.Name" />
             </div>
-            <div class="info">
-                <h3>@item.Name</h3>
-                <p class="price">@item.Price.ToString("C")</p>
-                <p class="unit">Size: @item.MeasurementUnit</p>
-                <button class="btn btn-outline-primary add-to-bag">Add to bag</button>
 
-                <div class="wishlist-actions">
-                    <a asp-controller="Wishlist" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
-                    |
-                    <a asp-controller="Wishlist" asp-action="Remove" asp-route-id="@item.ProductId">Remove</a>
-                    |
-                    <a href="#" class="add-comment">Add comment</a>
-                </div>
+            <div class="info">
+                <h5>@item.Name</h5>
+                <p class="description text-muted">@item.Description</p>
+            </div>
+
+            <div class="details text-right">
+                <p class="price-unit-value text-success fw-bold">
+                    @($"{item.Price:0.00} lei")
+                </p>
+                <p class="price-unit-label text-muted">
+                    @($"per {item.MeasurementUnit}")
+                </p>
             </div>
         </div>
     }
 </div>
+
+<div id="deleteConfirmDialog"></div>
+
+<script>
+    function showToast(type, title, message) {
+        const toastObj = document.getElementById('actionToast').ej2_instances[0];
+        toastObj.show({
+            title: title,
+            content: message,
+            cssClass: `e-toast-${type}`,
+            icon: `e-${type} toast-icons`
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var deletingItemId = null;
+        var deleteDialog = new ej.popups.Dialog({
+            header: 'Confirm Remove',
+            content: '<div class="delete-question-text">Are you sure you want to remove this item from your wishlist?</div>',
+            showCloseIcon: false,
+            width: '350px',
+            isModal: true,
+            visible: false,
+            target: document.body,
+            cssClass: 'rounded-dialog',
+            buttons: [
+                {
+                    click: function () { deleteDialog.hide(); },
+                    buttonModel: { content: 'NO', isPrimary: false, cssClass: 'e-flat' }
+                },
+                {
+                    click: function () {
+                        fetch('@Url.Action("Toggle", "Wishlist")', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(deletingItemId)
+                        })
+                            .then(r => r.json())
+                            .then(json => {
+                                if (json.isFavorited === false) {
+                                    document.getElementById('wishCard-' + deletingItemId)?.remove();
+                                }
+                            })
+                            .finally(() => deleteDialog.hide());
+                    },
+                    buttonModel: { content: 'YES', isPrimary: true, cssClass: 'e-flat' }
+                }
+            ],
+            position: { X: 'center', Y: 'center' }
+        });
+        deleteDialog.appendTo('#deleteConfirmDialog');
+
+        document.querySelectorAll('.remove-fab').forEach(function (fabEl) {
+            var inst = fabEl.ej2_instances && fabEl.ej2_instances[0];
+            if (!inst) return;
+            inst.element.addEventListener('click', function () {
+                deletingItemId = fabEl.dataset.productId;
+                deleteDialog.show();
+            });
+        });
+
+        document.querySelectorAll('.add-fab').forEach(function (fabEl) {
+            var inst = fabEl.ej2_instances && fabEl.ej2_instances[0];
+            if (!inst) return;
+            inst.element.addEventListener('click', function () {
+                const productId = fabEl.dataset.productId;
+                fetch('@Url.Action("AddProduct", "Cart")', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productId: productId, quantity: 1 })
+                })
+                    .then(r => r.json())
+                    .then(json => {
+                        inst.disabled = true;
+                        inst.iconCss = 'fas fa-check';
+                        inst.tooltip = 'Added';
+                        inst.dataBind();
+
+                        showToast('success', 'Added to cart', 'Item has been added to your shopping cart.');
+                    })
+                    .catch(e => {
+                        showToast('error', 'Error', 'Could not add item. Please try again.');
+                    });
+            });
+        });
+    });
+</script>

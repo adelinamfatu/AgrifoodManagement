@@ -11,6 +11,7 @@ namespace AgrifoodManagement.Util.Models
     {
         public Guid ProductId { get; init; }
         public string Name { get; init; }
+        public string Description { get; init; }
         public decimal Price { get; init; }
         public MeasurementUnit? MeasurementUnit { get; init; }
         public string ImageUrl { get; init; }

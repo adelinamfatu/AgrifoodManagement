@@ -33,13 +33,14 @@ namespace AgrifoodManagement.Business.CommandHandlers.Wishlist
                 {
                     ProductId = w.ProductId,
                     Name = w.Product.Name,
+                    Description = w.Product.Description,
                     Price = w.Product.CurrentPrice ?? w.Product.OriginalPrice,
                     MeasurementUnit = w.Product.UnitOfMeasurement,
                     ImageUrl = _context.ExtendedProperties
                         .Where(ep => ep.EntityId == w.ProductId && ep.Key == "PhotoUrl")
                         .Select(ep => ep.Value)
                         .FirstOrDefault()
-                        ?? "/images/placeholder.png"
+                        ?? "/images/no-image-placeholder.png"
                 })
                 .ToListAsync(ct);
 
