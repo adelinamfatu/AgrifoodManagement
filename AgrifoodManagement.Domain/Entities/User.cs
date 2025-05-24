@@ -39,10 +39,8 @@ namespace AgrifoodManagement.Domain.Entities
 
         public bool IsPro { get; set; }
 
-        public ICollection<Product>? Products { get; set; }
+        public virtual ICollection<Product>? Products { get; set; }
 
-        public ICollection<Review> ReviewsWritten { get; set; }
-
-        public ICollection<Review> ReviewsReceived { get; set; }
+        public virtual ICollection<Review> ReviewsWritten { get; set; }
     }
 }

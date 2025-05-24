@@ -21,11 +21,14 @@ namespace AgrifoodManagement.Web.Services
                 .RegisterServicesFromAssemblyContaining<PromoteProductCommandHandler>()
                 .RegisterServicesFromAssemblyContaining<UpdateProductCommandHandler>()
                 .RegisterServicesFromAssemblyContaining<UpdateProductStatusCommandHandler>()
-                .RegisterServicesFromAssemblyContaining<DeleteProductPhotosCommandHandler>());
+                .RegisterServicesFromAssemblyContaining<DeleteProductPhotosCommandHandler>()
+                .RegisterServicesFromAssemblyContaining<UploadProductPhotoCommand>());
 
             services.AddMediatR(cfg => cfg
                 .RegisterServicesFromAssemblyContaining<AddCommentCommandHandler>()
-                .RegisterServicesFromAssemblyContaining<CreateForumThreadCommandHandler>());
+                .RegisterServicesFromAssemblyContaining<CreateForumThreadCommandHandler>()
+                .RegisterServicesFromAssemblyContaining<AddReviewCommand>()
+                .RegisterServicesFromAssemblyContaining<ToggleWishlistItemCommand>());
 
             services.AddMediatR(cfg => cfg
                 .RegisterServicesFromAssemblyContaining<AddProductToCartCommand>()

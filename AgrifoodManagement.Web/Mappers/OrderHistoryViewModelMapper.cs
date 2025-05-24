@@ -25,6 +25,7 @@ namespace AgrifoodManagement.Web.Mappers
                 Status = dto.Status,
                 Quantity = dto.Quantity,
                 Total = dto.Total,
+                CanReview = dto.CanReview,
                 Children = dto.Children?.Select(MapRow).ToList()
             };
         }

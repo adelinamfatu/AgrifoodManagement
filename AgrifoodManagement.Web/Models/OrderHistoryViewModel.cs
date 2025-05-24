@@ -15,6 +15,7 @@
         public string Status { get; set; } = "";
         public string? Quantity { get; set; }
         public decimal? Total { get; set; }
+        public bool CanReview { get; set; }
         public List<OrderTreeRowViewModel>? Children { get; set; }
     }
 }

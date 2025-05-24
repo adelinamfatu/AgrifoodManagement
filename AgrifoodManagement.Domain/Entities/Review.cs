@@ -21,17 +21,15 @@ namespace AgrifoodManagement.Domain.Entities
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [Required]
+        [ForeignKey("Product")]
         public Guid ProductId { get; set; }
 
         [ForeignKey(nameof(ProductId))]
-        public Product Product { get; set; }
+        public virtual Product Product { get; set; }
 
-        [Required]
+        [ForeignKey("User")]
         public Guid ReviewerId { get; set; }
 
-        [ForeignKey(nameof(ReviewerId))]
-        [InverseProperty(nameof(User.ReviewsWritten))]
-        public User Reviewer { get; set; }
+        public virtual User Reviewer { get; set; }
     }
 }

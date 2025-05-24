@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,11 @@ namespace AgrifoodManagement.Business.CommandHandlers.History
 
         public async Task<List<OrderTreeDto>> Handle(GetProcessedOrdersQuery request, CancellationToken ct)
         {
+            var reviewedProductIds = await _context.Reviews
+                .Where(r => r.Reviewer.Email == request.BuyerEmail)
+                .Select(r => r.ProductId)
+                .ToListAsync(ct);
+
             var orders = await _context.Orders
                 .Where(o => o.Buyer!.Email == request.BuyerEmail &&
                            (o.Status == OrderStatus.Processing ||
@@ -46,11 +52,13 @@ namespace AgrifoodManagement.Business.CommandHandlers.History
                 Total = order.OrderDetails!.Sum(d => d.Quantity * d.UnitPrice),
                 Children = order.OrderDetails.Select(od => new OrderTreeDto
                 {
-                    Id = od.Id,
+                    Id = od.ProductId,
                     Name = od.Product!.Name,
                     Quantity = $"{od.Quantity} {od.Product.UnitOfMeasurement}",
                     Total = od.Quantity * od.UnitPrice,
                     SellerPhone = od.Seller.PhoneNumber,
+                    CanReview = order.Status == OrderStatus.Completed
+                               && !reviewedProductIds.Contains(od.ProductId)
                 }).ToList()
             }).ToList();
 

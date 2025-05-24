@@ -16,6 +16,7 @@ namespace AgrifoodManagement.Util.ValueObjects
         public string Status { get; set; } = "";
         public string Quantity { get; set; }
         public decimal? Total { get; set; }
+        public bool CanReview { get; set; }
         public List<OrderTreeDto>? Children { get; set; }
     }
 }
