@@ -1,5 +1,6 @@
 ﻿using AgrifoodManagement.Business.Commands.Account;
 using AgrifoodManagement.Business.Services.Interfaces;
+using AgrifoodManagement.Util;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Models.Auth;
@@ -162,7 +163,7 @@ namespace AgrifoodManagement.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProfile(UpdateUserViewModel viewModel)
+        public async Task<IActionResult> UpdateProfile(UpdateUserViewModel viewModel, IFormFile SignatureFile)
         {
             if (!ModelState.IsValid)
             {
@@ -183,7 +184,8 @@ namespace AgrifoodManagement.Web.Controllers
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 PhoneNumber = viewModel.PhoneNumber,
-                DeliveryAddress = viewModel.Address
+                DeliveryAddress = viewModel.Address,
+                SignatureFile = SignatureFile
             };
 
             await _mediator.Send(cmd);

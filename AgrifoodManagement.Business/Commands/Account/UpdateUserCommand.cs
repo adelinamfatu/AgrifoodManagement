@@ -17,5 +17,6 @@ namespace AgrifoodManagement.Business.Commands.Account
         public string LastName { get; init; } = "";
         public string PhoneNumber { get; init; } = "";
         public string DeliveryAddress { get; init; } = "";
+        public IFormFile? SignatureFile { get; set; }
     }
 }

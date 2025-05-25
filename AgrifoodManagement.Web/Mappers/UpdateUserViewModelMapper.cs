@@ -24,7 +24,8 @@ namespace AgrifoodManagement.Web.Mappers
                 Number = parts.Length > 1 ? parts[1] : string.Empty,
                 City = parts.Length > 2 ? parts[2] : string.Empty,
                 Country = parts.Length > 3 ? parts[3] : string.Empty,
-                Address = dto.Address
+                Address = dto.Address,
+                SignatureData = dto.Signature
             };
         }
     }

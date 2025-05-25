@@ -179,6 +179,13 @@
                     "onclick=\"completeOrder('" + data.Id + "')\">" +
                     "Complete</button>";
             }
+            if (data.Status === "Completed") {
+                return `<button class="e-btn e-secondary small-action-btn"
+                            onclick="downloadInvoice('${data.Id}')"
+                            title="Download Invoice">
+                      <i class="fas fa-file-download"></i>
+                    </button>`;
+            }
             return "";
         }
         const parentStatus = data.parentItem && data.parentItem.Status;
@@ -276,5 +283,9 @@
             position: { X: 'center', Y: '100px' },
             closeOnEscape: true
         });
+    }
+
+    function downloadInvoice(orderId) {
+        window.location.href = `/History/DownloadInvoice?id=${orderId}`;
     }
 </script>

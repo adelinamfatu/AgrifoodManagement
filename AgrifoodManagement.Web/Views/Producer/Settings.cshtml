@@ -175,6 +175,27 @@
                             Changing your photo can be done by clicking on the avatar in the toolbar.
                         </p>
                     </div>
+
+                    <div class="settings-form-section">
+                        <h2>Signature</h2>
+
+                        <div class="signature-wrapper">
+                            <ejs-signature id="ProfileSignature"
+                                           created="onSignatureCreated"
+                                           style="height: 100%; width: 100%;">
+                            </ejs-signature>
+                        </div>
+
+                        <div class="signature-actions">
+                            <button type="button"
+                                    class="e-btn e-outline"
+                                    onclick="clearSignature()">
+                                Clear
+                            </button>
+                        </div>
+
+                        <input type="hidden" asp-for="SignatureData" id="SignatureData" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -195,7 +216,21 @@
         });
     }
 
-    function onSaveClick(e) {
+    function onSignatureCreated() {
+        const sig = document.getElementById('ProfileSignature')
+            .ej2_instances[0];
+        const dataUrl = '@Model.SignatureData';
+        if (dataUrl) {
+            sig.load(dataUrl);
+        }
+    }
+
+    function clearSignature() {
+        const pad = document.getElementById('ProfileSignature').ej2_instances[0];
+        pad.clear();
+    }
+
+    async function onSaveClick(e) {
         e.preventDefault();
 
         const form = document.getElementById('editProfileForm');
@@ -212,9 +247,16 @@
 
         document.getElementById('DeliveryAddress').value = parts.join(', ');
 
+        const fd = new FormData(form);
+        const pad = document.getElementById('ProfileSignature').ej2_instances[0];
+        const dataUrl = pad.getSignature();
+        document.getElementById('SignatureData').value = dataUrl;
+        const blob = await(await fetch(dataUrl)).blob();
+        fd.append('SignatureFile', blob, 'signature.png');
+
         fetch(form.action, {
             method: 'POST',
-            body: new FormData(form),
+            body: fd,
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
             .then(r => r.json())

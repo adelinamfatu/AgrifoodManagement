@@ -24,8 +24,8 @@ namespace AgrifoodManagement.Web.Mappers
                 Quantity = dto.Quantity,
                 UnitOfMeasurement = dto.UnitOfMeasurement,
                 ExpiryDate = dto.ExpirationDate,
-                Rating = 4.5m,
-                ReviewCount = 500,
+                Rating = dto.Rating ?? 0,
+                ReviewCount = dto.ReviewCount ?? 0,
                 IsFavorited = dto.IsFavorited,
                 Badge = dto.DiscountPercentage > 0 ? $"{dto.DiscountPercentage}% OFF" : string.Empty
             };

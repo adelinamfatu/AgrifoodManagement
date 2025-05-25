@@ -44,5 +44,8 @@ namespace AgrifoodManagement.Web.Models.Settings
 
         [Display(Name = "Country")]
         public string? Country { get; set; }
+
+        [Display(Name = "Signature")]
+        public string SignatureData { get; set; }
     }
 }

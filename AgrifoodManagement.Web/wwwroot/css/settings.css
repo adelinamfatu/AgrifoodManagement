@@ -116,3 +116,42 @@
 .settings-inline-input label i {
     color: #555 !important;
 }
+
+.signature-wrapper {
+    position: relative;
+    height: 200px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fafafa;
+    overflow: hidden;
+}
+
+    .signature-wrapper
+    .e-signature
+    .e-signature-area {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .signature-wrapper canvas {
+        touch-action: none;
+        cursor: crosshair;
+    }
+
+    .signature-wrapper .e-signature .e-signature-area {
+        border: none;
+        background: transparent;
+    }
+
+.signature-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+    .signature-actions .e-btn {
+        min-width: 100px;
+    }

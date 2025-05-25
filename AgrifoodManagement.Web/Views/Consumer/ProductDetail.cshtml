@@ -37,12 +37,13 @@
         <div class="product-detail-col-right">
             <div class="product-detail-category text-center">@Model.CategoryName</div>
             <h1 class="product-detail-title text-center">@Model.Name</h1>
-            <div class="product-detail-rating">
-                <div class="stars">
-                    <span class="star-icon">★</span>
-                    <span class="star-rating">@Model.Rating</span>
-                    <span class="review-count">- @Model.ReviewCount</span>
-                </div>
+            <div class="product-detail-rating text-center">
+                <ejs-rating id="rating"
+                        value="@Model.Rating"
+                        readOnly="true"
+                        max="5">
+                </ejs-rating>
+                <span class="review-count">(@Model.ReviewCount)</span>
             </div>
 
             <div class="product-detail-description">
@@ -135,7 +136,7 @@
                 showCartToast({
                     title: 'Error',
                     content: 'Something went wrong while adding to cart.',
-                    type: 'danger'
+                    type: 'error'
                 });
             });
     }

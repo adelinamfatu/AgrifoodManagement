@@ -32,5 +32,12 @@ namespace AgrifoodManagement.Web.Controllers
             var success = await _mediator.Send(cmd);
             return Ok(new { success });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DownloadInvoice(Guid id)
+        {
+            var pdfBytes = await _mediator.Send(new GenerateInvoiceCommand(id));
+            return File(pdfBytes, "application/pdf", $"invoice_{id}.pdf");
+        }
     }
 }

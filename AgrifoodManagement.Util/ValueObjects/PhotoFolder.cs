@@ -9,6 +9,7 @@ namespace AgrifoodManagement.Util.ValueObjects
     public enum PhotoFolder
     {
         Users,
-        Products
+        Products,
+        Signatures
     }
 }

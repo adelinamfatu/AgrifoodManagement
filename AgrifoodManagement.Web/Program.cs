@@ -40,6 +40,8 @@ builder.Services
     .AddHttpClient<IGeocodingService, NominatimGeocodingService>();
 builder.Services
     .AddScoped<IOrderStatusTransitionValidator, OrderStatusTransitionValidator>();
+builder.Services
+    .AddScoped<IInvoiceService, AgrifoodManagement.Business.Services.Impl.InvoiceService>();
 
 // Stripe
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));

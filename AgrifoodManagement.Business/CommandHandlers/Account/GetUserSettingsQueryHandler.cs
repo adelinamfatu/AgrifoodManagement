@@ -35,7 +35,13 @@ namespace AgrifoodManagement.Business.CommandHandlers.Account
                     x.PhoneNumber,
                     x.Address,
                     x.Latitude,
-                    x.Longitude
+                    x.Longitude,
+                    SignatureData = _context.ExtendedProperties
+                        .Where(ep => ep.EntityType == "User"
+                                     && ep.EntityId == x.Id
+                                     && ep.Key == "SignatureUrl")
+                        .Select(ep => ep.Value)
+                        .FirstOrDefault()
                 })
                 .FirstOrDefaultAsync(token);
 
@@ -52,7 +58,8 @@ namespace AgrifoodManagement.Business.CommandHandlers.Account
                 PhoneNumber = user.PhoneNumber,
                 Address = user.Address,
                 Latitude = user.Latitude,
-                Longitude = user.Longitude
+                Longitude = user.Longitude,
+                Signature = user.SignatureData
             };
         }
     }

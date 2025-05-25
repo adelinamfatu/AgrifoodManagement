@@ -22,8 +22,9 @@
     min-width: 350px;
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Reduced gap between elements */
-    background-color: #f0f8ea;
+    gap: 15px;
+    background-color: #7bae7f !important;
+    color: #fff;
     padding: 30px;
     border-radius: 8px;
 }
@@ -89,21 +90,21 @@
     font-size: 14px;
     letter-spacing: 1px;
     font-weight: 600;
-    margin-bottom: 5px; /* Added for better spacing */
+    margin-bottom: 5px;
 }
 
 .product-detail-title {
     font-size: 32px;
     font-weight: 700;
-    margin: 5px 0 10px; /* Adjusted spacing */
+    margin: 5px 0 10px;
     color: #333;
 }
 
 .product-detail-rating {
     display: flex;
     align-items: center;
-    margin: 5px 0 10px; /* Adjusted spacing */
-    justify-content: center; /* Centered */
+    margin: 5px 0 10px;
+    justify-content: center;
 }
 
 .stars {
@@ -130,14 +131,14 @@
 .product-detail-description {
     color: #555;
     line-height: 1.6;
-    margin: 10px 0; /* Adjusted spacing */
+    margin: 10px 0;
     background-color: rgba(255, 255, 255, 0.5);
     padding: 15px;
     border-radius: 8px;
 }
 
 .product-detail-specifications {
-    margin: 10px 0; /* Adjusted spacing */
+    margin: 10px 0;
 }
 
 .spec-row {
@@ -182,7 +183,7 @@
 .product-detail-price-container {
     display: flex;
     justify-content: center;
-    margin: 15px 0; /* Adjusted spacing */
+    margin: 15px 0;
 }
 
 .product-detail-price {
@@ -207,7 +208,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px; /* Reduced gap */
+    gap: 15px;
 }
 
 .product-detail-quantity-selector {
@@ -216,7 +217,7 @@
     margin: 5px 0;
     width: 100%;
     justify-content: center;
-    gap: 10px; /* Space between label and input */
+    gap: 10px;
 }
 
 .quantity-label {
@@ -226,9 +227,8 @@
     margin-right: 5px;
 }
 
-/* Larger input styling */
 .quantity-input-large {
-    width: 150px !important; /* Adjusted width */
+    width: 150px !important;
     height: 50px !important;
 }
 
@@ -245,14 +245,13 @@
     display: flex;
     gap: 15px;
     width: 100%;
-    max-width: 450px; /* Adjusted width */
-    margin-top: 5px; /* Reduced margin */
+    max-width: 450px;
+    margin-top: 5px;
     justify-content: center;
 }
 
-/* Custom button styling */
 .btn-custom {
-    width: 180px !important; /* Adjusted width */
+    width: 180px !important;
     height: 50px !important;
 }
 
@@ -282,6 +281,99 @@
     .e-primary.btn-custom:hover {
         background-color: #333 !important;
     }
+
+.product-detail-rating ejs-rating {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: .5rem;
+}
+
+.product-detail-rating .review-count {
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+}
+
+.custom-numeric .e-input-group {
+    width: 90px !important; 
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.9);
+}
+
+.custom-numeric input.e-input {
+    text-align: center !important;
+    color: #333 !important;
+    font-weight: 600;
+}
+
+.custom-numeric .e-input-group:focus-within {
+    box-shadow: none !important;
+}
+
+.product-detail-col-right .product-detail-title,
+.product-detail-col-right .product-detail-price .price-current,
+.product-detail-col-right .product-detail-price .price-unit {
+    color: #fff !important;
+}
+
+.product-detail-col-right .product-detail-rating,
+.product-detail-col-right .product-detail-rating .review-count {
+    color: #fff !important;
+}
+
+.product-detail-col-right .e-rating-star,
+.product-detail-col-right .e-rating-star-unfilled {
+    color: #fff !important;
+}
+
+.product-detail-col-right .product-detail-specifications .spec-label,
+.product-detail-col-right .product-detail-specifications .spec-value {
+    color: #333 !important;
+}
+
+.product-detail-col-right .quantity-label {
+    color: #fff !important;
+}
+
+.product-detail-col-right .e-numerictextbox .e-input {
+    color: #fff !important;
+    background: transparent !important;
+    border-color: rgba(255,255,255,0.7) !important;
+}
+
+.product-detail-col-right
+.e-numerictextbox .e-input-group
+.e-input-group-icon {
+    color: #fff !important;
+}
+
+.e-flat.btn-custom,
+.e-primary.btn-custom {
+    box-shadow: none;
+}
+
+.product-detail-col-right .product-detail-category {
+    color: #fff !important;
+}
+
+.product-detail-col-right {
+    --text-color: #fff !important;
+}
+
+    .product-detail-col-right .e-rating-container {
+        /* override both variables Syncfusion uses */
+        --text-color: #fff; /* the “(0)” and outlines */
+        --primary-color: #fff; /* the filled stars */
+    }
+
+        /* 2) Fallback: make sure the SVG/font glyph itself is white */
+        .product-detail-col-right
+        .e-rating-container
+        .e-rating-item
+        .e-rating-icon {
+            color: #fff !important;
+            fill: #fff !important;
+        }
 
 @media (max-width: 768px) {
     .product-detail-row {

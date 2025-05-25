@@ -34,7 +34,8 @@ namespace AgrifoodManagement.Web.Services
                 .RegisterServicesFromAssemblyContaining<AddProductToCartCommand>()
                 .RegisterServicesFromAssemblyContaining<RemoveCartItemCommand>()
                 .RegisterServicesFromAssemblyContaining<UpdateCartItemQuantityCommand>()
-                .RegisterServicesFromAssemblyContaining<ConfirmOrderCommand>());
+                .RegisterServicesFromAssemblyContaining<ConfirmOrderCommand>()
+                .RegisterServicesFromAssemblyContaining<GenerateInvoiceCommand>());
 
             services.AddMediatR(cfg => cfg
                 .RegisterServicesFromAssemblyContaining<UpdateProductStockCommand>()
