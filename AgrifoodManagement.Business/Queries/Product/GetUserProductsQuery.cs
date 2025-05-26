@@ -10,5 +10,10 @@ namespace AgrifoodManagement.Business.Queries.Product
 {
     public class GetUserProductsQuery : IRequest<List<ProductDto>>
     {
+        public string UserEmail { get; }
+        public GetUserProductsQuery(string userEmail)
+        {
+            UserEmail = userEmail;
+        }
     }
 }

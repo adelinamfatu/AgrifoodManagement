@@ -21,7 +21,8 @@ namespace AgrifoodManagement.Util.Models
         public string CategoryName { get; set; }
         public int? CartQuantity { get; set; }
         public int? WishlistQuantity { get; set; }
-        public decimal EstimatedMarketPrice { get; set; }
+        public SentimentType? MajoritySentiment { get; set; }
+        public double? SentimentConfidence { get; set; }
         public bool IsPromoted { get; set; }
         public int DiscountPercentage {  get; set; }
         public bool IsFavorited { get; set; }

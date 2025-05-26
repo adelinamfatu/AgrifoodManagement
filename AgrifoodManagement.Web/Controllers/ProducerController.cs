@@ -38,7 +38,11 @@ namespace AgrifoodManagement.Web.Controllers
             var productCategories = await _mediator.Send(new GetChildCategoriesQuery());
             ViewBag.ProductCategories = productCategories;
 
-            var allDtos = await _mediator.Send(new GetUserProductsQuery());
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+                return RedirectToAction("Auth", "Account");
+
+            var allDtos = await _mediator.Send(new GetUserProductsQuery(email));
 
             IEnumerable<ProductDto> filtered = filter switch
             {
@@ -89,7 +93,11 @@ namespace AgrifoodManagement.Web.Controllers
         {
             SetSidebar("2");
 
-            var products = await _mediator.Send(new GetProductStocksQuery());
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+                return RedirectToAction("Auth", "Account");
+
+            var products = await _mediator.Send(new GetProductStocksQuery(email));
             var stocks = ProductViewModelMapper.Map(products);
 
             return View(stocks);

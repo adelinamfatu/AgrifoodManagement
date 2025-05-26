@@ -22,11 +22,16 @@ namespace AgrifoodManagement.Business.CommandHandlers.Stock
 
         public async Task<List<ProductDto>> Handle(GetProductStocksQuery request, CancellationToken cancellationToken)
         {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == request.UserEmail, cancellationToken);
+
             var now = DateTime.UtcNow;
 
             return await _context.Products
-                .Where(p => p.ExpirationDate > now)
+                .Where(p => p.ExpirationDate > now
+                    && p.UserId == user!.Id)
                 .Include(p => p.ProductCategory)
+                .Include(p => p.Seller)
                 .Select(p => new ProductDto
                 {
                     Id = p.Id,

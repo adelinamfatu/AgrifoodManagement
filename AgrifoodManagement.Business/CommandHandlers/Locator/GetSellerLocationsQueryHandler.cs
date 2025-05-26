@@ -29,8 +29,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Locator
                 {
                     Latitude = u.Latitude!.Value,
                     Longitude = u.Longitude!.Value,
-                    Name = $"{u.FirstName} {u.LastName}",
-                    IsInRomania = u.Address!.Contains("Romania")
+                    Name = $"{u.FirstName} {u.LastName}"
                 })
                 .ToListAsync(ct);
         }

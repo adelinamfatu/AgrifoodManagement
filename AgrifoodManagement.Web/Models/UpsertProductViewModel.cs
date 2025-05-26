@@ -42,5 +42,9 @@ namespace AgrifoodManagement.Web.Models
         public AnnouncementStatus AnnouncementStatus { get; set; }
 
         public List<string> PhotoUrls { get; set; } = new List<string>();
+
+        public SentimentType? SentimentType { get; set; }
+
+        public double? SentimentConfidence { get; set; }
     }
 }

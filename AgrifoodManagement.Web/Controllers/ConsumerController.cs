@@ -4,6 +4,7 @@ using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Business.Queries.Shop;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Web.Mappers;
+using AgrifoodManagement.Web.Models.Locator;
 using AgrifoodManagement.Web.Models.Shop;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -94,7 +95,11 @@ namespace AgrifoodManagement.Web.Controllers
         public async Task<IActionResult> LocatorAsync()
         {
             var locations = await _mediator.Send(new GetSellerLocationsQuery());
-            var viewModel = LocatorViewModelMapper.Map(locations);
+            var viewModel = new LocatorViewModel
+            {
+                Locations = locations
+            };
+
             return View(viewModel);
         }
 

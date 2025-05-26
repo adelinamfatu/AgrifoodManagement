@@ -22,7 +22,8 @@ namespace AgrifoodManagement.Web.Mappers
                 CategoryName = dto.CategoryName,
                 CartQuantity = dto.CartQuantity,
                 WishlistQuantity = dto.WishlistQuantity,
-                EstimatedMarketPrice = dto.EstimatedMarketPrice,
+                SentimentType = dto.MajoritySentiment,
+                SentimentConfidence = dto.SentimentConfidence,
                 IsPromoted = dto.IsPromoted,
                 AnnouncementStatus = dto.AnnouncementStatus,
                 PhotoUrls = dto.PhotoUrls

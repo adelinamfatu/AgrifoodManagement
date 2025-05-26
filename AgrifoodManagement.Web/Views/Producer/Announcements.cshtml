@@ -1,4 +1,5 @@
 ﻿@using AgrifoodManagement.Util.Models;
+@using AgrifoodManagement.Util.ValueObjects;
 
 @{
     Layout = "~/Views/Shared/_ProducerSidebarLayout.cshtml";
@@ -116,7 +117,7 @@
                         </div>
                     </div>
 
-                    <div class="product-price">$@product.Price.ToString("0.00") per @product.UnitOfMeasurement</div>
+                    <div class="product-price">@product.Price.ToString("0.00") lei per @product.UnitOfMeasurement</div>
 
                     <p class="product-description">@product.Description</p>
 
@@ -145,9 +146,27 @@
                                 <span class="metric-value">@product.WishlistQuantity</span>
                                 <span class="metric-label">in wishlists</span>
                             </div>
-                            <div class="suggested-price-tag">
-                                Est. Market: $@((product.Price * 1.15m).ToString("0.00"))
-                            </div>
+                            @if (product.SentimentType.HasValue)
+                            {
+                                var type = product.SentimentType.Value;
+                                var conf = product.SentimentConfidence ?? 0;
+                                <div class="sentiment-tag @(type.ToString().ToLower())">
+                                    <span class="sentiment-emoji">
+                                        @(type == SentimentType.Positive ? "👍"
+                                            : type == SentimentType.Negative ? "👎"
+                                            : "😐")
+                                    </span>
+                                    <span class="sentiment-text">
+                                        @type @((int)(conf * 100))%
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="sentiment-tag neutral">
+                                    <span class="sentiment-text">No reviews yet</span>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

@@ -11,6 +11,5 @@ namespace AgrifoodManagement.Util.Models
         public double Latitude { get; init; }
         public double Longitude { get; init; }
         public string Name { get; init; } = "";
-        public bool IsInRomania {  get; init; }
     }
 }

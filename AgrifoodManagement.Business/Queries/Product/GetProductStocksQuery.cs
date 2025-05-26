@@ -8,5 +8,12 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.Queries.Product
 {
-    public class GetProductStocksQuery : IRequest<List<ProductDto>> { }
+    public class GetProductStocksQuery : IRequest<List<ProductDto>> 
+    {
+        public string UserEmail { get; }
+        public GetProductStocksQuery(string userEmail)
+        {
+            UserEmail = userEmail;
+        }
+    }
 }

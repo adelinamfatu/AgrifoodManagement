@@ -225,14 +225,37 @@
     color: #777;
 }
 
-.suggested-price-tag {
-    background: #e6f7ff;
-    border: 1px solid #b3e0ff;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    color: #0077cc;
+.sentiment-tag {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
     margin-left: auto;
+}
+
+.sentiment-emoji {
+    margin-right: 0.25rem;
+}
+
+.sentiment-tag.positive {
+    background-color: #e6ffed;
+    border: 1px solid #8ce99a;
+    color: #2b8a3e;
+}
+
+.sentiment-tag.negative {
+    background-color: #ffe6e6;
+    border: 1px solid #fa5252;
+    color: #c92a2a;
+}
+
+.sentiment-tag.neutral {
+    background-color: #f1f3f5;
+    border: 1px solid #ced4da;
+    color: #495057;
 }
 
 .product-header {
