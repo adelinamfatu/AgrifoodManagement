@@ -8,13 +8,21 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.2" />
+    <PackageReference Include="Microsoft.ML" Version="4.0.2" />
     <PackageReference Include="Stripe.net" Version="48.1.0" />
     <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="28.2.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AgrifoodManagement.Domain\AgrifoodManagement.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\SentimentAnalysis\training-dataset.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

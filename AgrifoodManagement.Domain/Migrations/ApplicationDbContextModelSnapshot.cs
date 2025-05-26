@@ -322,6 +322,12 @@ namespace AgrifoodManagement.Domain.Migrations
                     b.Property<Guid>("ReviewerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<float>("SentimentConfidence")
+                        .HasColumnType("real");
+
+                    b.Property<int?>("SentimentType")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");

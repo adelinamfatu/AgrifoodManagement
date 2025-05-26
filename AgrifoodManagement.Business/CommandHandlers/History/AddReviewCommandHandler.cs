@@ -1,4 +1,5 @@
 ﻿using AgrifoodManagement.Business.Commands.Order;
+using AgrifoodManagement.Business.Services.Interfaces;
 using AgrifoodManagement.Domain;
 using AgrifoodManagement.Domain.Entities;
 using MediatR;
@@ -14,10 +15,12 @@ namespace AgrifoodManagement.Business.CommandHandlers.History
     public class AddReviewCommandHandler : IRequestHandler<AddReviewCommand, bool>
     {
         private readonly ApplicationDbContext _context;
+        private readonly ISentimentAnalysisService _sentiment;
 
-        public AddReviewCommandHandler(ApplicationDbContext context)
+        public AddReviewCommandHandler(ApplicationDbContext context, ISentimentAnalysisService sentimentAnalysisService)
         {
             _context = context;
+            _sentiment = sentimentAnalysisService;
         }
 
         public async Task<bool> Handle(AddReviewCommand req, CancellationToken ct)
@@ -41,6 +44,10 @@ namespace AgrifoodManagement.Business.CommandHandlers.History
                     ReviewerId = user.Id,
                     CreatedAt = DateTime.UtcNow
                 };
+
+                var (label, confidence) = _sentiment.Predict(review.Comment);
+                review.SentimentType = label;
+                review.SentimentConfidence = confidence;
 
                 _context.Reviews.Add(review);
                 await _context.SaveChangesAsync(ct);

@@ -62,17 +62,5 @@ namespace AgrifoodManagement.Util
             var result = await _cloudinary.DestroyAsync(deletionParams);
             return result.Result == "ok";
         }
-
-        public async Task<string?> UploadRawAsync(Stream stream, string fileName, string folder)
-        {
-            var uploadParams = new RawUploadParams
-            {
-                File = new FileDescription(fileName, stream),
-                Folder = folder.ToLowerInvariant(),
-                ResourceType = ResourceType.Raw
-            };
-            var result = await _cloudinary.UploadAsync(uploadParams);
-            return result.SecureUrl?.ToString();
-        }
     }
 }

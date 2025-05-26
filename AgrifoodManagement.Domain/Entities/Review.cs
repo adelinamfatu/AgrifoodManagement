@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AgrifoodManagement.Util.ValueObjects;
 
 namespace AgrifoodManagement.Domain.Entities
 {
@@ -20,6 +21,10 @@ namespace AgrifoodManagement.Domain.Entities
         public string Comment { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public SentimentType? SentimentType { get; set; }
+
+        public float SentimentConfidence { get; set; }
 
         [ForeignKey("Product")]
         public Guid ProductId { get; set; }

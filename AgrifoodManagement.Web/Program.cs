@@ -42,6 +42,9 @@ builder.Services
     .AddScoped<IOrderStatusTransitionValidator, OrderStatusTransitionValidator>();
 builder.Services
     .AddScoped<IInvoiceService, AgrifoodManagement.Business.Services.Impl.InvoiceService>();
+builder.Services
+    .AddScoped<ISentimentAnalysisService, SentimentAnalysisService>();
+builder.Services.AddHostedService<DailySentimentRetrainService>();
 
 // Stripe
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
