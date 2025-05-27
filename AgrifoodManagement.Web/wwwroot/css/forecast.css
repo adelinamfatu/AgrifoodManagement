@@ -1,0 +1,44 @@
+﻿.forecast-container {
+    display: flex;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
+
+.forecast-filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+    .forecast-filters > div {
+        display: flex;
+        flex-direction: column;
+    }
+
+#runForecastBtn {
+    align-self: flex-end;
+    margin-top: 1.5rem;
+}
+
+#chartInterpretation {
+    text-align: center;
+    font-style: italic;
+    color: #555;
+    margin-top: 1rem;
+}
+
+.forecast-filters ejs-dropdownlist {
+    width: 220px !important;
+}
+
+#forecast-chart-container {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+#forecastChart {
+    width: 90% !important;
+}

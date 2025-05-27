@@ -44,6 +44,8 @@ builder.Services
     .AddScoped<IInvoiceService, AgrifoodManagement.Business.Services.Impl.InvoiceService>();
 builder.Services
     .AddScoped<ISentimentAnalysisService, SentimentAnalysisService>();
+builder.Services
+    .AddScoped<IForecastService, ForecastService>();
 builder.Services.AddHostedService<DailySentimentRetrainService>();
 
 // Stripe

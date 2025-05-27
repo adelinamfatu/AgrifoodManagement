@@ -1,18 +1,22 @@
 ﻿using AgrifoodManagement.Business.Queries.Account;
+using AgrifoodManagement.Business.Queries.Forecast;
 using AgrifoodManagement.Business.Queries.Forum;
 using AgrifoodManagement.Business.Queries.Order;
 using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Business.Queries.Report;
+using AgrifoodManagement.Domain.Entities;
 using AgrifoodManagement.Util.Models;
 using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Mappers;
 using AgrifoodManagement.Web.Models;
+using AgrifoodManagement.Web.Models.Forecast;
 using AgrifoodManagement.Web.Models.Forum;
 using AgrifoodManagement.Web.Models.Report;
 using AgrifoodManagement.Web.Models.Settings;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 
 namespace AgrifoodManagement.Web.Controllers
@@ -155,10 +159,39 @@ namespace AgrifoodManagement.Web.Controllers
             return View(viewModel);
         }
 
-        public IActionResult Forecasting()
+        public async Task<IActionResult> ForecastingAsync(string productId, DateTime? from, DateTime? to, string granularity = "day")
         {
             SetSidebar("5");
-            return View();
+
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+                return RedirectToAction("Auth", "Account");
+
+            var products = await _mediator.Send(new GetUserProductsQuery(email));
+
+            if (string.IsNullOrEmpty(productId))
+                productId = products.First().Id.ToString();
+
+            from ??= DateTime.Today.AddMonths(-2);
+            to ??= DateTime.Today;
+            granularity = string.IsNullOrEmpty(granularity) ? "day" : granularity;
+
+            var forecastResult = await _mediator.Send(new GetDemandForecastQuery(
+                productId, from ?? DateTime.Today.AddMonths(-2), to ?? DateTime.Today, granularity));
+
+            var viewModel = new ForecastViewModel
+            {
+                Products = products.Select(p => new SelectListItem(p.Name, p.Id.ToString())).ToList(),
+                SelectedProductId = productId,
+                DefaultFrom = from ?? DateTime.Today.AddMonths(-2),
+                DefaultTo = to ?? DateTime.Today,
+                DefaultGranularity = granularity,
+                History = forecastResult.History,
+                Forecast = forecastResult.ForecastPoints,
+                Metrics = forecastResult.Metrics
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> ForumAsync()

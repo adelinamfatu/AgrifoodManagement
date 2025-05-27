@@ -1,6 +1,162 @@
-﻿@{
+﻿@using AgrifoodManagement.Web.Models.Forecast;
+@using Newtonsoft.Json;
+
+@{
     Layout = "~/Views/Shared/_ProducerSidebarLayout.cshtml";
+
+    var historyJson = JsonConvert.SerializeObject(Model.History);
+    var forecastJson = JsonConvert.SerializeObject(Model.Forecast);
 }
 
-<h2>Forecasting Page</h2>
-<p>This is your Forecasting page.</p>
+@model ForecastViewModel
+
+<div id="forecast-container">
+    <div class="forecast-filters">
+        <div>
+            <label for="productSelect">Product</label>
+            <ejs-dropdownlist id="productSelect"
+                              dataSource="@Model.Products"
+                              placeholder="Select product"
+                              value="@Model.SelectedProductId"
+                              floatLabelType="Never">
+                <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+            </ejs-dropdownlist>
+        </div>
+
+        <div>
+            <label for="dateRange">Date Range</label>
+            <ejs-daterangepicker id="dateRange"
+                                 startDate="@Model.DefaultFrom"
+                                 endDate="@Model.DefaultTo"
+                                 placeholder="Select date range"
+                                 floatLabelType="Never">
+            </ejs-daterangepicker>
+        </div>
+
+        <div>
+            <label for="granularitySelect">Granularity</label>
+            <ejs-dropdownlist id="granularitySelect"
+                              dataSource="@Model.GranularityOptions"
+                              placeholder="Select granularity"
+                              value="@Model.DefaultGranularity"
+                              floatLabelType="Never">
+                <e-dropdownlist-fields text="Text" value="Value"></e-dropdownlist-fields>
+            </ejs-dropdownlist>
+        </div>
+
+        <div>
+            <ejs-button id="runForecastBtn"
+                        content="Run Forecast"
+                        isPrimary="true">
+            </ejs-button>
+        </div>
+    </div>
+
+    <div class="forecast-control-section">
+        <div id="forecast-chart-container" style="width:92%; margin: auto;">
+            <ejs-chart id="forecastChart"
+                       title="Demand Forecast"
+                       load="load">
+                <e-chart-chartarea>
+                    <e-chartarea-border width="0"></e-chartarea-border>
+                </e-chart-chartarea>
+
+                <e-chart-primaryxaxis valueType="DateTime" labelFormat="dd MMM">
+                    <e-majorgridlines width="0"></e-majorgridlines>
+                </e-chart-primaryxaxis>
+
+                <e-chart-primaryyaxis labelFormat="{value}"
+                                      minimum="0"
+                                      interval="50">
+                    <e-linestyle width="0"></e-linestyle>
+                    <e-majorticklines width="0"></e-majorticklines>
+                </e-chart-primaryyaxis>
+
+                <e-series-collection>
+                    <e-series xName="Date"
+                              low="Lower"
+                              high="Upper"
+                              type="RangeArea"
+                              name="95% Confidence Interval"
+                              opacity="0.3">
+                        <e-series-border width="0"></e-series-border>
+                    </e-series>
+                    <e-series xName="Date"
+                              yName="Predicted"
+                              type="Line"
+                              name="Forecast">
+                        <e-series-marker visible="true" width="8" height="8"></e-series-marker>
+                    </e-series>
+                    <e-series xName="Date"
+                              yName="Value"
+                              type="Line"
+                              name="Historical"
+                              dashArray="4">
+                    </e-series>
+                </e-series-collection>
+
+                <e-chart-legendSettings visible="true"></e-chart-legendSettings>
+                <e-chart-tooltipsettings enable="true"
+                                         shared="false"
+                                         format="<b>${series.name}</b>: ${point.y}">
+                </e-chart-tooltipsettings>
+            </ejs-chart>
+        </div>
+    </div>
+
+    <div id="chartInterpretation">
+    </div>
+</div>
+
+<script>
+    var historyData = @Html.Raw(historyJson);
+    var forecastData = @Html.Raw(forecastJson);
+
+    function load(args) {
+        var chart = args.chart;
+        chart.width = ej.base.Browser.isDevice ? "100%" : "92%";
+        chart.series[0].dataSource = forecastData;
+        chart.series[1].dataSource = forecastData;
+        chart.series[2].dataSource = historyData;
+        chart.primaryXAxis.edgeLabelPlacement = ej.base.Browser.isDevice ? 'Shift' : 'Hide';
+
+        setTimeout(updateInterpretation, 0);
+    }
+
+    function updateInterpretation() {
+        if (!forecastData || forecastData.length < 2) {
+            document.getElementById('chartInterpretation').innerText =
+                'Not enough data to interpret trend.';
+            return;
+        }
+        let first = forecastData[0].Predicted;
+        let last = forecastData[forecastData.length - 1].Predicted;
+        let pctChange = ((last - first) / first) * 100;
+        let trend = pctChange > 2 ? 'increasing' :
+            pctChange < -2 ? 'decreasing' : 'fairly stable';
+        let msg = `Forecast shows demand is <strong>${trend}</strong>`;
+        if (trend !== 'fairly stable') {
+            msg += ` by about <strong>${pctChange.toFixed(1)}%</strong> over the period.`;
+        } else {
+            msg += ' over the selected window.';
+        }
+        document.getElementById('chartInterpretation').innerHTML = msg;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var runBtn = document.getElementById('runForecastBtn').ej2_instances[0];
+        runBtn.element.addEventListener('click', function () {
+            var prod = document.getElementById('productSelect').ej2_instances[0].value;
+            var dr = document.getElementById('dateRange').ej2_instances[0];
+            var from = dr.startDate.toISOString().slice(0, 10);
+            var to = dr.endDate.toISOString().slice(0, 10);
+            var gran = document.getElementById('granularitySelect').ej2_instances[0].value;
+
+            window.location.href = '@Url.Action("Forecasting", "Producer")'
+                + '?productId=' + encodeURIComponent(prod)
+                + '&from=' + encodeURIComponent(from)
+                + '&to=' + encodeURIComponent(to)
+                + '&granularity=' + encodeURIComponent(gran);
+        });
+    });
+</script>
