@@ -44,7 +44,9 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
                     ExpirationDate = p.ExpirationDate,
                     CategoryId = p.ProductCategoryId,
                     CategoryName = p.ProductCategory != null ? p.ProductCategory.Name : "Uncategorized",
-                    CartQuantity = p.OrderDetails.Sum(od => od.Quantity),
+                    CartQuantity = p.OrderDetails.Where(od => od.Order!.Status == OrderStatus.InCart
+                        || od.Order.Status == OrderStatus.Pending)
+                        .Sum(od => od.Quantity),
                     WishlistQuantity = p.WishlistItems.Count(),
                     MajoritySentiment = p.Reviews.Any()
                         ? p.Reviews
