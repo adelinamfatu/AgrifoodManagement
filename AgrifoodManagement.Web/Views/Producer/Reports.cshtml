@@ -16,16 +16,45 @@
             <e-dashboardlayout-panel sizeX="2" sizeY="2" row="1" col="0">
                 <e-content-template>
                     <div class="e-panel-container">
-                        <div class="e-panel-header"><div class="title">Sales — Yearly</div></div>
+                        <div class="e-panel-header">
+                            <div class="title">Quarterly Sales by Product</div>
+                        </div>
                         <div class="e-panel-content">
                             <ejs-chart id="colChart" style="height:100%;width:100%">
-                                <e-chart-primaryxaxis valueType="Category" interval="1">
+                                <e-chart-tooltipSettings enable="true"
+                                                         format="${series.name}: ${point.y}"
+                                                         enableMarker="true">
+                                </e-chart-tooltipSettings>
+
+                                <e-chart-primaryxaxis valueType="Category"
+                                                      labelIntersectAction="Rotate45">
                                     <e-majorgridlines width="0"></e-majorgridlines>
                                 </e-chart-primaryxaxis>
+
                                 <e-series-collection>
-                                    <e-series dataSource="@(Model.ColumnChartData)" xName="Period" yName="OnlinePercentage" name="Online" type="Column" fill="#28a745"></e-series>
-                                    <e-series dataSource="@(Model.ColumnChartData)" xName="Period" yName="RetailPercentage" name="Retail" type="Column" fill="#dc3545"></e-series>
+                                    @{
+                                        var distinctProducts = Model.ColumnChartData
+                                        .Select(cd => cd.ProductName)
+                                        .Distinct()
+                                        .OrderBy(n => n)
+                                        .ToList();
+                                    }
+
+                                    @for (int i = 0; i < distinctProducts.Count; i++)
+                                    {
+                                        var prodName = distinctProducts[i];
+                                        <e-series dataSource="@( Model.ColumnChartData
+                                                            .Where(cd => cd.ProductName == prodName)
+                                                            .ToList() )"
+                                                  xName="Period"
+                                                  yName="Sales"
+                                                  name="@prodName"
+                                                  type="Column"
+                                                  fill="@Model.Palettes[i % Model.Palettes.Length]">
+                                        </e-series>
+                                    }
                                 </e-series-collection>
+
                                 <e-chart-legendsettings visible="true"></e-chart-legendsettings>
                             </ejs-chart>
                         </div>
@@ -36,12 +65,13 @@
             <e-dashboardlayout-panel sizeX="1" sizeY="2" row="1" col="2">
                 <e-content-template>
                     <div class="e-panel-container">
-                        <div class="e-panel-header"><div class="title">Product Share</div></div>
+                        <div class="e-panel-header"><div class="title">Order Status Distribution</div></div>
                         <div class="e-panel-content">
                             <ejs-accumulationchart id="pieChart" style="height:100%;width:100%">
+                                <e-accumulationchart-tooltipsettings enable="true" format="${point.x}: ${point.y}%" enableHighlight="true"></e-accumulationchart-tooltipsettings>
                                 <e-accumulation-series-collection>
                                     <e-accumulation-series dataSource="@(Model.PieData)"
-                                                           xName="Product"
+                                                           xName="Status"
                                                            yName="Percentage"
                                                            type="Pie"
                                                            palettes="@(Model.Palettes)">
@@ -56,14 +86,53 @@
             <e-dashboardlayout-panel sizeX="3" sizeY="2" row="3" col="0">
                 <e-content-template>
                     <div class="e-panel-container">
-                        <div class="e-panel-header"><div class="title">Monthly Trend</div></div>
+                        <div class="e-panel-header"><div class="title">Monthly Trend (Top 3 Categories)</div></div>
                         <div class="e-panel-content">
                             <ejs-chart id="splineChart" style="height:100%;width:100%">
-                                <e-chart-primaryxaxis valueType="Category"></e-chart-primaryxaxis>
+
+                                <e-chart-tooltipSettings enable="true"
+                                                         format="${series.name} (${point.x}): ${point.y}"
+                                                         enableMarker="true">
+                                </e-chart-tooltipSettings>
+
+                                <e-chart-primaryxaxis valueType="Category"
+                                                      labelIntersectAction="Rotate45">
+                                    <e-majorgridlines width="0"></e-majorgridlines>
+                                </e-chart-primaryxaxis>
+
                                 <e-series-collection>
-                                    <e-series dataSource="@(Model.SplineChartData)" xName="Period" yName="OnlinePercentage" name="Online" type="SplineArea" fill="#28a745" opacity="0.3"></e-series>
-                                    <e-series dataSource="@(Model.SplineChartData)" xName="Period" yName="RetailPercentage" name="Retail" type="SplineArea" fill="#dc3545" opacity="0.3"></e-series>
+                                    @{
+                                        var topCats = Model.SplineChartData
+                                            .Select(s => s.CategoryName)
+                                            .Distinct()
+                                            .OrderBy(n => n)
+                                            .ToList();
+                                    }
+
+                                    @for (int i = 0; i < topCats.Count; i++)
+                                    {
+                                        var catName = topCats[i];
+                                        <e-series dataSource="@( Model.SplineChartData
+                                                            .Where(s => s.CategoryName == catName)
+                                                            .OrderBy(s => DateTime.ParseExact(s.Period, "MMM", null))
+                                                            .ToList() )"
+                                                  xName="Period"
+                                                  yName="Sales"
+                                                  name="@catName"
+                                                  type="SplineArea"
+                                                  fill="@Model.Palettes[i % Model.Palettes.Length]"
+                                                  opacity="0.3">
+
+                                            <e-series-marker visible="true">
+                                                <e-series-datalabel visible="true" position="Top">
+                                                    <e-font color="black"></e-font>
+                                                </e-series-datalabel>
+                                            </e-series-marker>
+
+                                        </e-series>
+                                    }
                                 </e-series-collection>
+
                                 <e-chart-legendsettings visible="true"></e-chart-legendsettings>
                             </ejs-chart>
                         </div>

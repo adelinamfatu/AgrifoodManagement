@@ -3,5 +3,5 @@ using MediatR;
 
 namespace AgrifoodManagement.Business.Queries.Report
 {
-    public record GetCategoryShareQuery : IRequest<List<CategoryShareDto>>;
+    public record GetOrderStatusDistributionQuery : IRequest<List<OrderStatusShareDto>>;
 }

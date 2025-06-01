@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Util.Models
 {
-    public class QuarterlySalesDto
+    public class QuarterlyProductSalesDto
     {
         public string Period { get; init; } = null!;
+        public string ProductName { get; set; }
         public double Sales { get; init; }
     }
 }

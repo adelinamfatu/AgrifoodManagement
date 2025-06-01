@@ -8,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Business.Queries.Report
 {
-    public record GetQuarterlySalesQuery : IRequest<List<QuarterlySalesDto>>;
+    public record GetQuarterlySalesQuery : IRequest<List<QuarterlyProductSalesDto>>;
 }

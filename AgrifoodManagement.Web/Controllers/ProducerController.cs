@@ -124,7 +124,8 @@ namespace AgrifoodManagement.Web.Controllers
         {
             SetSidebar("4");
 
-            var pieData = await _mediator.Send(new GetCategoryShareQuery());
+            var pieData = await _mediator.Send(new GetOrderStatusDistributionQuery());
+            var totalOrders = pieData.Sum(x => x.Count);
             var columnData = await _mediator.Send(new GetQuarterlySalesQuery());
             var splineData = await _mediator.Send(new GetMonthlySalesQuery(6));
 
@@ -135,22 +136,26 @@ namespace AgrifoodManagement.Web.Controllers
                 PieData = pieData
                          .Select(x => new PieData
                          {
-                             Product = x.Category,
-                             Percentage = x.Percentage
+                             Status = x.Status,
+                             Percentage = totalOrders > 0
+                                ? Math.Round((double)x.Count / totalOrders * 100, 1)
+                                : 0
                          }).ToList(),
 
                 ColumnChartData = columnData
                          .Select(x => new ColumnData
                          {
                              Period = x.Period,
-                             OnlinePercentage = x.Sales 
+                             ProductName = x.ProductName,
+                             Sales = x.Sales
                          }).ToList(),
 
                 SplineChartData = splineData
                          .Select(x => new SplineData
                          {
-                             Period = x.Period,
-                             OnlinePercentage = x.Sales
+                             Period = new DateTime(x.Year, x.Month, 1).ToString("MMM"),
+                             CategoryName = x.CategoryName,
+                             Sales = x.TotalSales
                          }).ToList(),
 
                 Palettes = new[] { "#2485FA", "#FEC200", "#28A745", "#DC3545" }

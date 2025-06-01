@@ -40,6 +40,10 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
                     CategoryName = p.ProductCategory.Name,
                     IsPromoted = p.IsPromoted,
                     AnnouncementStatus = p.AnnouncementStatus,
+                    Rating = p.Reviews.Any()
+                                ? p.Reviews.Average(r => r.Rating)
+                                : 0,
+                    ReviewCount = p.Reviews.Count(),
                     PhotoUrls = _context.ExtendedProperties
                         .Where(ep => ep.EntityId == p.Id && ep.Key == "PhotoUrl")
                         .Select(ep => ep.Value)

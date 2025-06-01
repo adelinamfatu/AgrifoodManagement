@@ -360,19 +360,35 @@
     --text-color: #fff !important;
 }
 
-    .product-detail-col-right .e-rating-container {
-        /* override both variables Syncfusion uses */
-        --text-color: #fff; /* the “(0)” and outlines */
-        --primary-color: #fff; /* the filled stars */
+    .product-detail-col-right .e-rating-item-list .e-icons::before {
+        color: #fff !important;
     }
 
-        /* 2) Fallback: make sure the SVG/font glyph itself is white */
-        .product-detail-col-right
-        .e-rating-container
-        .e-rating-item
-        .e-rating-icon {
+    .product-detail-col-right #rating_item-list .e-rating-item::before,
+    .product-detail-col-right #rating_item-list .e-rating-icon::before,
+    .product-detail-col-right #rating_item-list .e-star-filled::before {
+        color: #fff !important;
+    }
+
+    .product-detail-col-right #rating_item-list .e-rating-item-container .e-rating-item {
+        filter: brightness(0) invert(1) !important;
+    }
+
+    .product-detail-col-right .e-rating-item.e-rating-icon.e-icons {
+        filter: brightness(0) invert(1) !important;
+    }
+
+    .product-detail-col-right .e-rating-item.e-rating-icon.e-icons {
+        filter: brightness(0) invert(0.9) !important;
+    }
+
+    .product-detail-col-right .e-rating-container {
+        --e-rating-icon-color: #fff !important;
+        --e-rating-fill-color: #fff !important;
+    }
+
+        .product-detail-col-right .e-rating-container * {
             color: #fff !important;
-            fill: #fff !important;
         }
 
 @media (max-width: 768px) {

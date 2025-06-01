@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AgrifoodManagement.Util.Models
 {
-    public class CategoryShareDto
+    public class OrderStatusShareDto
     {
-        public string Category { get; init; } = null!;
-        public double Percentage { get; init; }
+        public string Status { get; set; }
+        public int Count { get; set; }
     }
 }

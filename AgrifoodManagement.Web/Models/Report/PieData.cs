@@ -2,7 +2,7 @@
 {
     public class PieData
     {
-        public string Product { get; set; }
+        public string Status { get; set; }
         public double Percentage { get; set; }
     }
 }

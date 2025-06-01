@@ -7,8 +7,9 @@
         public List<ColumnData> ColumnChartData { get; set; }
 
         public List<PieData> PieData { get; set; }
-        public string[] Palettes { get; set; }
 
         public List<SplineData> SplineChartData { get; set; }
+
+        public string[] Palettes { get; set; }
     }
 }
