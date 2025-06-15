@@ -3,6 +3,7 @@
 
 @{
     Layout = "~/Views/Shared/_ProducerSidebarLayout.cshtml";
+    ViewData["Title"] = "Forecasting";
 
     var historyJson = JsonConvert.SerializeObject(Model.History);
     var forecastJson = JsonConvert.SerializeObject(Model.Forecast);

@@ -3,6 +3,7 @@
 
 @{
     Layout = "~/Views/Shared/_ProducerSidebarLayout.cshtml";
+    ViewData["Title"] = "Announcements";
 
     var productCategoriesData = ViewBag.ProductCategories as List<CategoryNode>;
     var sortOptions = new[] { "Expiration Date", "Price: High to Low", "Price: Low to High", "Quantity" };

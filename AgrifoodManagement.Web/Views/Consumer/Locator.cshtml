@@ -5,6 +5,8 @@
 
 @{
     Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
+    ViewData["Title"] = "Map";
+
     var locationsJson = JsonConvert.SerializeObject(Model.Locations);
 }
 

@@ -6,6 +6,7 @@
 
 @{
     Layout = "~/Views/Shared/_ProducerSidebarLayout.cshtml";
+    ViewData["Title"] = Model.Id == Guid.Empty ? "Add Product" : "Edit Product";
 
     var productCategoriesData = ViewBag.ProductCategories as List<CategoryNode>;
 
