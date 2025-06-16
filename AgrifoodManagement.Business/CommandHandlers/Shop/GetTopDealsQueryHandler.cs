@@ -25,9 +25,13 @@ namespace AgrifoodManagement.Business.CommandHandlers.Shop
         {
             try
             {
+                var now = DateTime.UtcNow.Date;
+
                 var discounted = await _context.Products
                     .AsNoTracking()
-                    .Where(p => p.CurrentPrice != p.OriginalPrice && p.CurrentPrice != null)
+                    .Where(p => p.CurrentPrice != p.OriginalPrice && p.CurrentPrice != null
+                        && p.AnnouncementStatus == AnnouncementStatus.Published
+                        && p.ExpirationDate.Date >= now)
                     .Select(p => new
                     {
                         p.Id,
@@ -39,7 +43,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Shop
                         p.Quantity,
                         Discount = (p.OriginalPrice - p.CurrentPrice) / p.OriginalPrice * 100
                     })
-                    .OrderByDescending(x => x.Discount)
+                    .OrderBy(x => x.ExpirationDate)
                     .Take(request.TakeCount)
                     .ToListAsync(cancellationToken);
 

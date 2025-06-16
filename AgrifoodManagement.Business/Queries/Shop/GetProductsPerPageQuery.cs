@@ -15,11 +15,28 @@ namespace AgrifoodManagement.Business.Queries.Shop
         public int Page { get; }
         public int PageSize { get; }
 
-        public GetProductsPerPageQuery(string userEmail, int page, int pageSize)
+        // Filters
+        public MeasurementUnit? UnitFilter { get; }
+        public string PriceRange { get; }
+        public string SortBy { get; }
+        public int? CategoryId { get; }
+
+        public GetProductsPerPageQuery(
+            string userEmail,
+            int page,
+            int pageSize,
+            MeasurementUnit? unitFilter,
+            string priceRange,
+            string sortBy,
+            int? categoryId)
         {
             UserEmail = userEmail;
             Page = page;
             PageSize = pageSize;
+            UnitFilter = unitFilter;
+            PriceRange = priceRange;
+            SortBy = sortBy;
+            CategoryId = categoryId;
         }
     }
 }

@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
     ViewData["Title"] = "Harvestica";
 
-    var totalPages = (int)Math.Ceiling((double)Model.Deals.Count / 5);
+    var totalPages = (int)Math.Ceiling((double)Model.Deals.Count / 4);
 }
 
 @model HomeViewModel
@@ -18,7 +18,7 @@
                 A digital marketplace where farmers list fresh produce and businesses buy locally, efficiently, and smartly.
                 Real-time stock tracking, expiry alerts, price forecasting, personalized recommendations & more.
             </p>
-            <a href="/Listings/Explore" class="shop-now-btn">Explore Products</a>
+            <a href="/Consumer/Shop" class="shop-now-btn">Explore Products</a>
         </div>
         <img class="hero-image" src="/images/farm.png" alt="Organic Vegetables in Bag" />
         <div class="hero-icons"></div>
@@ -69,8 +69,8 @@
                 int productIndex = 0;
                 foreach (var product in Model.Deals)
                 {
-                    var pageClass = $"page-{productIndex / 5}";
-                    <div class="product-wrapper @pageClass" style="display:@(productIndex < 5 ? "block" : "none")">
+                    var pageClass = $"page-{productIndex / 4}";
+                    <div class="product-wrapper @pageClass" style="display:@(productIndex < 4 ? "block" : "none")">
                         @await Html.PartialAsync("_ProductCard", product)
                     </div>
                     productIndex++;
@@ -115,7 +115,8 @@
                         {
                             foreach (var sub in mainCategory.Children)
                             {
-                                <a href="/Products/Category/@sub.Id" class="subcategory-card">
+                                <a href="@Url.Action("Shop","Consumer", new { categoryId = sub.Id })"
+                                    class="subcategory-card">
                                     <div class="subcategory-img">
                                         <img src="@(string.IsNullOrEmpty(sub.ImageUrl) ? mainCategory.ImageUrl : sub.ImageUrl)" alt="@sub.Category" />
                                     </div>
@@ -180,7 +181,7 @@
 
         const dots = document.querySelectorAll('.pagination-dots .dot');
         const productPages = document.querySelectorAll('.product-wrapper');
-        const productsPerPage = 5;
+        const productsPerPage = 4;
 
         dots.forEach(dot => {
             dot.addEventListener('click', () => {

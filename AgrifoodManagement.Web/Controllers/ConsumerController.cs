@@ -3,6 +3,7 @@ using AgrifoodManagement.Business.Queries.Order;
 using AgrifoodManagement.Business.Queries.Product;
 using AgrifoodManagement.Business.Queries.Shop;
 using AgrifoodManagement.Util.Models;
+using AgrifoodManagement.Util.ValueObjects;
 using AgrifoodManagement.Web.Mappers;
 using AgrifoodManagement.Web.Models.Locator;
 using AgrifoodManagement.Web.Models.Shop;
@@ -24,7 +25,7 @@ namespace AgrifoodManagement.Web.Controllers
             var categories = await _mediator.Send(new GetCategoriesWithImagesQuery());
             var categoryViewModels = CategoryViewModelMapper.Map(categories);
 
-            var dealsResult = await _mediator.Send(new GetTopDealsQuery(5));
+            var dealsResult = await _mediator.Send(new GetTopDealsQuery(15));
             var dealViewModels = new List<ProductViewModel>();
 
             if (dealsResult.IsSuccess)
@@ -41,11 +42,23 @@ namespace AgrifoodManagement.Web.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> ShopAsync(int page = 1)
+        public async Task<IActionResult> ShopAsync(
+            int? categoryId,
+            string unit = "all",
+            string price = "all",
+            string sort = "expiration",
+            int page = 1)
         {
             const int pageSize = 12;
+            MeasurementUnit? unitFilter = null;
+            if (unit != "all" &&
+                Enum.TryParse<MeasurementUnit>(unit, true, out var u))
+            {
+                unitFilter = u;
+            }
+
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
-            var result = await _mediator.Send(new GetProductsPerPageQuery(email, page, pageSize));
+            var result = await _mediator.Send(new GetProductsPerPageQuery(email, page, pageSize, unitFilter, price, sort, categoryId));
 
             if (!result.IsSuccess)
             {
@@ -56,7 +69,10 @@ namespace AgrifoodManagement.Web.Controllers
             {
                 Products = ProductViewModelMapper.Map((List<ProductDto>)result.Value.Items),
                 CurrentPage = result.Value.CurrentPage,
-                TotalPages = result.Value.TotalPages
+                TotalPages = result.Value.TotalPages,
+                SelectedUnit = unitFilter,
+                SelectedPrice = price,
+                SelectedSort = sort
             };
 
             return View(viewModel);

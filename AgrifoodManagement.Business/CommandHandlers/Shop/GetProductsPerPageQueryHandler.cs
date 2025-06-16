@@ -25,10 +25,49 @@ namespace AgrifoodManagement.Business.CommandHandlers.Shop
         {
             try
             {
+                var now = DateTime.UtcNow.Date;
+
                 var query = _context.Products
+                    .Where(p => p.AnnouncementStatus == AnnouncementStatus.Published
+                        && p.ExpirationDate.Date >= now)
                     .Include(p => p.ProductCategory)
-                    .AsNoTracking()
-                    .OrderBy(p => p.Name);
+                    .AsNoTracking();
+
+                // Category filter
+                if (request.CategoryId.HasValue)
+                    query = query.Where(p => p.ProductCategoryId == request.CategoryId.Value);
+
+                // Unit filter
+                if (request.UnitFilter.HasValue)
+                {
+                    query = query.Where(p => p.UnitOfMeasurement == request.UnitFilter.Value);
+                }
+
+                // Price‐range filter
+                switch (request.PriceRange)
+                {
+                    case "under-15":
+                        query = query.Where(p => p.CurrentPrice < 15);
+                        break;
+                    case "15-25":
+                        query = query.Where(p => p.CurrentPrice >= 15 && p.CurrentPrice <= 25);
+                        break;
+                    case "25-45":
+                        query = query.Where(p => p.CurrentPrice >= 25 && p.CurrentPrice <= 45);
+                        break;
+                    case "over-45":
+                        query = query.Where(p => p.CurrentPrice > 45);
+                        break;
+                }
+
+                // Sorting
+                query = request.SortBy switch
+                {
+                    "price-low" => query.OrderBy(p => p.CurrentPrice),
+                    "price-high" => query.OrderByDescending(p => p.CurrentPrice),
+                    "newest" => query.OrderByDescending(p => p.TimePosted),
+                    _ => query.OrderBy(p => p.ExpirationDate),
+                };
 
                 var totalCount = await query.CountAsync(cancellationToken);
 

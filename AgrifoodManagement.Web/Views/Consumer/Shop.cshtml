@@ -5,10 +5,13 @@
     Layout = "~/Views/Shared/_ConsumerNavbarLayout.cshtml";
     ViewData["Title"] = "Shop";
 
-    var unitOfMeasurementData = Enum.GetValues(typeof(MeasurementUnit))
+    var unitOfMeasurementData = new[] {
+        new { text = "All Units", value = "all" }
+    }
+    .Concat(Enum.GetValues(typeof(MeasurementUnit))
         .Cast<MeasurementUnit>()
-        .Select(e => new { text = e.ToString(), value = e.ToString().ToLower() })
-        .ToArray();
+        .Select(e => new { text = e.ToString(), value = e.ToString().ToLower() }))
+    .ToArray();
 
     var priceData = new[] {
         new { text = "All Prices", value = "all" },
@@ -19,9 +22,10 @@
     };
 
     var sortData = new[] {
+        new { text = "Expiring Soon", value = "expiration" },
         new { text = "Popularity", value = "popularity" },
-        new { text = "Price: Low to High", value = "price-low" },
-        new { text = "Price: High to Low", value = "price-high" },
+        new { text = "Price ↑ (Low→High)", value = "price-low" },
+        new { text = "Price ↓ (High→Low)", value = "price-high" },
         new { text = "Newest First", value = "newest" }
     };
 }
@@ -39,6 +43,7 @@
                 <div class="filter-group">
                     <ejs-dropdownlist id="unit-filter"
                                       dataSource='@unitOfMeasurementData'
+                                      value="@(Model.SelectedUnit?.ToString().ToLower() ?? "all")"
                                       placeholder="Select Unit">
                         <e-dropdownlist-fields text="text" value="value"></e-dropdownlist-fields>
                     </ejs-dropdownlist>
@@ -46,6 +51,7 @@
                 <div class="filter-group">
                     <ejs-dropdownlist id="price-filter"
                                       dataSource='@priceData'
+                                      value="@(Model.SelectedPrice ?? "all")"
                                       placeholder="Select price range">
                         <e-dropdownlist-fields text="text" value="value"></e-dropdownlist-fields>
                     </ejs-dropdownlist>
@@ -53,6 +59,7 @@
                 <div class="filter-group">
                     <ejs-dropdownlist id="sort-by"
                                       dataSource='@sortData'
+                                      value="@(Model.SelectedSort ?? "expiration")"
                                       placeholder="Sort by">
                         <e-dropdownlist-fields text="text" value="value"></e-dropdownlist-fields>
                     </ejs-dropdownlist>
@@ -114,29 +121,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        const filterButton = document.getElementById('filter-button');
-        
-        if (filterButton) {
-            filterButton.addEventListener('click', function () {
-                const unitOfMeasurement = document.getElementById('unit-filter').ej2_instances[0]?.value;
-                const priceRange = document.getElementById('price-filter').ej2_instances[0]?.value;
-                const sortBy = document.getElementById('sort-by').ej2_instances[0]?.value;
-
-                if (unitOfMeasurement && priceRange && sortBy) {
-                    const allProducts = document.querySelectorAll('.all-products .product-card');
-                    allProducts.forEach(product => {
-                        product.style.opacity = '0.5';
-
-                        setTimeout(() => {
-                            product.style.opacity = '1';
-                        }, 500);
-                    });
-                } else {
-                    console.error('One of the dropdown values is missing!');
-                }
-            });
-        }
-
         const productCards = document.querySelectorAll('.product-card');
 
         productCards.forEach(card => {
@@ -147,6 +131,21 @@
             card.addEventListener('mouseleave', function () {
                 this.querySelector('.product-actions').classList.remove('show');
             });
+        });
+
+        const unitDd = document.getElementById('unit-filter').ej2_instances[0];
+        const priceDd = document.getElementById('price-filter').ej2_instances[0];
+        const sortDd = document.getElementById('sort-by').ej2_instances[0];
+        const btn = document.getElementById('filter-button');
+
+        btn.addEventListener('click', () => {
+            const params = new URLSearchParams(window.location.search);
+            params.set('unit', unitDd.value || 'all');
+            params.set('price', priceDd.value || 'all');
+            params.set('sort', sortDd.value || 'expiration');
+            params.set('page', '1');
+
+            window.location.search = params.toString();
         });
     });
 </script>

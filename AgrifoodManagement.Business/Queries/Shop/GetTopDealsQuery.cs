@@ -13,7 +13,7 @@ namespace AgrifoodManagement.Business.Queries.Shop
     {
         public int TakeCount { get; }
 
-        public GetTopDealsQuery(int takeCount = 5)
+        public GetTopDealsQuery(int takeCount = 15)
         {
             TakeCount = takeCount;
         }
