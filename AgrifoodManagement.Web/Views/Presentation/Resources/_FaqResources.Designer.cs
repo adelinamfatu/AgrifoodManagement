@@ -61,7 +61,7 @@ namespace AgrifoodManagement.Web.Views.Presentation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To list your stock, navigate to your dashboard and select &quot;Add New Listing.&quot; Provide details such as quantity, category, expiration date, price, and location. You can also upload images and update or archive the listing at any time..
+        ///   Looks up a localized string similar to To list your stock, navigate to your announcements page and select &quot;Add New Product.&quot; Provide details such as quantity, category, expiration date, price, and location. You can also upload images and update or archive the listing at any time..
         /// </summary>
         internal static string Answer1 {
             get {
@@ -70,7 +70,7 @@ namespace AgrifoodManagement.Web.Views.Presentation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Our platform integrates with Google Maps to show you the closest available suppliers. Simply enter your location and filter results based on proximity, price, or availability..
+        ///   Looks up a localized string similar to Just head over to our Map page—you’ll see pins for every supplier plotted on an interactive map. Enable location access (or enter an address) to center the view around you, then click any pin to view that supplier’s details..
         /// </summary>
         internal static string Answer2 {
             get {
@@ -79,7 +79,7 @@ namespace AgrifoodManagement.Web.Views.Presentation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes! Our system sends automatic notifications when your stock nears its expiration date, helping you take timely action by offering discounts or moving items to the &quot;Urgent Sale&quot; section..
+        ///   Looks up a localized string similar to Go to the Forecast page, select your product, set a date range and granularity, then click Run Forecast. You’ll see historical demand (dashed line), predicted demand (solid markers), and a 95% confidence band. A brief summary below—e.g. “Demand is increasing by about 27.9%”—helps you plan inventory and promotions..
         /// </summary>
         internal static string Answer3 {
             get {
@@ -106,7 +106,7 @@ namespace AgrifoodManagement.Web.Views.Presentation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Our loyalty program rewards frequent buyers with points that can be redeemed for discounts on future purchases. The more you buy, the more you save!.
+        ///   Looks up a localized string similar to Actually, you can save your favorite products with our Wishlist feature! Just click the heart icon on any product to add it to your Wishlist. Then visit your Account &gt; Wishlist page to see all your saved items in one place. From there, you can quickly move them into your cart or track price changes..
         /// </summary>
         internal static string Answer6 {
             get {
@@ -142,7 +142,7 @@ namespace AgrifoodManagement.Web.Views.Presentation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can I receive notifications when my stock is about to expire?.
+        ///   Looks up a localized string similar to How can I forecast future demand for my products?.
         /// </summary>
         internal static string Question3 {
             get {
@@ -169,7 +169,7 @@ namespace AgrifoodManagement.Web.Views.Presentation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to How does the loyalty program work?.
+        ///   Looks up a localized string similar to How does the wishlist work?.
         /// </summary>
         internal static string Question6 {
             get {

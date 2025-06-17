@@ -557,6 +557,11 @@ input {
         margin-bottom: 0px;
     }
 
+.logo-1 {
+    max-height: 30px;
+    width: auto;
+}
+
 @media all and (max-width:991px) {
     .navbar .navbar-collapse {
         overflow: auto;

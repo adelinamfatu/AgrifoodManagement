@@ -79,7 +79,7 @@ namespace AgrifoodManagement.Web.Views.Presentation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Get notified when stock is nearing expiration and move items to a priority sale section to reduce waste..
+        ///   Looks up a localized string similar to Use browsing history, favorites, and sentiment from reviews to suggest products you’ll love, learning and adapting to your tastes over time..
         /// </summary>
         internal static string Feature2Description {
             get {
@@ -88,7 +88,7 @@ namespace AgrifoodManagement.Web.Views.Presentation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Automated Expiry Alerts.
+        ///   Looks up a localized string similar to Personalized Recommendation Engine.
         /// </summary>
         internal static string Feature2Title {
             get {

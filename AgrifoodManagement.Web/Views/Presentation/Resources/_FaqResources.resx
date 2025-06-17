@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Answer1" xml:space="preserve">
-    <value>To list your stock, navigate to your dashboard and select "Add New Listing." Provide details such as quantity, category, expiration date, price, and location. You can also upload images and update or archive the listing at any time.</value>
+    <value>To list your stock, navigate to your announcements page and select "Add New Product." Provide details such as quantity, category, expiration date, price, and location. You can also upload images and update or archive the listing at any time.</value>
   </data>
   <data name="Answer2" xml:space="preserve">
-    <value>Our platform integrates with Google Maps to show you the closest available suppliers. Simply enter your location and filter results based on proximity, price, or availability.</value>
+    <value>Just head over to our Map page—you’ll see pins for every supplier plotted on an interactive map. Enable location access (or enter an address) to center the view around you, then click any pin to view that supplier’s details.</value>
   </data>
   <data name="Answer3" xml:space="preserve">
-    <value>Yes! Our system sends automatic notifications when your stock nears its expiration date, helping you take timely action by offering discounts or moving items to the "Urgent Sale" section.</value>
+    <value>Go to the Forecast page, select your product, set a date range and granularity, then click Run Forecast. You’ll see historical demand (dashed line), predicted demand (solid markers), and a 95% confidence band. A brief summary below—e.g. “Demand is increasing by about 27.9%”—helps you plan inventory and promotions.</value>
   </data>
   <data name="Answer4" xml:space="preserve">
     <value>We use machine learning to analyze historical sales data, current demand, and market trends to estimate future prices. This helps farmers decide whether it's worth harvesting certain products next season.</value>
@@ -133,7 +133,7 @@
     <value>Premium listings appear at the top of search results, increasing visibility. You can purchase premium placements to get more exposure for your products.</value>
   </data>
   <data name="Answer6" xml:space="preserve">
-    <value>Our loyalty program rewards frequent buyers with points that can be redeemed for discounts on future purchases. The more you buy, the more you save!</value>
+    <value>Actually, you can save your favorite products with our Wishlist feature! Just click the heart icon on any product to add it to your Wishlist. Then visit your Account &gt; Wishlist page to see all your saved items in one place. From there, you can quickly move them into your cart or track price changes.</value>
   </data>
   <data name="Header" xml:space="preserve">
     <value>Find answers to common questions about how our agro-food management platform works.</value>
@@ -145,7 +145,7 @@
     <value>How can I find the nearest supplier?</value>
   </data>
   <data name="Question3" xml:space="preserve">
-    <value>Can I receive notifications when my stock is about to expire?</value>
+    <value>How can I forecast future demand for my products?</value>
   </data>
   <data name="Question4" xml:space="preserve">
     <value>How are price estimations calculated?</value>
@@ -154,7 +154,7 @@
     <value>What is the premium listing option?</value>
   </data>
   <data name="Question6" xml:space="preserve">
-    <value>How does the loyalty program work?</value>
+    <value>How does the wishlist work?</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Frequently Asked Questions</value>
