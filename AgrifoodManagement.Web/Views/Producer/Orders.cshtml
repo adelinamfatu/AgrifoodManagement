@@ -30,7 +30,7 @@
                 <e-treegrid-column field="BuyerPhone" headerText="Buyer Phone" width="140" textAlign="Center"></e-treegrid-column>
                 <e-treegrid-column field="Status" headerText="Status" width="140" textAlign="Center" template="#statusTemplate"></e-treegrid-column>
                 <e-treegrid-column field="Quantity" headerText="Quantity" width="100" textAlign="Center"></e-treegrid-column>
-                <e-treegrid-column field="Total" headerText="Total" format="C2" width="120" textAlign="Center"></e-treegrid-column>
+                <e-treegrid-column field="Total" headerText="Total" template="#totalTemplate" width="120" textAlign="Center"></e-treegrid-column>
                 <e-treegrid-column headerText="Action" width="160" textAlign="Center" template="actionTemplate" allowFiltering="false" allowSorting="false"></e-treegrid-column>
             </e-treegrid-columns>
         </ejs-treegrid>
@@ -40,6 +40,10 @@
 <ejs-toast id="actionToast" newestOnTop="true" showCloseButton="true" timeOut="4000">
     <e-toast-position X="Right" Y="Top"></e-toast-position>
 </ejs-toast>
+
+<script id="totalTemplate" type="text/x-template">
+    ${data.Total.toFixed(2)} lei
+</script>
 
 <script id="statusTemplate" type="text/x-template">
     <span class="status-badge ${Status.toLowerCase()}">${Status}</span>

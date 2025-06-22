@@ -17,7 +17,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -92,6 +92,17 @@
     color: #666;
 }
 
+.wishlist-card .price-value {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #28a745;
+}
+
+.wishlist-card .price-unit {
+    font-size: .9rem;
+    color: #6c757d;
+}
+
 .wishlist-card .details {
     margin-left: auto;
     padding: 0 3rem 0 1rem; 
@@ -101,18 +112,6 @@
     align-items: flex-end;
     gap: 0.25rem; 
 }
-
-    .wishlist-card .details .price-unit-value {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin: 0;
-    }
-
-    .wishlist-card .details .price-unit-label {
-        font-size: 0.95rem;
-        color: #666;
-        margin: 0;
-    }
 
 .empty-wishlist {
     max-width: 480px;

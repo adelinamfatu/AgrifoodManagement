@@ -51,15 +51,10 @@ else
                 <div class="info">
                     <h5>@item.Name</h5>
                     <p class="description text-muted">@item.Description</p>
-                </div>
-
-                <div class="details text-right">
-                    <p class="price-unit-value text-success fw-bold">
-                        @($"{item.Price:0.00} lei")
-                    </p>
-                    <p class="price-unit-label text-muted">
-                        @($"per {item.MeasurementUnit}")
-                    </p>
+                    <div class="pricing">
+                        <span class="price-value">@($"{item.Price:0.00} lei")</span>
+                        <small class="price-unit">per @item.MeasurementUnit</small>
+                    </div>
                 </div>
             </div>
         }

@@ -25,7 +25,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
                     d.Order.Status == OrderStatus.InCart, ct);
 
             if (detail == null)
-                throw new KeyNotFoundException("Cart item not found.");
+                throw new KeyNotFoundException("An error occurred while removing the item.");
 
             detail.Quantity = (int)Math.Clamp(req.NewQuantity, 0, detail.Product.Quantity);
             await _context.SaveChangesAsync(ct);

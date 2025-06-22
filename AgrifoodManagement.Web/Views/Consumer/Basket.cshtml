@@ -65,7 +65,7 @@
                         <div class="cart-order-summary" style="margin-top: 10px;">
                             <div class="summary-row">
                                 <span class="summary-label">Subtotal:</span>
-                                <span class="summary-value">@Model.SubTotal.ToString("N2") lei</span>
+                                <span id="subtotalValue" class="summary-value">@Model.SubTotal.ToString("N2") lei</span>
                             </div>
                             <div class="summary-row">
                                 <span class="summary-label">Shipping:</span>
@@ -73,7 +73,7 @@
                             </div>
                             <div class="summary-row total-row">
                                 <span class="summary-label fw-bold">Total:</span>
-                                <span class="summary-value fw-bold">@Model.Total.ToString("N2") lei</span>
+                                <span id="totalValue" class="summary-value fw-bold">@Model.Total.ToString("N2") lei</span>
                             </div>
                         </div>
                     </div>
@@ -96,23 +96,24 @@
 
 </div>
 
-<ejs-toast id="cartErrorToast" created="onCartToastCreated">
+<ejs-toast id="cartToast" created="onCartToastCreated">
     <e-toast-position X="Right" Y="Top"></e-toast-position>
 </ejs-toast>
 
 <script>
-    let cartErrorToast;
+    let cartToastObj;
 
     function onCartToastCreated() {
-        cartErrorToast = document.getElementById('cartErrorToast').ej2_instances[0];
+        cartToastObj = this;
     }
 
-    function showCartError(content) {
-        cartErrorToast.show({
-            title: 'Error',
-            content,
-            cssClass: 'e-toast-danger',
-            icon: 'e-error toast-icons'
+    function showCartToast({ title, content, type = 'success' }) {
+        console.log('Se afiseaza toast')
+        cartToastObj.show({
+            title: title,
+            content: content,
+            cssClass: `e-toast-${type}`,
+            icon: `e-${type} toast-icons`
         });
     }
 
@@ -126,7 +127,11 @@
                 const resp = await fetch(`/Cart/RemoveItem/${orderDetailId}`, { method: 'DELETE' });
                 const { message } = await resp.json();
                 if (!resp.ok) {
-                    showCartError(message);
+                    showCartToast({
+                        title: 'Error',
+                        content: message,
+                        type: 'error'
+                    });
                     return;
                 }
                 grid.deleteRecord('Id', { Id: orderDetailId });
@@ -141,18 +146,35 @@
             });
             const json2 = await resp2.json();
             if (!resp2.ok) {
-                showCartError(json2.message);
+                showCartToast({
+                    title: 'Error',
+                    content: json2.message,
+                    type: 'error'
+                });
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+                return;
             }
+            window.location.reload();
             return;
         }
 
         if (args.requestType === 'delete') {
-            const orderDetailId = args.data.Id;
+            const record = Array.isArray(args.data) ? args.data[0] : args.data;
+            const orderDetailId = record.Id;
             const resp = await fetch(`/Cart/RemoveItem/${orderDetailId}`, { method: 'DELETE' });
             const { message } = await resp.json();
             if (!resp.ok) {
-                showCartError(message);
+                showCartToast({
+                    title: 'Error',
+                    content: message,
+                    type: 'error'
+                });
+                return;
             }
+            window.location.reload();
         }
     }
 

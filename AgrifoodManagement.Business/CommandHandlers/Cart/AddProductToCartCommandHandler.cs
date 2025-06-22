@@ -62,7 +62,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
 
                 var existingItem = order.OrderDetails
                     .FirstOrDefault(od => od.ProductId == request.ProductId
-                                    && od.Id == order.Id);
+                                    && od.OrderId == order.Id);
 
                 if (existingItem != null)
                 {
@@ -80,7 +80,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
                         SellerId = product.UserId
                     };
 
-                    order.OrderDetails.Add(newDetail);
+                    _context.OrderDetails.Add(newDetail);
                 }
 
                 order.TotalAmount = order.OrderDetails.Sum(od => od.UnitPrice * od.Quantity);
