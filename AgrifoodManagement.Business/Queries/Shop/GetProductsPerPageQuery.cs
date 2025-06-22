@@ -20,6 +20,7 @@ namespace AgrifoodManagement.Business.Queries.Shop
         public string PriceRange { get; }
         public string SortBy { get; }
         public int? CategoryId { get; }
+        public Guid? ProducerId { get; }
 
         public GetProductsPerPageQuery(
             string userEmail,
@@ -28,7 +29,8 @@ namespace AgrifoodManagement.Business.Queries.Shop
             MeasurementUnit? unitFilter,
             string priceRange,
             string sortBy,
-            int? categoryId)
+            int? categoryId,
+            Guid? producerId)
         {
             UserEmail = userEmail;
             Page = page;
@@ -37,6 +39,7 @@ namespace AgrifoodManagement.Business.Queries.Shop
             PriceRange = priceRange;
             SortBy = sortBy;
             CategoryId = categoryId;
+            ProducerId = producerId;
         }
     }
 }

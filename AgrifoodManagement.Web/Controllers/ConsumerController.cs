@@ -43,6 +43,7 @@ namespace AgrifoodManagement.Web.Controllers
         }
 
         public async Task<IActionResult> ShopAsync(
+            Guid? producerId,
             int? categoryId,
             string unit = "all",
             string price = "all",
@@ -58,7 +59,7 @@ namespace AgrifoodManagement.Web.Controllers
             }
 
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
-            var result = await _mediator.Send(new GetProductsPerPageQuery(email, page, pageSize, unitFilter, price, sort, categoryId));
+            var result = await _mediator.Send(new GetProductsPerPageQuery(email, page, pageSize, unitFilter, price, sort, categoryId, producerId));
 
             if (!result.IsSuccess)
             {

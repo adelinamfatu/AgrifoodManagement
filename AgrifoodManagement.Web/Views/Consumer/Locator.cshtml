@@ -46,7 +46,14 @@
             bounds.extend(pos);
 
             var info = new google.maps.InfoWindow({
-                content: '<div class="markerTemplate"><strong>' + loc.Name + '</strong></div>'
+                content: `
+                    <div class="markerTemplate">
+                      <strong>${loc.Name}</strong><br/>
+                      <a href="/Consumer/Shop?producerId=${loc.ProducerId}"
+                         style="text-decoration:none;color:#007bff">
+                         View ${loc.Name}’s Shop
+                      </a>
+                    </div>`
             });
             marker.addListener('click', function () {
                 info.open(map, marker);

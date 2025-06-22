@@ -69,6 +69,12 @@ namespace AgrifoodManagement.Business.CommandHandlers.Shop
                     _ => query.OrderBy(p => p.ExpirationDate),
                 };
 
+                // Producer filter
+                if (request.ProducerId.HasValue)
+                {
+                    query = query.Where(p => p.UserId == request.ProducerId.Value);
+                }
+
                 var totalCount = await query.CountAsync(cancellationToken);
 
                 var products = await query

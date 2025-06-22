@@ -29,6 +29,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Locator
                 {
                     Latitude = u.Latitude!.Value,
                     Longitude = u.Longitude!.Value,
+                    ProducerId = u.Id,
                     Name = $"{u.FirstName} {u.LastName}"
                 })
                 .ToListAsync(ct);
