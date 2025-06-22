@@ -31,5 +31,6 @@ namespace AgrifoodManagement.Util.Models
         public string? ProducerName { get; set; }
         public AnnouncementStatus AnnouncementStatus { get; set; }
         public List<string> PhotoUrls { get; set; }
+        public List<ReviewDto> Reviews { get; set; } = new();
     }
 }

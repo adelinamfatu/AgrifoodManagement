@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AgrifoodManagement.Util.Models;
 using Microsoft.EntityFrameworkCore;
+using AgrifoodManagement.Util.ValueObjects;
 
 namespace AgrifoodManagement.Business.CommandHandlers.Announcement
 {
@@ -48,6 +49,16 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
                     PhotoUrls = _context.ExtendedProperties
                         .Where(ep => ep.EntityId == p.Id && ep.Key == "PhotoUrl")
                         .Select(ep => ep.Value)
+                        .ToList(),
+                    Reviews = p.Reviews
+                        .OrderByDescending(r => r.CreatedAt)
+                        .Select(r => new ReviewDto
+                        {
+                            Rating = r.Rating,
+                            Comment = r.Comment,
+                            ReviewerName = r.Reviewer!.FirstName + " " + r.Reviewer.LastName,
+                            Date = r.CreatedAt
+                        })
                         .ToList()
                 })
                 .FirstOrDefaultAsync(cancellationToken);

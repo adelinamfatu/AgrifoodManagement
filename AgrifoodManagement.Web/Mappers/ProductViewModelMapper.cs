@@ -28,7 +28,8 @@ namespace AgrifoodManagement.Web.Mappers
                 ReviewCount = dto.ReviewCount ?? 0,
                 ProducerName = dto.ProducerName,
                 IsFavorited = dto.IsFavorited,
-                Badge = dto.DiscountPercentage > 0 ? $"{dto.DiscountPercentage}% OFF" : string.Empty
+                Badge = dto.DiscountPercentage > 0 ? $"{dto.DiscountPercentage}% OFF" : string.Empty,
+                Reviews = dto.Reviews
             };
         }
     }

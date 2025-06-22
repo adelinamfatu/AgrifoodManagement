@@ -50,6 +50,12 @@
                         max="5">
                 </ejs-rating>
                 <span class="review-count">(@Model.ReviewCount)</span>
+                <ejs-button id="viewReviewsBtn"
+                            cssClass="see-reviews-btn e-flat"
+                            iconCss="fas fa-comment-dots review-icon"
+                            tooltip="View all reviews"
+                            onclick="openReviewsDialog()">
+                </ejs-button>
             </div>
 
             <div class="product-detail-description">
@@ -94,6 +100,47 @@
     </div>
 </div>
 
+<ejs-dialog id="reviewsDialog"
+            header="Customer Reviews"
+            visible="false"
+            width="400px"
+            showCloseIcon="true"
+            target="body">
+    <e-content-template>
+        <div class="reviews-list">
+            @if (Model.Reviews.Any())
+            {
+                @foreach (var r in Model.Reviews)
+                {
+                    <div class="review-item mb-3 p-2 border rounded">
+                        <div>
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= r.Rating)
+                                {
+                                    <span>★</span>
+                                }
+                                else
+                                {
+                                    <span style="color:#ccc">★</span>
+                                }
+                            }
+                        </div>
+                        <p class="mb-1">@r.Comment</p>
+                        <small class="text-muted">
+                            by <strong>@r.ReviewerName</strong> on @r.Date.ToString("MM/dd/yyyy")
+                        </small>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No reviews yet.</p>
+            }
+        </div>
+    </e-content-template>
+</ejs-dialog>
+
 <ejs-toast id="cartToast" created="onCartToastCreated">
     <e-toast-position X="Right" Y="Top"></e-toast-position>
 </ejs-toast>
@@ -112,6 +159,11 @@
             cssClass: `e-toast-${type}`,
             icon: `e-${type} toast-icons`
         });
+    }
+
+    function openReviewsDialog() {
+        const dlg = document.getElementById('reviewsDialog').ej2_instances[0];
+        dlg.show();
     }
 
     function changeProductImage(src) {

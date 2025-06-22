@@ -21,5 +21,6 @@ namespace AgrifoodManagement.Web.Models.Shop
         public string? ProducerName { get; set; }
         public bool IsFavorited { get; set; }
         public bool IsExpiringSoon => ExpiryDate.Subtract(DateTime.Now).TotalDays <= 3;
+        public List<ReviewDto> Reviews { get; set; }
     }
 }
