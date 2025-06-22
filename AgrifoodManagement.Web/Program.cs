@@ -47,6 +47,8 @@ builder.Services
 builder.Services
     .AddScoped<IForecastService, ForecastService>();
 builder.Services.AddHostedService<DailySentimentRetrainService>();
+builder.Services
+    .AddScoped<IProductRecommendationService, ProductRecommendationService>();
 
 // Stripe
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));

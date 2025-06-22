@@ -158,7 +158,7 @@ namespace AgrifoodManagement.Web.Controllers
                              Sales = x.TotalSales
                          }).ToList(),
 
-                Palettes = new[] { "#2485FA", "#FEC200", "#28A745", "#DC3545" }
+                Palettes = new[] { "#2485FA", "#FEC200", "#28A745", "#DC3545", "#17A2B8" }
             };
 
             return View(viewModel);
