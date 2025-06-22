@@ -28,6 +28,7 @@ namespace AgrifoodManagement.Util.Models
         public bool IsFavorited { get; set; }
         public double? Rating { get; set; }
         public int? ReviewCount { get; set; }
+        public string? ProducerName { get; set; }
         public AnnouncementStatus AnnouncementStatus { get; set; }
         public List<string> PhotoUrls { get; set; }
     }

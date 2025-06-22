@@ -44,6 +44,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
                                 ? p.Reviews.Average(r => r.Rating)
                                 : 0,
                     ReviewCount = p.Reviews.Count(),
+                    ProducerName = p.Seller!.FirstName + " " + p.Seller!.LastName,
                     PhotoUrls = _context.ExtendedProperties
                         .Where(ep => ep.EntityId == p.Id && ep.Key == "PhotoUrl")
                         .Select(ep => ep.Value)

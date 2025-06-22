@@ -36,7 +36,13 @@
 
         <div class="product-detail-col-right">
             <div class="product-detail-category text-center">@Model.CategoryName</div>
+
             <h1 class="product-detail-title text-center">@Model.Name</h1>
+
+            <div class="product-detail-producer text-center">
+                By <strong>@Model.ProducerName</strong>
+            </div>
+
             <div class="product-detail-rating text-center">
                 <ejs-rating id="rating"
                         value="@Model.Rating"

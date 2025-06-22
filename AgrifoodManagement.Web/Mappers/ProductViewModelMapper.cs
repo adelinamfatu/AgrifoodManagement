@@ -26,6 +26,7 @@ namespace AgrifoodManagement.Web.Mappers
                 ExpiryDate = dto.ExpirationDate,
                 Rating = dto.Rating ?? 0,
                 ReviewCount = dto.ReviewCount ?? 0,
+                ProducerName = dto.ProducerName,
                 IsFavorited = dto.IsFavorited,
                 Badge = dto.DiscountPercentage > 0 ? $"{dto.DiscountPercentage}% OFF" : string.Empty
             };

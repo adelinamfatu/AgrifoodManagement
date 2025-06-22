@@ -107,6 +107,12 @@
     justify-content: center;
 }
 
+.product-detail-producer {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 1rem;
+}
+
 .stars {
     display: flex;
     align-items: center;
@@ -239,6 +245,16 @@
 .e-numerictextbox.quantity-input-large input {
     font-size: 18px !important;
     text-align: center !important;
+}
+
+.quantity-input-large.e-control-wrapper,
+.quantity-input-large.e-control-wrapper .e-input {
+    background-color: #fff !important;
+    color: #333 !important;
+}
+
+.quantity-input-large.e-control-wrapper {
+    border: 1px solid rgba(0,0,0,0.2) !important;
 }
 
 .product-detail-buttons {

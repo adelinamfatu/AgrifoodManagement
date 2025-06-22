@@ -39,7 +39,7 @@ namespace AgrifoodManagement.Web.Controllers
             return Ok(new { message = "Product added to cart", orderId });
         }
 
-        //[HttpDelete("Cart/RemoveItem/{orderDetailId:guid}")]
+        [HttpDelete("Cart/RemoveItem/{orderDetailId:guid}")]
         public async Task<IActionResult> RemoveItem(Guid orderDetailId)
         {
             try
