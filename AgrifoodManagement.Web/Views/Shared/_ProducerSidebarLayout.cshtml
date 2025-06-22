@@ -50,8 +50,13 @@
                             @foreach (var item in sidebarItems)
                             {
                                 bool locked = item.IsPro && !isPro;
+                                var isActive = item.Id == ViewBag.ActiveItemId ? "active" : "";
 
-                                <div class="menu-item @(item.Id == ViewBag.ActiveItemId ? "active" : "")" onclick="navigateTo('@item.Url', '@item.Id')">
+                                <div class="menu-item @isActive @(locked ? "locked" : "")"
+                                @if (!locked)
+                                {
+                                    @:onclick="navigateTo('@item.Url','@item.Id')"
+                                }>
                                     <div class="menu-item-content">
                                         <i class="menu-item-icon @item.IconCss"></i>
                                         <span class="menu-item-text">@item.Name</span>

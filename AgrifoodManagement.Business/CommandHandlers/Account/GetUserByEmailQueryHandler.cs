@@ -37,32 +37,49 @@ namespace AgrifoodManagement.Business.CommandHandlers.Account
             if (user == null)
                 return null;
 
-            var rawDate = await _context.ExtendedProperties
+            var allDates = await _context.ExtendedProperties
                 .Where(ep =>
                     ep.EntityType == "User" &&
                     ep.EntityId == user.Id &&
                     ep.Key == "ProUpgradeDate")
                 .Select(ep => ep.Value)
-                .FirstOrDefaultAsync(cancellationToken);
+                .ToListAsync(cancellationToken);
+
+            DateTime? proStart = allDates
+                .Where(v => DateTime.TryParse(
+                                v,
+                                CultureInfo.InvariantCulture,
+                                DateTimeStyles.RoundtripKind,
+                                out _))
+                .Select(v => DateTime.Parse(
+                                v,
+                                CultureInfo.InvariantCulture,
+                                DateTimeStyles.RoundtripKind))
+                .OrderByDescending(d => d)
+                .FirstOrDefault();
 
             int daysLeft = 0;
-            if (rawDate != null
-                && DateTime.TryParse(
-                     rawDate,
-                     CultureInfo.InvariantCulture,
-                     DateTimeStyles.RoundtripKind,
-                     out var proStart))
+            if (proStart.HasValue)
             {
-                var expiry = proStart.AddDays(30);
-                var span = expiry.Date - DateTime.UtcNow.Date;
-                daysLeft = Math.Max(0, span.Days);
+                var expiry = proStart.Value.AddDays(30);
+                daysLeft = Math.Max(0, (expiry.Date - DateTime.UtcNow.Date).Days);
+            }
+
+            if (user.IsPro && daysLeft == 0)
+            {
+                var userEntity = await _context.Users.FindAsync(new object[] { user.Id }, cancellationToken);
+                if (userEntity is not null)
+                {
+                    userEntity.IsPro = false;
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
             }
 
             return new UserDto
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                IsPro = user.IsPro,
+                IsPro = user.IsPro && daysLeft > 0,
                 AvatarUrl = user.Avatar ?? "/images/avatar-placeholder.png",
                 DaysLeft = daysLeft
             };

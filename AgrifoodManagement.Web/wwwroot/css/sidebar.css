@@ -119,6 +119,18 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     font-size: 14px;
 }
 
+.menu-item.locked {
+    background-color: rgba(255,255,255,0.2);
+    opacity: 0.7;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+    .menu-item.locked .menu-item-icon,
+    .menu-item.locked .menu-item-text {
+        color: rgba(255,255,255,0.6) !important;
+    }
+
 .page-title {
     font-size: 24px;
     font-weight: 600;

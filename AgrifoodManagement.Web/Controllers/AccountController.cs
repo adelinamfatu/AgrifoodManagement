@@ -213,7 +213,7 @@ namespace AgrifoodManagement.Web.Controllers
 
             var domain = $"{Request.Scheme}://{Request.Host}";
             var successUrl = $"{domain}/Account/CompletePro?session_id={{CHECKOUT_SESSION_ID}}";
-            var cancelUrl = $"{domain}/Account/Announcements";
+            var cancelUrl = $"{domain}/Producer/Announcements";
 
             var result = await _stripeCheckoutService.CreateCheckoutSessionAsync(
                 lineItems: items,
@@ -241,7 +241,7 @@ namespace AgrifoodManagement.Web.Controllers
             if (session.PaymentStatus != "paid")
             {
                 TempData["Error"] = "Payment not completed.";
-                return RedirectToAction("Producer/Announcements");
+                return RedirectToAction("Announcements", "Producer");
             }
 
             if (!session.Metadata.TryGetValue("UserEmail", out var userEmail))
@@ -255,7 +255,7 @@ namespace AgrifoodManagement.Web.Controllers
                 session.AmountTotal / 100m
             ));
 
-            return RedirectToAction("Producer/Announcements");
+            return RedirectToAction("Announcements", "Producer");
         }
 
         [HttpPost]
