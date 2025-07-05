@@ -32,6 +32,7 @@ namespace AgrifoodManagement.Business.Services.Impl
                 .Select(p => new {
                     p.Id,
                     p.ExpirationDate,
+                    p.IsPromoted,
                     p.UserId
                 })
                 .ToListAsync(cancellationToken);
@@ -80,15 +81,22 @@ namespace AgrifoodManagement.Business.Services.Impl
                     sentiment.TryGetValue(p.Id, out var avgS);
                     var sentimentScore = (avgS + 1) / 2;
 
-                    var total = 0.5 * urgency
+                    var baseScore = 0.5 * urgency
                               + 0.3 * sentimentScore
                               + 0.2 * wishBoost;
 
-                    return new { p.Id, Score = total };
+                    return new
+                    {
+                        p.Id,
+                        p.IsPromoted,
+                        Score = baseScore
+                    };
                 })
-                .OrderByDescending(x => x.Score)
-                .Take(count)
+                .OrderByDescending(x => x.IsPromoted)
+                .ThenByDescending(x => x.Score)
                 .Select(x => x.Id)
+                .Distinct()
+                .Take(count)
                 .ToList();
 
             return scored;
