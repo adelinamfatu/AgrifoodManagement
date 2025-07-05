@@ -202,7 +202,6 @@
                             commentsList.innerHTML = '';
                         }
                         const avatarUrl = data.avatarUrl && data.avatarUrl.trim() !== '' ? data.avatarUrl : '/api/placeholder/40/40'; // Fallback image
-                        console.log(avatarUrl);
 
                         const newComment = document.createElement('div');
                         newComment.className = 'comment';

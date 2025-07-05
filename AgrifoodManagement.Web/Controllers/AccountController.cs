@@ -70,7 +70,13 @@ namespace AgrifoodManagement.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("Index", model);
+                var errors = ModelState.Values
+                   .SelectMany(v => v.Errors)
+                   .Select(e => e.ErrorMessage)
+                   .Distinct();
+
+                TempData["Error"] = string.Join("\n", errors);
+                return RedirectToAction("Auth");
             }
 
             var registerCommand = new RegisterUserCommand
@@ -87,8 +93,8 @@ namespace AgrifoodManagement.Web.Controllers
 
             if (!registerResult.IsSuccess)
             {
-                ModelState.AddModelError("", registerResult.Error);
-                return View("Index", model);
+                TempData["Error"] = registerResult.Error;
+                return RedirectToAction("Auth");
             }
 
             // Automatically log in the user after successful registration

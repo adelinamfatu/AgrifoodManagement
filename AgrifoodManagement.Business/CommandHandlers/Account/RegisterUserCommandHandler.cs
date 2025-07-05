@@ -35,7 +35,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.Account
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,
                 IsPro = false,
-                UserType = request.UserType
+                UserType = (UserType)request.UserType
             };
 
             _context.Users.Add(user);

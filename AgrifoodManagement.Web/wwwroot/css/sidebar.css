@@ -43,18 +43,15 @@ h1, h2, h3, h4, h5, h6, p, span, div {
     width: 260px;
     font-family: 'Inter', sans-serif;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+    background-color: #7bae7f !important;
+    border: none !important;
+    color: white;
 }
 
 #toolbar {
     background-color: #7bae7f !important;
     border-bottom: 1px solid #3b8e3f !important;
     padding: 0 16px;
-}
-
-#sidebarObj {
-    background-color: #7bae7f !important;
-    border: none !important;
-    color: white;
 }
 
 .menu-button {
@@ -445,4 +442,12 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 .e-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn {
     background-color: #7bae7f !important;
     color: white !important;
+}
+
+.e-toolbar .menu-button .e-btn-icon {
+    color: #fff !important;
+}
+
+.e-toolbar .e-tbar-btn-text {
+    color: #fff !important;
 }

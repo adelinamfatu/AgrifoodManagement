@@ -251,7 +251,6 @@
         chips.forEach(function (chip) {
             chip.addEventListener('click', function () {
                 var status = chip.getAttribute('data-value');
-                console.log(status);
                 window.location.search = '?filter=' + status;
             });
         });
