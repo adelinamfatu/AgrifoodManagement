@@ -41,7 +41,8 @@ namespace AgrifoodManagement.Web.Controllers
             var result = await _mediator.Send(command);
             if (!result.IsSuccess)
             {
-                return Unauthorized(result.Error);
+                TempData["Error"] = result.Error;
+                return RedirectToAction("Auth");
             }
 
             // Set the token in a cookie

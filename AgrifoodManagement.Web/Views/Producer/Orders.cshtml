@@ -70,8 +70,20 @@
     }
 
     function actionTemplate(data) {
-        if (data.Status === "Processing") {
-            return "<button class='e-btn e-primary small-action-btn' onclick=\"confirmPickup('" + data.Id + "')\">Confirm Pickup</button>";
+        if (data.Children && data.Children.length) {
+            if (data.Status === "Processing") {
+                return "<button class='e-btn e-primary small-action-btn' "
+                    + "onclick=\"confirmPickup('" + data.Id + "')\">"
+                    + "Confirm Pickup</button>";
+            }
+            if (data.Status === "Completed") {
+                return `<button class="e-btn e-secondary small-action-btn"
+                                  onclick="downloadInvoice('${data.Id}')"
+                                  title="Download Invoice">
+                           <i class="fas fa-file-download"></i>
+                        </button>`;
+            }
+            return "";
         }
         return "";
     }
@@ -107,5 +119,9 @@
             position: { X: 'center', Y: 'center' },
             closeOnEscape: true
         });
+    }
+
+    function downloadInvoice(orderId) {
+        window.location.href = `/History/DownloadInvoice?id=${orderId}`;
     }
 </script>

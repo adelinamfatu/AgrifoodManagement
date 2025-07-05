@@ -21,7 +21,8 @@ namespace AgrifoodManagement.Business.CommandHandlers.History
         public async Task<List<OrderTreeDto>> Handle(GetSellerOrdersQuery request, CancellationToken ct)
         {
             var details = await _context.OrderDetails
-                .Where(d => d.Seller!.Email == request.SellerEmail)
+                .Where(d => d.Seller!.Email == request.SellerEmail
+                    && (d.Order!.Status != OrderStatus.InCart || d.Order!.Status != OrderStatus.Pending))
                 .Include(d => d.Order)
                 .ThenInclude(o => o!.Buyer)
                 .Include(d => d.Product)

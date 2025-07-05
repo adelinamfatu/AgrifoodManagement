@@ -53,6 +53,7 @@ namespace AgrifoodManagement.Web.Controllers
                 "active" => allDtos
                                   .Where(d => d.AnnouncementStatus == AnnouncementStatus.Published),
                 "expiring" => allDtos
+                                  .Where(d => d.AnnouncementStatus != AnnouncementStatus.Expired)
                                   .Where(d => (d.ExpirationDate - DateTime.UtcNow).TotalDays < 14),
                 "lowStock" => allDtos
                                   .Where(d => d.Quantity < 21),

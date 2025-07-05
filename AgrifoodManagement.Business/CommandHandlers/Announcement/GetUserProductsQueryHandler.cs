@@ -27,6 +27,23 @@ namespace AgrifoodManagement.Business.CommandHandlers.Announcement
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Email == request.UserEmail, cancellationToken);
 
+            var now = DateTime.UtcNow;
+
+            var toExpire = await _context.Products
+                .Where(p => p.UserId == user.Id
+                            && p.ExpirationDate < now
+                            && p.AnnouncementStatus != AnnouncementStatus.Expired)
+                .ToListAsync(cancellationToken);
+
+            foreach (var prod in toExpire)
+            {
+                prod.AnnouncementStatus = AnnouncementStatus.Expired;
+            }
+            if (toExpire.Count > 0)
+            {
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+
             return await _context.Products
                 .Where(p => p.UserId == user!.Id)
                 .Include(p => p.ProductCategory)

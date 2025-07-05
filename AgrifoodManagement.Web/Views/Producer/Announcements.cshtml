@@ -126,7 +126,8 @@
                         <div class="detail">
                             <i class="fa fa-calendar"></i>
                             <span>Expires: @product.ExpirationDate.ToString("MMM dd, yyyy")</span>
-                            @if ((product.ExpirationDate - DateTime.Now).TotalDays < 7)
+                            @if ((product.ExpirationDate - DateTime.Now).TotalDays < 7 
+                                && product.AnnouncementStatus != AnnouncementStatus.Expired)
                             {
                                 <span class="warning-tag">Expiring Soon</span>
                             }

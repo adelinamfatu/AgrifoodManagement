@@ -10,6 +10,7 @@
     <meta charset="UTF-8">
     <title>@AuthResources.PageTitle</title>
     <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/css/toast.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -44,5 +45,22 @@
             </div>
         </div>
     </div>
+
+    <ejs-toast id="actionToast" newestOnTop="true" showCloseButton="true" timeOut="4000">
+        <e-toast-position X="Right" Y="Top"></e-toast-position>
+    </ejs-toast>
+
+    <script>
+        function showToast(type, title, message) {
+            const toastObj = document.getElementById('actionToast').ej2_instances[0];
+            toastObj.show({ title, content: message, cssClass: `e-toast-${type}` });
+            }
+            document.addEventListener("DOMContentLoaded", function () {
+            @if (TempData["Error"] != null)
+            {
+                <text>showToast("error", "Login Failed", "@TempData["Error"]"); </text>
+            }
+        });
+    </script>
 </body>
 </html>
