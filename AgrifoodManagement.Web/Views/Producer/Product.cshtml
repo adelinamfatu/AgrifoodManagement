@@ -172,10 +172,22 @@
     </form>
 </div>
 
+<ejs-toast id="actionToast" newestOnTop="true" showCloseButton="true" timeOut="4000">
+    <e-toast-position X="Right" Y="Top"></e-toast-position>
+</ejs-toast>
+
 <script>
     var thumbnailFiles = [null, null, null];
 
-    // 
+    function showToast(type, title, message) {
+        const toastObj = document.getElementById('actionToast').ej2_instances[0];
+        toastObj.show({
+            title: title,
+            content: message,
+            cssClass: `e-toast-${type}`
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         @if (Model.PhotoUrls != null)
         {
@@ -194,7 +206,11 @@
         for (let i = 0; i < args.filesData.length; i++) {
             const emptyIndex = findFirstEmptySlot();
             if (emptyIndex === -1) {
-                alert("You can upload a maximum of 3 images. Please remove one to add a new one.");
+                showToast(
+                    "warning",
+                    "Upload limit reached",
+                    "You can upload a maximum of 3 images. Please remove one to add a new one."
+                );
                 break;
             }
 
@@ -306,21 +322,32 @@
                 method: 'POST',
                 body: formData,
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Server returned ' + response.status + ' : ' + response.statusText);
+                .then(async response => {
+                    if (response.status === 400) {
+                        const payload = await response.json();
+                        const messages = [];
+                        Object.values(payload.errors).forEach(arr => arr.forEach(msg => messages.push(msg)));
+                        showToast(
+                            "error",
+                            "Validation failed",
+                            messages.join("\n")
+                        );
+                        // stop the promise chain
+                        throw new Error("validation");
                     }
                     return response.json();
                 })
                 .then(data => {
                     if (data.success && data.redirectUrl) {
+                        showToast("success", "Saved", "Product has been saved successfully.");
                         window.location.href = data.redirectUrl;
                     } else {
-                        console.log('Product upload successful but no redirect URL provided.');
+                        showToast("error", "Oops", "Could not save product. Please try again.");
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    if (error.message === "validation") return;
+                    showToast("error", "Error", error.message || "An unexpected error occurred.");
                 });
         });
 

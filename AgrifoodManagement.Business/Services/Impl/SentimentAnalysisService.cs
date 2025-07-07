@@ -30,13 +30,34 @@ namespace AgrifoodManagement.Business.Services.Impl
             {
                 using var fs = File.OpenRead(_modelPath);
                 _model = _ml.Model.Load(fs, out _);
+                var emptyData = _ml.Data.LoadFromEnumerable(new List<SentimentData>());
+                var schema = _model.GetOutputSchema(emptyData.Schema);
                 _engine = _ml.Model.CreatePredictionEngine<SentimentData, SentimentPrediction>(_model);
             }
         }
 
         public async Task TrainAsync(IEnumerable<Review> dbReviews, CancellationToken ct = default)
         {
-            var csv = _ml.Data.LoadFromTextFile<SentimentData>(_csvPath, hasHeader: true, separatorChar: ',');
+            var loader = _ml.Data.CreateTextLoader(new TextLoader.Options
+            {
+                Separators = new[] { ',' },
+                HasHeader = true,
+                AllowQuoting = true,
+                Columns = new[]
+                {
+                    new TextLoader.Column(
+                        name: nameof(SentimentData.Comment),
+                        dataKind: DataKind.String,
+                        index: 0),
+
+                    new TextLoader.Column(
+                        name: nameof(SentimentData.Label),
+                        dataKind: DataKind.String,
+                        index: 1),
+                }
+            });
+
+            var csv = loader.Load(_csvPath);
             var seed = _ml.Data.CreateEnumerable<SentimentData>(csv, reuseRowObject: false);
 
             var fromDb = dbReviews.Select(r => new SentimentData { Comment = r.Comment, Label = MapRatingToLabel(r.Rating) });
@@ -45,13 +66,15 @@ namespace AgrifoodManagement.Business.Services.Impl
             var trainingView = _ml.Data.LoadFromEnumerable(combined.Take(5000));
 
             var pipeline = _ml.Transforms.Conversion
-                                .MapValueToKey("Label")
-                           .Append(_ml.Transforms.Text
-                                .FeaturizeText("Features", "Comment"))
-                           .Append(_ml.MulticlassClassification
-                                .Trainers.SdcaMaximumEntropy())
-                           .Append(_ml.Transforms.Conversion
-                                .MapKeyToValue("PredictedLabel"));
+                    .MapValueToKey("LabelKey", "Label")
+                    .Append(_ml.Transforms.Text
+                        .FeaturizeText("Features", "Comment"))
+                    .Append(_ml.MulticlassClassification
+                        .Trainers.SdcaMaximumEntropy(
+                           labelColumnName: "LabelKey",
+                           featureColumnName: "Features"))
+                        .Append(_ml.Transforms.Conversion
+                       .MapKeyToValue("PredictedLabel", "PredictedLabel"));
 
             _model = pipeline.Fit(trainingView);
             _engine = _ml.Model.CreatePredictionEngine<SentimentData, SentimentPrediction>(_model);

@@ -86,7 +86,9 @@
                             <i class="fa fa-cog"></i> Manage
                         </button>
 
-                        @if (!product.IsPromoted)
+                        @if (product.AnnouncementStatus != AnnouncementStatus.Expired
+                           && product.AnnouncementStatus != AnnouncementStatus.Archived
+                           && !product.IsPromoted)
                         {
                             <button class="promote-btn" onclick="promoteProduct('@product.Id', '@product.Name')">
                                 <i class="fa fa-bullhorn"></i> Promote
@@ -100,11 +102,15 @@
                         <h3 class="product-name">@product.Name</h3>
                         <div class="product-controls">
                             <button class="edit-btn" title="Edit Listing"><i class="fa fa-pencil"></i></button>
-                            <button class="archive-btn"
-                                title="Archive Listing"
-                                onclick="archiveProduct('@product.Id')">
-                                <i class="fa fa-archive"></i>
-                            </button>
+                            @if (product.AnnouncementStatus != AnnouncementStatus.Expired
+                                && product.AnnouncementStatus != AnnouncementStatus.Archived)
+                            {
+                                <button class="archive-btn"
+                                        title="Archive Listing"
+                                        onclick="archiveProduct('@product.Id')">
+                                    <i class="fa fa-archive"></i>
+                                </button>
+                            }
                         </div>
                     </div>
 
