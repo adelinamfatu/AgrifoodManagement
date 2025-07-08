@@ -137,7 +137,26 @@
     </section>
 </div>
 
+<ejs-toast id="cartToast" created="onCartToastCreated">
+    <e-toast-position X="Right" Y="Top"></e-toast-position>
+</ejs-toast>
+
 <script>
+    let cartToastObj;
+
+    function onCartToastCreated() {
+        cartToastObj = this;
+    }
+
+    function showCartToast({ title, content, type = 'success' }) {
+        cartToastObj.show({
+            title: title,
+            content: content,
+            cssClass: `e-toast-${type}`,
+            icon: `e-${type} toast-icons`
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         function startCountdown() {
             const now = new Date();

@@ -19,10 +19,13 @@ namespace AgrifoodManagement.Business.CommandHandlers.Report
         public async Task<List<OrderStatusShareDto>> Handle(GetOrderStatusDistributionQuery req, CancellationToken ct)
         {
             var byStatus = await _context.Orders
+                .Where(o => o.Status != OrderStatus.Pending)
                 .GroupBy(o => o.Status)
                 .Select(g => new OrderStatusShareDto
                 {
-                    Status = g.Key.ToString(),
+                    Status = g.Key == OrderStatus.InCart
+                        ? "In Cart"
+                        : g.Key.ToString(),
                     Count = g.Count()
                 })
                 .ToListAsync(ct);

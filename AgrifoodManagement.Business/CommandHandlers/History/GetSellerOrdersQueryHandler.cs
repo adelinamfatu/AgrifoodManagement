@@ -22,14 +22,16 @@ namespace AgrifoodManagement.Business.CommandHandlers.History
         {
             var details = await _context.OrderDetails
                 .Where(d => d.Seller!.Email == request.SellerEmail
-                    && (d.Order!.Status != OrderStatus.InCart || d.Order!.Status != OrderStatus.Pending))
+                    && (d.Order!.Status != OrderStatus.InCart && d.Order!.Status != OrderStatus.Pending))
                 .Include(d => d.Order)
                 .ThenInclude(o => o!.Buyer)
                 .Include(d => d.Product)
                 .ToListAsync(ct);
 
             // Group them by Order to build tree nodes
-            var byOrder = details.GroupBy(d => d.Order!);
+            var byOrder = details
+                .GroupBy(d => d.Order!)
+                .OrderByDescending(g => g.Key.OrderedAt);
 
             var result = byOrder.Select(g => {
                 var order = g.Key;

@@ -101,8 +101,13 @@
             .catch(err => {
                 showCartToast({
                     title: 'Error',
-                    content: typeof err === 'string' ? err : 'Could not add to cart.',
-                    type: 'danger'
+                    content: 'Could not add to cart.',
+                    type: 'error'
+                });
+                showCartToast({
+                    title: 'Warning',
+                    content: 'Please note: for now, you can only add items from the same producer to your cart. We’re working on making multi-producer carts possible in the future.',
+                    type: 'warning'
                 });
             });
     }

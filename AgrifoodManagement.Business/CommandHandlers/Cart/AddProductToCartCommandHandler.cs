@@ -58,6 +58,17 @@ namespace AgrifoodManagement.Business.CommandHandlers.Cart
                 if (product == null)
                     throw new Exception("Product not found");
 
+                if (order.OrderDetails.Any())
+                {
+                    var currentSellerId = order.OrderDetails.First().SellerId;
+                    if (currentSellerId != product.UserId)
+                    {
+                        throw new InvalidOperationException(
+                            "Your cart already contains items from a different producer. " +
+                            "Please complete or clear the current cart before adding products from another producer.");
+                    }
+                }
+
                 var unitPrice = product.CurrentPrice ?? product.OriginalPrice;
 
                 var existingItem = order.OrderDetails

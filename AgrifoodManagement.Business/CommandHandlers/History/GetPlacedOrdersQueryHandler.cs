@@ -34,6 +34,7 @@ namespace AgrifoodManagement.Business.CommandHandlers.History
                             o.Status == OrderStatus.Shipped ||
                             o.Status == OrderStatus.Canceled ||
                             o.Status == OrderStatus.Completed))
+                .OrderByDescending(o => o.OrderedAt)
                 .Include(o => o.OrderDetails!)
                 .ThenInclude(d => d.Product!)
                 .ThenInclude(p => p.Seller!)
