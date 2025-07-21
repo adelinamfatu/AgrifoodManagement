@@ -111,6 +111,10 @@ You can find the database structure in [`Baza de date.svg`](./Baza%20de%20date.s
 
 ![Baza de date](https://github.com/user-attachments/assets/e00a71e9-e521-48d2-9fed-f8c52dc7db5a)
 
+---
+
+Below are some photos from the app
+
 <img width="878" height="442" alt="image" src="https://github.com/user-attachments/assets/e04e7f8b-e030-4428-b9ac-9b44790ca0f4" />
 <img width="832" height="421" alt="image" src="https://github.com/user-attachments/assets/74479115-14fd-4807-83d4-6dc3567f4030" />
 <img width="808" height="452" alt="image" src="https://github.com/user-attachments/assets/b1ffc8e8-40e1-4a90-81a0-ed1925445085" />
