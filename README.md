@@ -103,7 +103,7 @@ Integrated with **Tidio**, the chatbot:
 
 ---
 
-## 📸 Preview
+## 🗃️ Database Preview
 
 You can find the database structure in [`Baza de date.svg`](./Baza%20de%20date.svg)
 
@@ -113,7 +113,11 @@ You can find the database structure in [`Baza de date.svg`](./Baza%20de%20date.s
 
 ---
 
-Below are some photos from the app
+## 📸 UI Preview
+
+Below are some photos from the application:
+
+---
 
 <img width="878" height="442" alt="image" src="https://github.com/user-attachments/assets/e04e7f8b-e030-4428-b9ac-9b44790ca0f4" />
 <img width="832" height="421" alt="image" src="https://github.com/user-attachments/assets/74479115-14fd-4807-83d4-6dc3567f4030" />
