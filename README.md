@@ -110,3 +110,12 @@ You can find the database structure in [`Baza de date.svg`](./Baza%20de%20date.s
 ---
 
 ![Baza de date](https://github.com/user-attachments/assets/e00a71e9-e521-48d2-9fed-f8c52dc7db5a)
+
+<img width="878" height="442" alt="image" src="https://github.com/user-attachments/assets/e04e7f8b-e030-4428-b9ac-9b44790ca0f4" />
+<img width="832" height="421" alt="image" src="https://github.com/user-attachments/assets/74479115-14fd-4807-83d4-6dc3567f4030" />
+<img width="808" height="452" alt="image" src="https://github.com/user-attachments/assets/b1ffc8e8-40e1-4a90-81a0-ed1925445085" />
+<img width="975" height="515" alt="image" src="https://github.com/user-attachments/assets/83aea509-a293-4029-9bb3-abd1c81bb79a" />
+<img width="846" height="463" alt="image" src="https://github.com/user-attachments/assets/e7ce3bf4-fc94-423d-9b2b-2b2359d93885" />
+<img width="866" height="482" alt="image" src="https://github.com/user-attachments/assets/d78afa67-8727-4947-ad6a-81fb59c057ef" />
+<img width="840" height="430" alt="image" src="https://github.com/user-attachments/assets/496c1d56-9d03-4add-804e-fe0dfc76b64e" />
+<img width="824" height="453" alt="image" src="https://github.com/user-attachments/assets/6eebd498-69d0-4fc7-9170-0a2f0f7d08e7" />
